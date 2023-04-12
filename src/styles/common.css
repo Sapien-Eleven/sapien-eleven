@@ -1,0 +1,27 @@
+.app {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    min-height: 100vh;
+}
+
+.TopBar {
+    box-sizing: border-box;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0px 70px;
+    gap: 277px;
+
+    background-color: white;
+    height: 81px;
+    border-bottom: 3px solid #CA3C3D;
+}
+
+.logo {
+    width: 201px;
+    height: 80px;
+}

@@ -8,11 +8,13 @@ import WalletExplainationHome from '../assets/images/icons/explaination_home.png
 import WalletExplainationNewWay from '../assets/images/icons/explaination_newway.png'
 import CreateWallet from '../assets/images/icons/create.png'
 import ScanWallet from '../assets/images/icons/scan.png'
-import {wallets} from "../const/consts";
+import {useEagerConnect, useInactiveListener, wallets} from "../const/consts";
 import {useWeb3React, UnsupportedChainIdError} from "@web3-react/core";
 import {NoEthereumProviderError, UserRejectedRequestError as UserRejectedRequestErrorInjected} from "@web3-react/injected-connector";
 import {UserRejectedRequestError as UserRejectedRequestErrorWalletConnect} from "@web3-react/walletconnect-connector";
 import {QRCode} from "react-qrcode-logo";
+import {connect} from "react-redux";
+import { setWalletAddress } from "../store/actions/auth";
 
 const getErrorMessage = (err) => {
     if (err instanceof NoEthereumProviderError) {
@@ -67,9 +69,8 @@ Fade.propTypes = {
     ownerState: PropTypes.any
 };
 
-export const WalletModal = memo((props) => {
+const WalletModal = memo((props) => {
     const {connector, library, chainId, account, activate, deactivate, active, error} = useWeb3React();
-
     const [recentWallets, setRecentWallets] = useState(['metamask']);
     const [popularWallets, setPopularWallets] = useState(['rainbow', 'coinbase', 'walletconnect', 'phantom']);
     const [actionStep, setActionStep] = useState(-1);
@@ -79,8 +80,22 @@ export const WalletModal = memo((props) => {
     // step3: Get started with WalletName
     const [selectedWallet, setSelectedWallet] = useState('');
     const [canBack, setCanBack] = useState(false);
+    const [activatingConnector, setActivatingConnector] = useState();
+
+    useEffect(() => {
+        if (activatingConnector && activatingConnector === connector) {
+            setActivatingConnector(undefined)
+        }
+    }, [activatingConnector, connector])
+
+    const triedEager = useEagerConnect();
+    useInactiveListener(!triedEager || !!activatingConnector);
 
     const onSelectWallet = useCallback(async(wallet) => {
+        if (wallet === 'metamask') {
+            await onConnectMetamask();
+            return;
+        }
         setSelectedWallet(wallet);
         if (wallets[wallet].stepCount > 0) setActionStep(1);
     }, []);
@@ -105,8 +120,14 @@ export const WalletModal = memo((props) => {
         setSelectedWallet(wallet);
         setActionStep(2);
         setCanBack(true);
-    }, []);
+    });
     const onOpenWallet = () => {};
+    const onConnectMetamask = useCallback(async () => {
+        console.log('connect metamask');
+        setActivatingConnector(wallets['metamask'].connector);
+        await activate(wallets['metamask'].connector);
+        onCloseModal();
+    }, []);
     const onCloseModal = useCallback(() => {
         props.closeModal();
         setSelectedWallet('');
@@ -225,6 +246,15 @@ export const WalletModal = memo((props) => {
         </Modal>
     )
 })
+
+export default connect(
+    state => ({
+        authReducer: state.authReducer
+    }),
+    dispatch => ({
+        setWalletAddress: (address) => dispatch(setWalletAddress(address)),
+    })
+)(WalletModal);
 
 const WalletModalStyles = {
     panel: {

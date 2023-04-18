@@ -1,7 +1,7 @@
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/700.css';
 import SapienLogo from '../assets/logo.png'
-import { policies } from '../const/pages'
+import { policies } from '../const/consts'
 import { Box, Button, Container, Grid, Typography } from '@mui/material'
 import { fonts, pixToRem } from '../const/uivar';
 
@@ -11,22 +11,22 @@ export function Footer() {
             sx={styles.panel}
             >
             <Container maxWidth={false}>
-                <Grid container md={12} direction="row" alignItems="center" justifyContent={'space-around'}>
-                    <Grid item xs={3}>
+                <Grid container direction="row" alignItems="center" justifyContent={'space-around'}>
+                    <Grid item md={3}>
                         <Box component={'img'} src={SapienLogo} sx={styles.logo} />
                     </Grid>
-                    <Grid container md={6.5} direction={'row'} alignItems={'center'} justifyContent={'center'}>
+                    <Grid container xs={6.5} direction={'row'} alignItems={'center'} justifyContent={'center'}>
                         {
                             policies.map((policy, index) => {
                                 return (
-                                    <Button sx={styles.policy}>{policy}</Button>
+                                    <Button key={index} sx={styles.policy}>{policy}</Button>
                                 )
                             })
                         }
                     </Grid>
-                    <Grid item xs={2.5}>
+                    <Grid item md={2.5}>
                         <Typography color="white" variant="subtitle1">
-                        Sapien Eleven - 2023  ©  Design by @sv3nsei
+                        Sapien Eleven - 2023  ©  s11
                         </Typography>
                     </Grid>
                 </Grid>

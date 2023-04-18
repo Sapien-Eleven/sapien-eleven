@@ -2,6 +2,8 @@ import { Box, Button, Container, styled } from "@mui/material";
 import MainBg from '../../assets/images/main_bg.png'
 import '@fontsource/roboto/400.css';
 import MetaMaskLogo from '../../assets/metamask_logo.png'
+import WalletModal from "../WalletModal";
+import {memo, useState} from "react";
 
 const WalletButton = styled(Button)((props) => ({
 	boxSizing: 'border-box',
@@ -25,7 +27,8 @@ const WalletButton = styled(Button)((props) => ({
     marginLeft: '70px'
 }))
 
-export function IntroPanel() {
+export const IntroPanel = memo((props) => {
+    const [walletModalVisible, setWalletModalVisible] = useState(false);
     return (
         <Container
             component={'div'}
@@ -44,10 +47,17 @@ export function IntroPanel() {
                 component={'span'}
                 sx={styles.comment}
             >Increasing longevity and vigor through knowledge,<br/>accesibility, motivation and empowerment</Box>
-            <WalletButton startIcon={<img src={MetaMaskLogo} style={styles.metamaskLogo} alt='metamask' />}>CONNECT WALLET</WalletButton>
+            <WalletButton
+                startIcon={<img src={MetaMaskLogo} style={styles.metamaskLogo} alt='metamask' />}
+                onClick={() => setWalletModalVisible(true)}
+            >CONNECT WALLET</WalletButton>
+            <WalletModal
+                visible={walletModalVisible}
+                closeModal={() => setWalletModalVisible(false)}
+            />
         </Container>
     )
-}
+});
 
 const styles = {
     introPanel: {

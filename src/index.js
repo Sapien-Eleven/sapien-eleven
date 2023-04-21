@@ -10,6 +10,9 @@ import {Web3Provider} from "@ethersproject/providers";
 import {Provider} from 'react-redux'
 import {createStore} from "redux";
 import reducer from './store/reducers/index'
+import { Buffer } from 'buffer';
+
+window.Buffer = window.Buffer || Buffer;
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 let theme = createTheme({
@@ -21,13 +24,7 @@ let theme = createTheme({
     }
 })
 const getLibrary = (provider) => {
-    let library;
-    if (provider.chainType === 'hmy') library = provider.blockchain;
-    else {
-        library = new Web3Provider(provider);
-        library.pollingInterval = 12000;
-    }
-    return library;
+    return new Web3Provider(provider)
 }
 
 const store = createStore(reducer);

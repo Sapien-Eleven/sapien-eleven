@@ -3,7 +3,8 @@ import MainBg from '../../assets/images/main_bg.png'
 import '@fontsource/roboto/400.css';
 import MetaMaskLogo from '../../assets/metamask_logo.png'
 import WalletModal from "../WalletModal";
-import {memo, useState} from "react";
+import {memo, useCallback, useState} from "react";
+import {useWeb3React} from "@web3-react/core";
 
 const WalletButton = styled(Button)((props) => ({
 	boxSizing: 'border-box',
@@ -29,6 +30,12 @@ const WalletButton = styled(Button)((props) => ({
 
 export const IntroPanel = memo((props) => {
     const [walletModalVisible, setWalletModalVisible] = useState(false);
+    const {active} = useWeb3React();
+
+    const onOpenWallet = useCallback(() => {
+        if (active) return;
+        setWalletModalVisible(true);
+    }, [active]);
     return (
         <Container
             component={'div'}
@@ -49,8 +56,8 @@ export const IntroPanel = memo((props) => {
             >Increasing longevity and vigor through knowledge,<br/>accesibility, motivation and empowerment</Box>
             <WalletButton
                 startIcon={<img src={MetaMaskLogo} style={styles.metamaskLogo} alt='metamask' />}
-                onClick={() => setWalletModalVisible(true)}
-            >CONNECT WALLET</WalletButton>
+                onClick={onOpenWallet}
+            >{active? `FULL ACCESS` : `CONNECT WALLET`}</WalletButton>
             <WalletModal
                 visible={walletModalVisible}
                 closeModal={() => setWalletModalVisible(false)}

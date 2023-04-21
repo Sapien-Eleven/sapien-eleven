@@ -121,9 +121,36 @@ const WalletModal = memo((props) => {
         setActionStep(2);
         setCanBack(true);
     });
-    const onOpenWallet = () => {};
+    const onOpenWallet = async () => {
+        if (selectedWallet === 'walletconnect') await onOpenWalletConnectAPI();
+        else if (selectedWallet === 'phantom') onOpenPhantom();
+    };
+    const onOpenWalletConnectAPI = useCallback(async () => {
+        console.log('walletconnect');
+        setActivatingConnector(wallets['walletconnect'].connector);
+        activate(wallets['walletconnect'].connector, async (err) => {
+            console.log(err)
+        })
+    }, []);
+    const onOpenPhantom = async () => {
+        const provider = getPhantomeProvider();
+        if (provider) {
+            try {
+                const response = await provider.connect();
+                const pubKey = await response.publicKey;
+                console.log(pubKey);
+            } catch (err) {
+                console.log(err);
+            }
+        }
+    }
+    const getPhantomeProvider = () => {
+        if ('solana' in window) {
+            const provider = window.solana;
+            if (provider.isPhantom) return provider;
+        }
+    }
     const onConnectMetamask = useCallback(async () => {
-        console.log('connect metamask');
         setActivatingConnector(wallets['metamask'].connector);
         await activate(wallets['metamask'].connector);
         onCloseModal();

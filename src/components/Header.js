@@ -47,7 +47,7 @@ const WalletButton = styled(Button)((props) => ({
 }))
 
 const Header = memo((props) => {
-	const {account, active} = useWeb3React();
+	const {account, active, deactivate} = useWeb3React();
 	const [walletModalVisible, setWalletModalVisible] = useState(false);
 	const closeWalletModal = useCallback(() => setWalletModalVisible(false), [])
 	useEffect(() => {
@@ -55,13 +55,13 @@ const Header = memo((props) => {
 			props.setWalletAddress(account)
 		}
 	}, []);
-	const connectWallet = () => {
+	const connectWallet = useCallback(() => {
 		if (active) {
-			alert('Do you want to disconnect wallet?')
+			deactivate();
 		} else {
 			setWalletModalVisible(true);
 		}
-	}
+	}, [active]);
 	return (
 		<AppBar className='TopBar' position='relative'>
 			<Container maxWidth={false}>

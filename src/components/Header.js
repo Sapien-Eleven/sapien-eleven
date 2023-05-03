@@ -3,11 +3,11 @@ import '../styles/common.css'
 import '@fontsource/roboto/700.css';
 import SapienLogo from '../assets/logo.png'
 import MetaMaskLogo from '../assets/metamask_logo.png'
-import {consts} from '../const/consts'
+import {consts, wallets} from '../const/consts'
 import WalletModal from "./WalletModal";
 import {memo, useCallback, useEffect, useState} from "react";
 import {pixToRem} from "../const/uivar";
-import {setWalletAddress} from "../store/actions/auth";
+import {setConnectedWallet, setWalletAddress} from "../store/actions/auth";
 import {connect} from "react-redux";
 import {useWeb3React} from "@web3-react/core";
 
@@ -58,7 +58,11 @@ const Header = memo((props) => {
 	const connectWallet = useCallback(() => {
 		if (active) {
 			deactivate();
+			props.setConnectedWallet('');
+			props.setWalletAddress('');
 		} else {
+			console.log(account);
+			console.log(active)
 			setWalletModalVisible(true);
 		}
 	}, [active]);
@@ -82,10 +86,11 @@ const Header = memo((props) => {
 						}
 					</Container>
 					<WalletButton
-						startIcon={<img src={MetaMaskLogo} style={styles.metamaskLogo} alt='metamask' />}
+						startIcon={<img src={props.connectedWallet === '' ? MetaMaskLogo : wallets[props.connectedWallet].remoteIcon} style={styles.metamaskLogo} alt='metamask' />}
 						onClick={connectWallet}
 					>
-						{active? `${account.substring(0, 4)}...${account.substring(account.length - 4)}` : 'CONNECT WALLET'}
+						{/*{active? `${account.substring(0, 4)}...${account.substring(account.length - 4)}` : 'CONNECT WALLET'}*/}
+						{props.walletAddress !== '' ? `${props.walletAddress.substring(0, 4)}...${props.walletAddress.substring(props.walletAddress.length - 4)}` : 'CONNECT WALLET'}
 					</WalletButton>
 				</Toolbar>
 			</Container>
@@ -98,10 +103,12 @@ const Header = memo((props) => {
 })
 export default connect(
 	state => ({
-		authReducer: state.authReducer
+		walletAddress: state.authReducer.walletAddress,
+		connectedWallet: state.authReducer.connectedWallet
 	}),
 	dispatch => ({
-		setWalletAddress: (address) => dispatch(setWalletAddress(address))
+		setWalletAddress: (address) => dispatch(setWalletAddress(address)),
+		setConnectedWallet: (wallet) => dispatch(setConnectedWallet(wallet))
 	})
 )(Header)
 

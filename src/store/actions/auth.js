@@ -4,3 +4,10 @@ export const setWalletAddress = (address) => {
         payload: {walletAddress: address}
     }
 }
+
+export const setConnectedWallet = (wallet) => {
+    return {
+        type: 'SET_CONNECTED_WALLET',
+        connectedWallet: wallet
+    }
+}

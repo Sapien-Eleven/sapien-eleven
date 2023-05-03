@@ -11,6 +11,11 @@ const authReducer = (state = initialState, action) => {
                 ...state,
                 walletAddress: action.payload.walletAddress
             }
+        case 'SET_CONNECTED_WALLET':
+            return {
+                ...state,
+                connectedWallet: action.connectedWallet
+            }
         default:
             return state;
     }

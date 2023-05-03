@@ -4,7 +4,8 @@ import '@fontsource/roboto/400.css';
 import MetaMaskLogo from '../../assets/metamask_logo.png'
 import WalletModal from "../WalletModal";
 import {memo, useCallback, useState} from "react";
-import {useWeb3React} from "@web3-react/core";
+import {connect} from "react-redux";
+import {wallets} from "../../const/consts";
 
 const WalletButton = styled(Button)((props) => ({
 	boxSizing: 'border-box',
@@ -28,14 +29,13 @@ const WalletButton = styled(Button)((props) => ({
     marginLeft: '70px'
 }))
 
-export const IntroPanel = memo((props) => {
+const IntroPanel = memo((props) => {
     const [walletModalVisible, setWalletModalVisible] = useState(false);
-    const {active} = useWeb3React();
 
     const onOpenWallet = useCallback(() => {
-        if (active) return;
+        if (props.connectedWallet !== '') return;
         setWalletModalVisible(true);
-    }, [active]);
+    }, [props.connectedWallet]);
     return (
         <Container
             component={'div'}
@@ -55,9 +55,9 @@ export const IntroPanel = memo((props) => {
                 sx={styles.comment}
             >Increasing longevity and vigor through knowledge,<br/>accesibility, motivation and empowerment</Box>
             <WalletButton
-                startIcon={<img src={MetaMaskLogo} style={styles.metamaskLogo} alt='metamask' />}
+                startIcon={<img src={props.connectedWallet === '' ? MetaMaskLogo : wallets[props.connectedWallet].remoteIcon} style={styles.metamaskLogo} alt='metamask' />}
                 onClick={onOpenWallet}
-            >{active? `FULL ACCESS` : `CONNECT WALLET`}</WalletButton>
+            >{props.connectedWallet !== ''? `FULL ACCESS` : `CONNECT WALLET`}</WalletButton>
             <WalletModal
                 visible={walletModalVisible}
                 closeModal={() => setWalletModalVisible(false)}
@@ -65,6 +65,12 @@ export const IntroPanel = memo((props) => {
         </Container>
     )
 });
+
+export default connect(
+    state => ({
+        connectedWallet: state.authReducer.connectedWallet
+    })
+)(IntroPanel)
 
 const styles = {
     introPanel: {

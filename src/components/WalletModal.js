@@ -8,13 +8,14 @@ import WalletExplainationHome from '../assets/images/icons/explaination_home.png
 import WalletExplainationNewWay from '../assets/images/icons/explaination_newway.png'
 import CreateWallet from '../assets/images/icons/create.png'
 import ScanWallet from '../assets/images/icons/scan.png'
-import {useEagerConnect, useInactiveListener, wallets} from "../const/consts";
+import {wallets} from "../const/consts";
 import {useWeb3React, UnsupportedChainIdError} from "@web3-react/core";
 import {NoEthereumProviderError, UserRejectedRequestError as UserRejectedRequestErrorInjected} from "@web3-react/injected-connector";
 import {UserRejectedRequestError as UserRejectedRequestErrorWalletConnect} from "@web3-react/walletconnect-connector";
 import {QRCode} from "react-qrcode-logo";
 import {connect} from "react-redux";
-import { setWalletAddress } from "../store/actions/auth";
+import {setConnectedWallet, setWalletAddress} from "../store/actions/auth";
+import {injected} from "../const/connectors";
 
 const getErrorMessage = (err) => {
     if (err instanceof NoEthereumProviderError) {
@@ -70,7 +71,7 @@ Fade.propTypes = {
 };
 
 const WalletModal = memo((props) => {
-    const {connector, library, chainId, account, activate, deactivate, active, error} = useWeb3React();
+    const {connector, account, activate, active} = useWeb3React();
     const [recentWallets, setRecentWallets] = useState(['metamask']);
     const [popularWallets, setPopularWallets] = useState(['rainbow', 'coinbase', 'walletconnect', 'phantom']);
     const [actionStep, setActionStep] = useState(-1);
@@ -89,6 +90,10 @@ const WalletModal = memo((props) => {
     }, [activatingConnector, connector])
 
     const triedEager = useEagerConnect();
+    if (triedEager && active) {
+        props.setConnectedWallet('metamask');
+        props.setWalletAddress(account.toString())
+    }
     useInactiveListener(!triedEager || !!activatingConnector);
 
     const onSelectWallet = useCallback(async(wallet) => {
@@ -126,24 +131,25 @@ const WalletModal = memo((props) => {
         else if (selectedWallet === 'phantom') onOpenPhantom();
     };
     const onOpenWalletConnectAPI = useCallback(async () => {
-        console.log('walletconnect');
         setActivatingConnector(wallets['walletconnect'].connector);
-        activate(wallets['walletconnect'].connector, async (err) => {
-            console.log(err)
-        })
+        await activate(wallets['walletconnect'].connector)
     }, []);
-    const onOpenPhantom = async () => {
+    const onOpenPhantom = useCallback(async () => {
         const provider = getPhantomeProvider();
         if (provider) {
             try {
                 const response = await provider.connect();
                 const pubKey = await response.publicKey;
-                console.log(pubKey);
+                props.setWalletAddress(pubKey.toString());
+                props.setConnectedWallet('phantom');
+                onCloseModal();
             } catch (err) {
                 console.log(err);
             }
+        } else {
+            window.open('https://phantom.app/')
         }
-    }
+    }, [])
     const getPhantomeProvider = () => {
         if ('solana' in window) {
             const provider = window.solana;
@@ -153,8 +159,11 @@ const WalletModal = memo((props) => {
     const onConnectMetamask = useCallback(async () => {
         setActivatingConnector(wallets['metamask'].connector);
         await activate(wallets['metamask'].connector);
+        props.setConnectedWallet('metamask');
+        console.log('connect metamask')
+        // props.setWalletAddress(account.toString());
         onCloseModal();
-    }, []);
+    }, [active]);
     const onCloseModal = useCallback(() => {
         props.closeModal();
         setSelectedWallet('');
@@ -276,12 +285,77 @@ const WalletModal = memo((props) => {
 
 export default connect(
     state => ({
-        authReducer: state.authReducer
+        walletAddress: state.authReducer.walletAddress
     }),
     dispatch => ({
         setWalletAddress: (address) => dispatch(setWalletAddress(address)),
+        setConnectedWallet: (wallet) => dispatch(setConnectedWallet(wallet))
     })
 )(WalletModal);
+
+const useEagerConnect = () => {
+    const {active, activate, account} = useWeb3React();
+    const [tried, setTried] = useState(false);
+
+    useEffect(() => {
+        injected.isAuthorized().then((isAuthorized) => {
+            if (isAuthorized) {
+                activate(injected, undefined, true).catch(() => {
+                    setTried(true);
+                });
+            } else setTried(true);
+        })
+    }, []);
+
+    useEffect(() => {
+        if (!tried && active) setTried(true);
+    }, [tried, active]);
+
+    return tried;
+}
+
+const useInactiveListener = (suppress = false) => {
+    const {active, activate, error} = useWeb3React();
+
+    useEffect(() => {
+        const {ethereum} = window;
+
+        if (ethereum && ethereum.on && !active && !error && !suppress) {
+            const handleConnect = () => {
+                console.log('Handling connect event');
+                activate(injected);
+            };
+            const handleChainChanged = (chainId) => {
+                console.log(`Handling 'ChainChanged' with payload ${chainId}`);
+                activate(injected)
+            }
+            const handleAccountsChanged = (accounts) => {
+                console.log(`Handling 'AccountChanged' with payload ${accounts}`);
+                if (accounts.length > 0) {
+                    activate(injected)
+                }
+            }
+            const handleNetworkChanged = (networkId) => {
+                console.log(`Handling 'NetworkChanged' with payload ${networkId}`);
+                activate(injected)
+            }
+
+            ethereum.on('connect', handleConnect)
+            ethereum.on('chainChanged', handleChainChanged)
+            ethereum.on('accountsChanged', handleAccountsChanged)
+            ethereum.on('networkChanged', handleNetworkChanged)
+
+            return () => {
+                if (ethereum.removeListener) {
+                    ethereum.removeListener('connect', handleConnect)
+                    ethereum.removeListener('chainChanged', handleChainChanged)
+                    ethereum.removeListener('accountsChanged', handleAccountsChanged)
+                    ethereum.removeListener('networkChanged', handleNetworkChanged)
+                }
+            }
+        }
+    }, [active, error, suppress, activate])
+}
 
 const WalletModalStyles = {
     panel: {

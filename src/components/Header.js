@@ -3,17 +3,18 @@ import '../styles/common.css'
 import '@fontsource/roboto/700.css';
 import SapienLogo from '../assets/logo.png'
 import MetaMaskLogo from '../assets/metamask_logo.png'
-import {consts, wallets} from '../const/consts'
+import {pages, wallets} from '../const/consts'
 import WalletModal from "./WalletModal";
 import {memo, useCallback, useEffect, useState} from "react";
 import {pixToRem} from "../const/uivar";
 import {setConnectedWallet, setWalletAddress} from "../store/actions/auth";
 import {connect} from "react-redux";
 import {useWeb3React} from "@web3-react/core";
+import {useNavigate} from "react-router-dom";
 
 const NavButton = styled(Button)((props) => ({
 	marginRight: 69.5,
-	height: 35,
+	height: 81,
 	color: '#333333',
 	fontFamily: 'Roboto',
 	fontStyle: 'normal',
@@ -50,6 +51,7 @@ const Header = memo((props) => {
 	const {account, active, deactivate} = useWeb3React();
 	const [walletModalVisible, setWalletModalVisible] = useState(false);
 	const closeWalletModal = useCallback(() => setWalletModalVisible(false), [])
+	const navigate = useNavigate()
 	useEffect(() => {
 		if (active) {
 			props.setWalletAddress(account)
@@ -66,8 +68,11 @@ const Header = memo((props) => {
 			setWalletModalVisible(true);
 		}
 	}, [active]);
+	const onNavigate = (page) => {
+		navigate(`/${page.toLowerCase()}`)
+	}
 	return (
-		<AppBar className='TopBar' position='relative'>
+		<AppBar className='TopBar' sx={[props.page !== 'home' ? {borderBottom: '1px solid #F2F2F2'} : null, {boxShadow: 'none'}]} position='relative'>
 			<Container maxWidth={false}>
 				<Toolbar disableGutters sx={styles.toolbar}>
 					<Box
@@ -78,9 +83,22 @@ const Header = memo((props) => {
 					/>
 					<Container sx={styles.navBar}>
 						{
-							consts.map((page, index) => {
+							pages.map((page, index) => {
 								return (
-									<NavButton key={index} >{page}</NavButton>
+									<NavButton
+										key={index}
+										onClick={() => onNavigate(page)}
+										sx={
+											props.page === page.toLowerCase() ?
+												{
+													borderBottom: '3px solid #CA3C3D'
+												}
+												:
+												null
+										}
+									>
+										{page}
+									</NavButton>
 								)
 							})
 						}

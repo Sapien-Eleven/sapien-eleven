@@ -14,7 +14,7 @@ export function Home() {
         <div
             className="app"
         >
-            <Header />
+            <Header page={'home'} />
             <IntroPanel />
             <IntroSapien />
             <HumanHealth />

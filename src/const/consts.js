@@ -8,7 +8,7 @@ import PhantomIcon from '../assets/images/icons/phantom.jpg'
 import {injected, walletconnect} from "./connectors";
 import {useWeb3React} from "@web3-react/core";
 import {useEffect, useState} from "react";
-export const consts = ['ACADEMY', 'ABOUT', 'MARKETPLACE', 'RESOURCES', 'CONTACT'];
+export const pages = ['ACADEMY', 'ABOUT', 'MARKETPLACE', 'RESOURCES', 'CONTACT'];
 
 export const policies = ['PRIVACY POLICY', 'TERMS AND CONDITIONS', 'DISCLAMER', 'COOKIE POLICY'];
 

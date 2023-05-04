@@ -1,19 +1,80 @@
-import {Box, Button} from "@mui/material";
-import {memo, useCallback, useEffect, useState} from "react";
+import {Box, Button, TextField} from "@mui/material";
+import {memo, useCallback, useEffect, useRef, useState} from "react";
 import StepBg from '../../assets/images/contact/step_bg.png'
 import FinalBg from '../../assets/images/contact/final_bg.png'
 import {colors, fonts, pixToRem} from "../../const/uivar";
 import {CircularProgressbar} from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
+import validator from 'validator'
+import {toast, ToastContainer} from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css';
 
 const Main = memo(props => {
-    const [step, setStep] = useState(1);
+    const [step, setStep] = useState(0);
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
+    const [email, setEmail] = useState('');
+    const [phoneNumber, setPhoneNumber] = useState('');
+    const [qc, setQC] = useState('')
+    const [stepForwardBtnDisabled, setStepForwardBtnDisabled] = useState(true)
+
     const stepBack = useCallback(() => {
-        if (step > 0) setStep(step - 1);
+        if (step > 0) {
+            setStep(step - 1);
+            setStepForwardBtnDisabled(false)
+        }
     }, [step])
     const stepForward = useCallback(() => {
-        if (step <= 3) setStep(step + 1)
-    }, [step])
+        if (step === 0) {
+           if (firstName === '' || lastName === '') return;
+        }
+        else if (step === 1) {
+            if (email === '') return;
+            if (!validator.isEmail(email)) {
+                toast.error('Email is not valid',
+                    {position: toast.POSITION.TOP_RIGHT})
+                return;
+            }
+        }
+        else if (step === 2) {
+            if (phoneNumber === '') return;
+            if (!validator.isMobilePhone(phoneNumber)) {
+                toast.error('Phone number is not valid',
+                    {position: toast.POSITION.TOP_RIGHT})
+                return;
+            }
+        }
+        if (step <= 3) {
+            setStep(step + 1)
+            setStepForwardBtnDisabled(true)
+        }
+    })
+
+    const onChangeFirstName = useCallback((e) => {
+        setFirstName(e.target.value)
+        if (lastName) setStepForwardBtnDisabled(false)
+        if (e.target.value === '') setStepForwardBtnDisabled(true)
+    })
+    const onChangeLastName = useCallback((e) => {
+        setLastName(e.target.value)
+        if (firstName) setStepForwardBtnDisabled(false)
+        if (e.target.value === '') setStepForwardBtnDisabled(true)
+    })
+    const onChangeEmail = useCallback((e) => {
+        setEmail(e.target.value)
+        if (e.target.value === '') setStepForwardBtnDisabled(true)
+        else setStepForwardBtnDisabled(false)
+    })
+    const onChangePhoneNumber = useCallback((e) => {
+        setPhoneNumber(e.target.value);
+        if (e.target.value === '') setStepForwardBtnDisabled(true)
+        else setStepForwardBtnDisabled(false)
+    })
+    const onChangeQC = useCallback((e) => {
+        setQC(e.target.value);
+        if (e.target.value === '') setStepForwardBtnDisabled(true)
+        else setStepForwardBtnDisabled(false)
+    })
     return (
         <Box
             component={'div'}
@@ -64,16 +125,22 @@ const Main = memo(props => {
                         sx={styles.stepActionPanel}
                     >
                         {
-                            step === 0 && <Name />
+                            step === 0 &&
+                            <Name
+                                defaultFirstName={firstName}
+                                defaultLastName={lastName}
+                                onChangeFirstName={onChangeFirstName}
+                                onChangeLastName={onChangeLastName}
+                            />
                         }
                         {
-                            step === 1 && <Email />
+                            step === 1 && <Email defaultValue={email} onChangeEmail={onChangeEmail} />
                         }
                         {
-                            step === 2 && <PhoneNumber />
+                            step === 2 && <PhoneNumber defaultValue={phoneNumber} onChangePhoneNumber={onChangePhoneNumber} />
                         }
                         {
-                            step === 3 && <Questions_Concerns />
+                            step === 3 && <Questions_Concerns defaultValue={qc} onChangeQC={onChangeQC} />
                         }
                         <Box
                             component={'div'}
@@ -81,11 +148,11 @@ const Main = memo(props => {
                         >
                             {
                                 step > 0 ?
-                                    <Button sx={styles.stepInactiveBtn} onClick={stepBack}>go back</Button>
+                                    <Button sx={styles.stepBackBtn} onClick={stepBack}>go back</Button>
                                     :
                                     <Box sx={{width: '30%'}} />
                             }
-                            <Button sx={styles.stepActiveBtn} onClick={stepForward}>Next</Button>
+                            <Button sx={styles.stepForwardBtn} disabled={stepForwardBtnDisabled} onClick={stepForward}>Next</Button>
                         </Box>
                     </Box>
                 </Box>
@@ -124,6 +191,16 @@ const Main = memo(props => {
                     >explore sapiens eleven</Button>
                 </Box>
             }
+            <ToastContainer
+                autoClose={3000}
+                hideProgressBar={true}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+            />
         </Box>
     )
 })
@@ -275,7 +352,7 @@ const styles = {
         alignItems: 'center',
         marginTop: pixToRem(25),
     },
-    stepInactiveBtn: {
+    stepBackBtn: {
         width: pixToRem(190),
         border: '1px solid #ccc',
         justifyContent: 'center',
@@ -294,7 +371,7 @@ const styles = {
             boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)'
         },
     },
-    stepActiveBtn: {
+    stepForwardBtn: {
         width: pixToRem(190),
         justifyContent: 'center',
         alignItems: 'center',
@@ -313,6 +390,10 @@ const styles = {
             color: 'white',
             boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)'
         },
+        '&.Mui-disabled': {
+            backgroundColor: 'transparent',
+            border: '1px solid #ccc',
+        }
     },
     stepNamePanel: {
         width: '80%',
@@ -437,19 +518,18 @@ const styles = {
         alignSelf: 'flex-start'
     },
     stepQCInput: {
+        width: '95%',
         fontFamily: fonts.roboto,
         fontStyle: 'normal',
         fontSize: pixToRem(14),
         lineHeight: pixToRem(30),
-        fontWeight: 400,
+        fontWeight: 700,
         color: colors.black,
         backgroundColor: 'white',
-        width: '95%',
-        border: 'none',
         paddingLeft: pixToRem(20),
         paddingRight: pixToRem(20),
-        paddingTop: pixToRem(15),
-        paddingBottom: pixToRem(15)
+        paddingTop: pixToRem(20),
+        paddingBottom: pixToRem(20)
     }
 }
 
@@ -467,9 +547,17 @@ const Name = memo(props => {
                     component={'span'}
                     sx={styles.stepNameLabel}
                 >First Name*</Box>
-                <Box
-                    component={'input'}
+                <TextField
                     sx={styles.stepNameInput}
+                    fullWidth={true}
+                    variant={'standard'}
+                    InputProps={{
+                        disableUnderline: true
+                    }}
+                    required={true}
+                    type={'text'}
+                    defaultValue={props.defaultFirstName}
+                    onChange={props.onChangeFirstName}
                 />
             </Box>
             <Box
@@ -480,9 +568,16 @@ const Name = memo(props => {
                     component={'span'}
                     sx={styles.stepNameLabel}
                 >Last Name*</Box>
-                <Box
-                    component={'input'}
+                <TextField
                     sx={styles.stepNameInput}
+                    fullWidth={true}
+                    variant={'standard'}
+                    InputProps={{
+                        disableUnderline: true
+                    }}
+                    required={true}
+                    defaultValue={props.defaultLastName}
+                    onChange={props.onChangeLastName}
                 />
             </Box>
         </Box>
@@ -499,9 +594,17 @@ const Email = memo(props => {
                 component={'span'}
                 sx={styles.stepEmailLabel}
             >Email*</Box>
-            <Box
-                component={'input'}
+            <TextField
                 sx={styles.stepEmailInput}
+                fullWidth={true}
+                variant={'standard'}
+                InputProps={{
+                    disableUnderline: true
+                }}
+                required={true}
+                type={'email'}
+                defaultValue={props.defaultValue}
+                onChange={props.onChangeEmail}
             />
         </Box>
     )
@@ -517,9 +620,16 @@ const PhoneNumber = memo(props => {
                 component={'span'}
                 sx={styles.stepPhoneNumberLabel}
             >Phone Number*</Box>
-            <Box
-                component={'input'}
+            <TextField
                 sx={styles.stepPhoneNumberInput}
+                fullWidth={true}
+                variant={'standard'}
+                InputProps={{
+                    disableUnderline: true
+                }}
+                required={true}
+                defaultValue={props.defaultValue}
+                onChange={props.onChangePhoneNumber}
             />
         </Box>
     )
@@ -535,9 +645,19 @@ const Questions_Concerns = memo(props => {
                 component={'span'}
                 sx={styles.stepQCLabel}
             >Questions / Concerns</Box>
-            <Box
-                component={'input'}
+            <TextField
                 sx={styles.stepQCInput}
+                multiline
+                fullWidth={true}
+                minRows={4}
+                maxRows={7}
+                placeholder={'Please write your question...'}
+                variant={'standard'}
+                InputProps={{
+                    disableUnderline: true,
+                }}
+                defaultValue={props.defaultValue}
+                onChange={props.onChangeQC}
             />
         </Box>
     )

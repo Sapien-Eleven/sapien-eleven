@@ -29,6 +29,61 @@ const Team = memo(props => {
             </Box>
             <Box
                 component={'div'}
+                sx={styles.teamLeader}
+            />
+            <Box
+                component={'div'}
+                sx={styles.memberPanel}
+            >
+                <Box
+                    component={'div'}
+                    sx={styles.memberBox}
+                />
+                <Box
+                    component={'div'}
+                    sx={styles.memberBox}
+                />
+                <Box
+                    component={'div'}
+                    sx={styles.memberBox}
+                />
+            </Box>
+            <Box
+                component={'div'}
+                sx={styles.memberPanel}
+            >
+                <Box
+                    component={'div'}
+                    sx={styles.memberBox}
+                />
+                <Box
+                    component={'div'}
+                    sx={styles.memberBox}
+                />
+                <Box
+                    component={'div'}
+                    sx={styles.memberBox}
+                />
+            </Box>
+            <Box
+                component={'div'}
+                sx={styles.memberPanel}
+            >
+                <Box
+                    component={'div'}
+                    sx={styles.memberBox}
+                />
+                <Box
+                    component={'div'}
+                    sx={styles.memberBox}
+                />
+                <Box
+                    component={'div'}
+                    sx={styles.memberBox}
+                />
+            </Box>
+            <Box
+                component={'div'}
                 sx={styles.memberPanel}
             >
                 <Box
@@ -94,16 +149,21 @@ const styles = {
         width: '100%',
         display: 'flex',
         flexDirection: 'row',
-        justifyContent: 'center',
+        justifyContent: 'space-around',
         alignItems: 'center',
         marginTop: pixToRem(40),
         marginBottom: pixToRem(30)
     },
     memberBox: {
-        width: '30%',
-        height: pixToRem(500),
+        width: '25%',
+        height: pixToRem(400),
         backgroundColor: '#F2F2F2',
-        marginLeft: pixToRem(15),
-        marginRight: pixToRem(15)
+    },
+    teamLeader: {
+        width: '40%',
+        height: pixToRem(650),
+        backgroundColor: '#F2F2F2',
+        marginTop: pixToRem(40),
+        marginBottom: pixToRem(80)
     }
 }

@@ -46,7 +46,10 @@ const Main = memo(props => {
         }
         if (step <= 3) {
             setStep(step + 1)
-            setStepForwardBtnDisabled(true)
+            if (step === 0 && email !== '') setStepForwardBtnDisabled(false)
+            else if (step === 1 && phoneNumber !== '') setStepForwardBtnDisabled(false)
+            else if (step === 2 && qc !== '') setStepForwardBtnDisabled(false)
+            else setStepForwardBtnDisabled(true)
         }
     })
 
@@ -251,7 +254,7 @@ const styles = {
         color: colors.red,
         border: '2px solid #F2F2F2',
         borderRadius: '50%',
-        scale: '-1 1'
+        transform: 'rotate(-90deg)'
     },
     stepperCount: {
         fontFamily: fonts.roboto,

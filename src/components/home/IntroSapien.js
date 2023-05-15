@@ -20,7 +20,7 @@ export function IntroSapien() {
             <Box
                 component={'span'}
                 sx={styles.comment}
-            >Sapien Eleve is a NFT wellness brand that aims to educate and improve the<br/>health and wellness of our community members through prevention.</Box>
+            >Meet our incredible team of dedicated professionals who bring a wealth of knowledge, experience, and passion to everything they do.</Box>
             <Container
                 component={'div'}
                 maxWidth={false}

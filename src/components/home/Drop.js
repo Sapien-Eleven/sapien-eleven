@@ -1,9 +1,12 @@
 import { Box, Button, Container } from "@mui/material";
 import { colors, fonts, pixToRem } from "../../const/uivar";
 import Running from '../../assets/images/running.png'
-import { Twitter } from "@mui/icons-material";
+import SapienMark from '../../assets/mark.png'
+import {connect} from "react-redux";
+import {memo} from "react";
+import {Twitter} from "@mui/icons-material";
 
-export function Drop() {
+const Drop = memo(props => {
     return (
         <Container
             component={'div'}
@@ -18,30 +21,50 @@ export function Drop() {
                     component={'span'}
                     sx={styles.whiteTitle}
                 >
-                    DON'T MISS
+                    {props.connectedWallet === '' ? 'EXCLUSIVE' : 'FULL'}
                 </Box>
                 <Box
                     component={'span'}
                     sx={styles.redTitle}
                 >
-                    A DROP
+                    {props.connectedWallet === '' ? 'MEMBERSHIP' : 'TRANSPARENCY'}
                 </Box>
                 <Box
                     component={'span'}
                     sx={styles.comment}
                 >
-                    One by one we will make world a healthier place. We can't do it alone though. Please follow along on Twitter and make sure to invite your friends and family.
+                    {
+                        props.connectedWallet === '' ?
+                            'For exclusive access to the Sapien Eleven Wellness Platform including all content, experiences, and products join today.'
+                            : 'It\'s no secret that transparency is necessary to gain full trust and support of the community. Stay up to date on what the Sapien Eleven team is striving to accomplish.'
+                    }
                 </Box>
-                <Button
-                    sx={styles.twitterBtn}
-                    startIcon={<Twitter sx={{width: '24px', height: '22px', marginRight: '10px'}} />}
-                >
-                    FOLLOW US ON TWITTER
-                </Button>
+                {
+                    props.connectedWallet === '' ?
+                        <Button
+                            sx={styles.twitterBtn}
+                            startIcon={<Box component={'img'} src={SapienMark} sx={{width: '24px', height: 'auto', marginRight: '10px'}} />}
+                        >
+                            JOIN SAPIEN ELEVEN
+                        </Button>
+                        :
+                        <Button
+                            sx={styles.twitterBtn}
+                            startIcon={<Twitter sx={{width: '24px', height: 'auto', marginRight: '10px'}} />}
+                        >
+                            FOLLOW US ON TWITTER
+                        </Button>
+                }
             </Box>
         </Container>
     )
-}
+})
+
+export default connect(
+    state => ({
+        connectedWallet: state.authReducer.connectedWallet
+    })
+)(Drop)
 
 const styles = {
     panel: {
@@ -56,7 +79,7 @@ const styles = {
         alignItems: 'flex-end',
     },
     explaination: {
-        width: '45%',
+        width: '38%',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',

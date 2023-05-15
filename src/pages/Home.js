@@ -6,7 +6,7 @@ import { ChronicDisease } from "../components/home/ChronicDisease";
 import { DiseaseReport } from "../components/home/DiseaseReport";
 import { HumanHealth } from "../components/home/HumanHealth";
 import IntroPanel from "../components/home/IntroPanel";
-import { Drop } from "../components/home/Drop";
+import Drop from "../components/home/Drop";
 import '../styles/common.css'
 
 export function Home() {

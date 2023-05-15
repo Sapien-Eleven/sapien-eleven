@@ -75,12 +75,17 @@ const Header = memo((props) => {
 		<AppBar className='TopBar' sx={[props.page !== 'home' ? {borderBottom: '1px solid #F2F2F2'} : null, {boxShadow: 'none'}]} position='relative'>
 			<Container maxWidth={false}>
 				<Toolbar disableGutters sx={styles.toolbar}>
-					<Box
-						component={'img'}
-						sx={styles.logo}
-						alt='Sapien Eleven'
-						src={SapienLogo}
-					/>
+					<Button
+						sx={styles.logoBtn}
+						onClick={() => onNavigate('')}
+					>
+						<Box
+							component={'img'}
+							sx={styles.logo}
+							alt='Sapien Eleven'
+							src={SapienLogo}
+						/>
+					</Button>
 					<Container sx={styles.navBar}>
 						{
 							pages.map((page, index) => {
@@ -142,6 +147,9 @@ const styles = {
 		flexDirection: 'row',
 		justifyContent: 'center',
 		alignItems: 'center'
+	},
+	logoBtn: {
+		padding: '0px 0px'
 	},
 	logo: {
 		width: pixToRem(201),

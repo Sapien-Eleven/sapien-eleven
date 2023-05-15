@@ -5,6 +5,7 @@ import WellnessGame from "../components/about/WellnessGame";
 import Team from "../components/about/Team";
 import Miss from "../components/about/Miss";
 import {Footer} from "../components/Footer";
+import NextHealthApp from "../components/about/NextHealthApp";
 
 const About = memo(props => {
     return (
@@ -12,6 +13,7 @@ const About = memo(props => {
             <Header page={'about'} />
             <IntroPanel />
             <WellnessGame />
+            <NextHealthApp />
             <Team />
             <Miss />
             <Footer />

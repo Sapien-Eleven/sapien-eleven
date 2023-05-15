@@ -8,6 +8,8 @@ import PhantomIcon from '../assets/images/icons/phantom.jpg'
 import {injected, walletconnect} from "./connectors";
 import {useWeb3React} from "@web3-react/core";
 import {useEffect, useState} from "react";
+import Brenton from '../assets/images/about/brenton.png'
+import Svensei from '../assets/images/about/sv3nsei.jpg'
 export const pages = ['ACADEMY', 'ABOUT', 'MARKETPLACE', 'RESOURCES', 'CONTACT'];
 
 export const policies = ['PRIVACY POLICY', 'TERMS AND CONDITIONS', 'DISCLAMER', 'COOKIE POLICY'];
@@ -52,3 +54,66 @@ export const wallets = {
         url: 'https://phantom.app/download'
     }
 }
+
+export const teamMembers = [
+    {
+        name: 'BRENTON',
+        role: 'Lead Content Creator',
+        image: Brenton
+    },
+    {
+        name: 'BRETT',
+        role: 'Brand Strategy and Development',
+        image: ''
+    },
+    {
+        name: 'SVENSEI',
+        role: 'UI/UX Designer',
+        image: Svensei
+    },
+    {
+        name: 'AMRA',
+        role: 'Illustrator & Graphic Designer',
+        image: ''
+    },
+    {
+        name: 'WANG',
+        role: 'Full Stack Developer',
+        image: ''
+    },
+    {
+        name: 'JIN',
+        role: 'Full Stack Developer',
+        image: ''
+    },
+    {
+        name: 'KEVIN',
+        role: 'Senior Financial Analyst',
+        image: ''
+    },
+    {
+        name: 'STE',
+        role: 'Life and Mental Health Coach',
+        image: ''
+    },
+    {
+        name: 'KIERSTON',
+        role: 'Chef',
+        image: ''
+    },
+    {
+        name: 'KAT',
+        role: 'Fitness Coach',
+        image: ''
+    },
+    {
+        name: 'EMILIE',
+        role: 'Yogini',
+        image: ''
+    },
+    {
+        name: 'HYGEIA',
+        role: 'Wellness AI',
+        image: ''
+    }
+]

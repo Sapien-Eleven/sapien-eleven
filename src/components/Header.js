@@ -72,7 +72,7 @@ const Header = memo((props) => {
 		navigate(`/${page.toLowerCase()}`)
 	}
 	return (
-		<AppBar className='TopBar' sx={[props.page !== 'home' ? {borderBottom: '1px solid #F2F2F2'} : null, {boxShadow: 'none'}]} position='relative'>
+		<AppBar className='TopBar' sx={[props.page !== 'home' ? {borderBottom: '1px solid #F2F2F2'} : null, {boxShadow: 'none'}]} position={'sticky'}>
 			<Container maxWidth={false}>
 				<Toolbar disableGutters sx={styles.toolbar}>
 					<Button

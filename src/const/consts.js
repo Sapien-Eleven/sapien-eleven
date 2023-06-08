@@ -117,3 +117,5 @@ export const teamMembers = [
         image: ''
     }
 ]
+
+export const academyCategories = ['mindfulness', 'meditation', 'yoga', 'mobility', 'fitness', 'recipes', 'diets', 'superfoods'];

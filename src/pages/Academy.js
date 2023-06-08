@@ -1,15 +1,13 @@
 import {Footer} from "../components/Footer";
 import Header from "../components/Header";
 import {memo} from "react";
-import IntroPanel from "../components/academy/IntroPanel";
-import Main from "../components/academy/Main";
+import Home from "../components/academy/Home";
 
 const Academy = memo(props => {
     return (
         <div className={'app'}>
             <Header page={'academy'} />
-            <IntroPanel />
-            <Main />
+            <Home />
             <Footer />
         </div>
     )

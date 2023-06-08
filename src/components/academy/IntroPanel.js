@@ -1,11 +1,14 @@
 import {memo} from "react";
-import {Box, Container} from "@mui/material";
+import {Box, Button, Container} from "@mui/material";
 import Bg from '../../assets/images/academy/intro_bg.png'
-import {fonts, pixToRem} from "../../const/uivar";
+import {colors, fonts, pixToRem} from "../../const/uivar";
+import MetaMaskLogo from '../../assets/metamask_logo.png'
+import Wellness from '../../assets/images/academy/wellness.png'
 
 const IntroPanel = memo(props => {
     return (
         <Container
+            component={'div'}
             maxWidth={false}
             sx={styles.panel}
         >
@@ -13,20 +16,31 @@ const IntroPanel = memo(props => {
                 component={'span'}
                 sx={styles.redTitle}
             >
-                WELLNESS
+                SAPIEN ELEVEN
             </Box>
             <Box
                 component={'span'}
                 sx={styles.whiteTitle}
             >
-                ACADEMY
+                WELLNESS ACADEMY
             </Box>
             <Box
                 component={'span'}
                 sx={styles.comment}
             >
-                The Sapien Eleven Wellness Academy is an archive of experiences to motivate and empower you to achieve your wellness goals.
+                The idea of the Sapien Eleven Wellness Academy is what motivated us to create Sapien Eleven in the first place.
             </Box>
+            <Button
+                sx={styles.button}
+                startIcon={<img src={MetaMaskLogo} style={styles.metamaskLogo} alt={'metamask'} />}
+            >
+                connect wallet
+            </Button>
+            <Box
+                component={'img'}
+                src={Wellness}
+                sx={styles.img}
+            />
         </Container>
     )
 })
@@ -38,43 +52,66 @@ const styles = {
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
-        alignItems: 'flex-start',
+        alignItems: 'center',
         width: '100%',
-        height: pixToRem(480),
-        backgroundImage: `url(${Bg})`,
-        backgroundRepeat: 'no-repeat',
-        backgroundSize: 'cover'
+        backgroundColor: colors.bgBlackColor
     },
     redTitle: {
         fontFamily: fonts.roboto,
-        fontSize: pixToRem(45),
+        fontSize: pixToRem(35),
         fontWeight: 700,
         fontStyle: 'normal',
         color: '#CA3C3D',
-        lineHeight: pixToRem(55),
-        marginLeft: pixToRem(70)
+        lineHeight: pixToRem(45),
+        marginTop: pixToRem(150)
     },
     whiteTitle: {
         fontFamily: fonts.besan,
-        fontSize: pixToRem(45),
+        fontSize: pixToRem(35),
         fontWeight: 400,
         fontStyle: 'normal',
         color: 'white',
-        lineHeight: pixToRem(55),
+        lineHeight: pixToRem(45),
         marginTop: pixToRem(5),
         marginBottom: pixToRem(15),
-        marginLeft: pixToRem(70)
     },
     comment: {
-        width: '42%',
+        width: '30%',
         fontFamily: fonts.roboto,
-        fontSize: pixToRem(26),
+        fontSize: pixToRem(20),
         fontWeight: 400,
         fontStyle: 'normal',
         color: 'white',
-        lineHeight: pixToRem(40),
+        lineHeight: pixToRem(30),
         marginTop: pixToRem(15),
         marginBottom: pixToRem(20),
-        marginLeft: pixToRem(70)
+        textAlign: 'center'
+    },
+    button: {
+        height: pixToRem(50),
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        alignItems: 'center',
+        paddingLeft: pixToRem(40),
+        paddingRight: pixToRem(40),
+        fontFamily: fonts.roboto,
+        fontSize: pixToRem(14),
+        fontWeight: 700,
+        fontStyle: 'normal',
+        lineHeight: 16,
+        border: '1px solid #CA3C3D',
+        borderRadius: 0,
+        marginTop: pixToRem(15),
+    },
+    metamaskLogo: {
+        width: pixToRem(20),
+        height: pixToRem(20),
+        marginRight: pixToRem(10)
+    },
+    img: {
+        width: pixToRem(300),
+        height: 'auto',
+        marginTop: pixToRem(20)
     }
 }

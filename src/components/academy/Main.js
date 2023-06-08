@@ -1,16 +1,18 @@
 import {Container} from "@mui/material";
-import {memo} from "react";
+import {memo, useCallback, useState} from "react";
 import Category from "./Category";
 import Content from "./Content";
 
 const Main = memo(props => {
+    const [category, setCategory] = useState('mindfulness')
+    const onChangeCategory = useCallback((value) => setCategory(value));
     return (
         <Container
             maxWidth={false}
             sx={styles.panel}
         >
-            <Category />
-            <Content />
+            <Category category={category} setCategory={onChangeCategory} />
+            <Content category={category} />
         </Container>
     )
 })

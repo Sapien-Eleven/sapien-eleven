@@ -1,27 +1,23 @@
 import {Box, Button} from "@mui/material";
 import {memo, useCallback, useState} from "react";
 import {colors, fonts, pixToRem} from "../../const/uivar";
+import {academyCategories} from "../../const/consts";
 
 const Category = memo(props => {
-    const categories = ['mindfulness', 'meditation', 'yoga', 'mobility', 'fitness', 'recipes', 'diets', 'superfoods'];
-    const [category, setCategory] = useState('mindfulness');
-    const onChangeCategory = useCallback((item) => {
-        setCategory(item)
-    });
     return (
         <Box
             component={'div'}
             sx={styles.panel}
         >
             {
-                categories.map((item, index) => {
+                academyCategories.map((item, index) => {
                     return (
                         <Button
                             key={index}
-                            sx={category === item ? styles.activeBtn : styles.inactiveBtn}
-                            onClick={() => onChangeCategory(item)}
+                            sx={props.category === item ? styles.activeBtn : styles.inactiveBtn}
+                            onClick={() => props.setCategory(item)}
                         >
-                            <Box sx={category === item ? styles.activeDot : styles.inactiveDot} />
+                            <Box sx={props.category === item ? styles.activeDot : styles.inactiveDot} />
                             {item}
                         </Button>
                     )

@@ -2,6 +2,8 @@ import {Box, Button} from "@mui/material";
 import {memo, useCallback, useState} from "react";
 import {colors, fonts, pixToRem} from "../../const/uivar";
 import {academyCategories} from "../../const/consts";
+import {useCollapse} from "react-collapsed";
+import {BiChevronRight, BiChevronDown} from 'react-icons/bi';
 
 const Category = memo(props => {
     return (
@@ -10,16 +12,9 @@ const Category = memo(props => {
             sx={styles.panel}
         >
             {
-                academyCategories.map((item, index) => {
+                Object.keys(academyCategories).map((item, index) => {
                     return (
-                        <Button
-                            key={index}
-                            sx={props.category === item ? styles.activeBtn : styles.inactiveBtn}
-                            onClick={() => props.setCategory(item)}
-                        >
-                            <Box sx={props.category === item ? styles.activeDot : styles.inactiveDot} />
-                            {item}
-                        </Button>
+                        <CategoryItem currentCategory={props.category} key={index} category={academyCategories[item]} setCategory={props.setCategory} />
                     )
                 })
             }
@@ -35,67 +30,151 @@ const styles = {
         flexDirection: 'column',
         justifyContent: 'flex-start',
         alignItems: 'flex-start',
-        backgroundColor: 'white',
         paddingTop: pixToRem(100),
-        paddingBottom: pixToRem(100),
-        paddingLeft: pixToRem(70),
+        paddingLeft: pixToRem(100),
         paddingRight: pixToRem(20),
     },
-    activeBtn: {
-        paddingTop: pixToRem(15),
-        paddingBottom: pixToRem(15),
-        paddingLeft: pixToRem(15),
-        paddingRight: pixToRem(15),
-        marginTop: pixToRem(7),
-        marginBottom: pixToRem(7),
-        border: '1px solid #CA3C3D',
-        borderRadius: 0,
+    activeCategoryItem: {
+        width: pixToRem(250),
+        border: '1px #CA3C3D solid',
+    },
+    inactiveCategoryItem: {
+        width: pixToRem(250),
+        border: '1px #CCC solid',
+    },
+    categoryHeader: {
         display: 'flex',
         flexDirection: 'row',
-        justifyContent: 'flex-start',
         alignItems: 'center',
-        fontFamily: fonts.roboto,
-        fontStyle: 'normal',
-        fontWeight: '700',
-        fontSize: pixToRem(14),
-        lineHeight: pixToRem(16),
-        color: '#333',
-        width: pixToRem(250),
-        textTransform: 'capitalize'
+        justifyContent: 'space-between',
+        padding: pixToRem(10)
     },
-    inactiveBtn: {
-        paddingTop: pixToRem(15),
-        paddingBottom: pixToRem(15),
-        paddingLeft: pixToRem(15),
-        paddingRight: pixToRem(15),
-        marginTop: pixToRem(7),
-        marginBottom: pixToRem(7),
-        borderRadius: 0,
+    subcategoryHeader: {
         display: 'flex',
         flexDirection: 'row',
-        justifyContent: 'flex-start',
         alignItems: 'center',
+        padding: pixToRem(10),
+        borderRadius: 0,
+    },
+    categoryLabelGroup: {
+        flex: 1,
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    activeHeaderLabel: {
+        flex: 1,
         fontFamily: fonts.roboto,
-        fontStyle: 'normal',
         fontWeight: '700',
-        fontSize: pixToRem(14),
-        lineHeight: pixToRem(16),
+        fontSize: pixToRem(18),
+        lineHeight: pixToRem(20),
         color: '#333',
-        width: pixToRem(250),
-        textTransform: 'capitalize'
+        textTransform: 'capitalize',
+        marginLeft: pixToRem(10)
     },
-    activeDot: {
-        width: pixToRem(20),
-        height: pixToRem(20),
-        backgroundColor: colors.red,
-        borderRadius: pixToRem(20),
-        marginRight: pixToRem(15)
+    inactiveHeaderLabel: {
+        flex: 1,
+        fontFamily: fonts.roboto,
+        fontWeight: '700',
+        fontSize: pixToRem(18),
+        lineHeight: pixToRem(20),
+        color: '#999',
+        textTransform: 'capitalize',
+        marginLeft: pixToRem(10)
     },
-    inactiveDot: {
-        width: pixToRem(20),
-        height: pixToRem(20),
-        backgroundColor: '#D9D9D9',
-        borderRadius: pixToRem(20),
-        marginRight: pixToRem(15)
+    arrowIcon: {
+        width: pixToRem(6),
+        height: pixToRem(10),
+        color: '#666'
+    },
+    inactiveSubCategoryLabel: {
+        flex: 1,
+        fontFamily: fonts.roboto,
+        fontWeight: '700',
+        fontSize: pixToRem(16),
+        lineHeight: pixToRem(18),
+        color: '#999',
+        textTransform: 'capitalize',
+        marginLeft: pixToRem(10)
+    },
+    activeSubCategoryLabel: {
+        flex: 1,
+        fontFamily: fonts.roboto,
+        fontWeight: '700',
+        fontSize: pixToRem(16),
+        lineHeight: pixToRem(18),
+        color: '#333',
+        textTransform: 'capitalize',
+        marginLeft: pixToRem(10)
+    },
+    categoryBody: {
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'flex-start',
+        paddingLeft: pixToRem(10),
+        paddingRight: pixToRem(10)
     }
 }
+
+const CategoryItem = memo(props => {
+    const {getCollapseProps, getToggleProps, isExpanded} = useCollapse({
+        duration: 1000,
+    });
+    return (
+        <Box
+            component={'div'}
+            sx={props.category.subCategories.findIndex(item => item.label === props.currentCategory.label) > -1 ? styles.activeCategoryItem : styles.inactiveCategoryItem}
+        >
+            <Box
+                component={'div'}
+                sx={styles.categoryHeader}
+                {...getToggleProps()}
+            >
+                <Box
+                    component={'div'}
+                    sx={styles.categoryLabelGroup}
+                >
+                    {props.category.subCategories.findIndex(item => item.label === props.currentCategory.label) > -1 ? props.category.activeIcon : props.category.inactiveIcon}
+                    <Box
+                        component={'span'}
+                        sx={props.category.subCategories.findIndex(item => item.label === props.currentCategory.label) > -1 ? styles.activeHeaderLabel : styles.inactiveHeaderLabel}
+                    >
+                        {props.category.label}
+                    </Box>
+                </Box>
+                {
+                    isExpanded ? <BiChevronDown /> : <BiChevronRight />
+                }
+            </Box>
+            <Box
+                component={'div'}
+                sx={styles.categoryBody}
+                {...getCollapseProps()}
+            >
+                {
+                    props.category.subCategories.map((item, index) => (
+                        <SubCategory key={index} currentCategory={props.currentCategory} subcategory={item} setCategory={() => props.setCategory(item)} />
+                    ))
+                }
+            </Box>
+        </Box>
+    )
+})
+
+const SubCategory = memo(props => {
+    return (
+        <Button
+            sx={styles.subcategoryHeader}
+            startIcon={props.currentCategory.label === props.subcategory.label ? props.subcategory.activeIcon : props.subcategory.inactiveIcon}
+            onClick={props.setCategory}
+        >
+            <Box
+                component={'span'}
+                sx={props.currentCategory.label === props.subcategory.label ? styles.activeSubCategoryLabel : styles.inactiveSubCategoryLabel}
+            >
+                {props.subcategory.label}
+            </Box>
+        </Button>
+    )
+})

@@ -1,6 +1,6 @@
 import {Box} from "@mui/material";
 import {memo} from "react";
-import {pixToRem} from "../../const/uivar";
+import {colors, pixToRem} from "../../const/uivar";
 import Mindfulness from "./Mindfulness";
 import Meditation from "./Meditation";
 import Yoga from "./Yoga";
@@ -8,27 +8,85 @@ import Mobility from "./Mobility";
 import Fitness from "./Fitness";
 import Recipes from "./Recipes";
 import Diets from "./Diets";
-import Superfoods from "./Superfoods";
+import EatToHeal from "./EatToHeal";
 
 const Content = memo(props => {
-    const contents = {
-        mindfulness: Mindfulness,
-        meditation: Meditation,
-        yoga: Yoga,
-        mobility: Mobility,
-        fitness: Fitness,
-        recipes: Recipes,
-        diets: Diets,
-        superfoods: Superfoods
-    };
-    console.log(contents['mindfulness']);
-    return (
-        <Box
-            component={'div'}
-            sx={styles.panel}
-        >
-        </Box>
-    )
+    switch (props.category.label) {
+        case 'mindfulness':
+            return (
+                <Box
+                    component={'div'}
+                    sx={styles.panel}
+                >
+                    <Mindfulness />
+                </Box>
+            )
+        case 'meditation':
+            return (
+                <Box
+                    component={'div'}
+                    sx={styles.panel}
+                >
+                    <Meditation />
+                </Box>
+            )
+        case 'yoga':
+            return (
+                <Box
+                    component={'div'}
+                    sx={styles.panel}
+                >
+                    <Yoga />
+                </Box>
+            )
+        case 'mobility':
+            return (
+                <Box
+                    component={'div'}
+                    sx={styles.panel}
+                >
+                    <Mobility />
+                </Box>
+            )
+        case 'fitness':
+            return (
+                <Box
+                    component={'div'}
+                    sx={styles.panel}
+                >
+                    <Fitness />
+                </Box>
+            )
+        case 'recipes':
+            return (
+                <Box
+                    component={'div'}
+                    sx={styles.panel}
+                >
+                    <Recipes />
+                </Box>
+            )
+        case 'diets':
+            return (
+                <Box
+                    component={'div'}
+                    sx={styles.panel}
+                >
+                    <Diets />
+                </Box>
+            )
+        case 'eattoheal':
+            return (
+                <Box
+                    component={'div'}
+                    sx={styles.panel}
+                >
+                    <EatToHeal />
+                </Box>
+            )
+        default:
+            return <Box></Box>;
+    }
 })
 
 export default Content
@@ -36,6 +94,7 @@ export default Content
 const styles = {
     panel: {
         flex: 1,
+        backgroundColor: colors.bgWhiteColor,
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',

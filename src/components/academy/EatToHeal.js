@@ -1,10 +1,10 @@
 import {Box} from "@mui/material";
 import {memo} from "react";
 
-const Superfoods = memo(props => {
+const EatToHeal = memo(props => {
     return (
         <Box></Box>
     )
 })
 
-export default Superfoods
+export default EatToHeal

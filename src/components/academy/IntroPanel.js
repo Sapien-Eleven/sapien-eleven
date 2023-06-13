@@ -1,11 +1,18 @@
-import {memo} from "react";
+import {memo, useCallback, useState} from "react";
 import {Box, Button, Container} from "@mui/material";
 import Bg from '../../assets/images/academy/intro_bg.png'
 import {colors, fonts, pixToRem} from "../../const/uivar";
 import MetaMaskLogo from '../../assets/metamask_logo.png'
 import Wellness from '../../assets/images/academy/wellness.png'
+import {connect} from "react-redux";
+import WalletModal from "../WalletModal";
 
 const IntroPanel = memo(props => {
+    const [walletModalVisible, setWalletModalVisible] = useState(false);
+    const openWalletModal = useCallback(() => {
+        if (props.connectedWallet !== '') return;
+        setWalletModalVisible(true)
+    });
     return (
         <Container
             component={'div'}
@@ -33,19 +40,28 @@ const IntroPanel = memo(props => {
             <Button
                 sx={styles.button}
                 startIcon={<img src={MetaMaskLogo} style={styles.metamaskLogo} alt={'metamask'} />}
+                onClick={openWalletModal}
             >
-                connect wallet
+                {props.connectedWallet !== ''? `FULL ACCESS` : `CONNECT WALLET`}
             </Button>
             <Box
                 component={'img'}
                 src={Wellness}
                 sx={styles.img}
             />
+            <WalletModal
+                visible={walletModalVisible}
+                closeModal={() => setWalletModalVisible(false)}
+            />
         </Container>
     )
 })
 
-export default IntroPanel
+export default connect(
+    state => ({
+        connectedWallet: state.authReducer.connectedWallet
+    })
+)(IntroPanel)
 
 const styles = {
     panel: {

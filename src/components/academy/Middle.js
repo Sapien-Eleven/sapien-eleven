@@ -1,7 +1,7 @@
 import {Box, Container} from "@mui/material";
 import {memo} from "react";
 import {colors, fonts, pixToRem} from "../../const/uivar";
-import Mindfullness from '../../assets/images/academy/mindfullness.png'
+import Mindfullness from '../../assets/images/academy/mindfulness_room.png'
 
 const Middle = memo(props => {
     return (

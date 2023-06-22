@@ -1,10 +1,14 @@
 import {Container} from "@mui/material";
-import {memo, useCallback, useState} from "react";
+import {memo, useCallback, useEffect, useState} from "react";
 import Category from "./Category";
 import Content from "./Content";
+import {academyCategories} from "../../const/consts";
 
 const Main = memo(props => {
     const [category, setCategory] = useState({})
+    useEffect(() => {
+        setCategory(academyCategories.mental.subCategories[0]);
+    }, []);
     const onChangeCategory = useCallback((value) => setCategory(value));
     return (
         <Container

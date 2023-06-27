@@ -68,21 +68,11 @@ const Content = memo(props => {
             )
         case 'diets':
             return (
-                <Box
-                    component={'div'}
-                    sx={styles.panel}
-                >
-                    <Diets />
-                </Box>
+                <Diets />
             )
-        case 'eattoheal':
+        case 'eat to heal':
             return (
-                <Box
-                    component={'div'}
-                    sx={styles.panel}
-                >
-                    <EatToHeal />
-                </Box>
+                <EatToHeal />
             )
         default:
             return <Box></Box>;

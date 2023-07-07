@@ -1,5 +1,5 @@
 import {memo, useCallback, useEffect, useState} from "react";
-import {Box, Breadcrumbs, dividerClasses, Link, Stack, Typography} from "@mui/material";
+import {Box, Breadcrumbs, Button, dividerClasses, Link, Stack, Typography} from "@mui/material";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import {colors, fonts, pixToRem} from "../../const/uivar";
 import ColorsWide from '../../assets/images/academy/colors_wide.png'
@@ -539,12 +539,73 @@ const oils = [
         content: ''
     }
 ];
+const learnMore = {
+    'colors': 'Nutrient Supply: Consuming a diverse range of nutrient-rich foods provides the body with essential vitamins, minerals, and other compounds needed for optimal function and repair.\n\nImmune Support: A healthy diet boosts our immune system enhancing our body\'s ability to fight off infections and illnesses.\n\nDisease Prevention: Foods rich in antioxidants and anti-inflammatory compounds, such as fruits, and vegetables, can help prevent chronic diseases like heart disease, diabetes, and cancer by neutralizing harmful free radicals and reducing inflammation.\n\nGut Health: Fiber-rich foods nourish our gut microbiota, playing a vital role in digestion, nutrient absorption, and overall health, including immune and mental health.\n\nWeight Management: Nutrient-dense foods are typically lower in calories but keep us satiated longer, helping maintain a healthy weight and preventing obesity-related diseases.\n\nIn essence, "eat to heal" is about using food as medicine to naturally enhance the body\'s healing capabilities and promote long-term health and wellness.',
+    'herbs': 'Indeed, herbs have been used by humans for thousands of years for their medicinal properties. They contain a variety of bioactive compounds that can support our health in various ways. Some can help soothe symptoms, support organ function, enhance sleep, reduce inflammation, and provide essential nutrients. Others can help modulate our immune system, either by calming an overactive immune response or by boosting a weak one.\n' +
+        '\n' +
+        'However, it\'s important to note that the impact of herbs on the immune system can be complex. For instance, herbs like echinacea or elderberry, which are known as immunostimulants, can boost the immune system and help it fight off infections. But for people with autoimmune diseases, where the immune system is already overactive, these herbs could potentially exacerbate the condition. Therefore, they should be used carefully under the guidance of a healthcare professional.\n' +
+        '\n' +
+        'In the case of autoimmune diseases, the goal is not to stimulate the immune system further, but to support and regulate it. Certain herbs have immunomodulatory properties, meaning they can help balance the immune response. The specific herbs that can help with this and other aspects of immune health will be discussed in detail in the following sections.\n' +
+        '\n' +
+        'However, it is important to remember that while herbs can provide health benefits, they should not be used as a replacement for conventional medical treatment, particularly for serious conditions like autoimmune diseases. Always consult with a healthcare provider before starting any herbal supplement regimen, especially if you have a chronic health condition or are taking other medications.\n' +
+        '\n' +
+        'Finally, the quality of the herbs used is important. Always choose high-quality, organic when possible, and ensure they come from a reputable source to avoid contamination with pesticides, heavy metals, and other harmful substances.\n',
+    'nuts': 'Nuts, derived from the seeds of plants, are indeed rich in unsaturated fatty acids and provide a wide range of nutritional benefits. They are a great source of protein, dietary fiber, and various essential vitamins and minerals. Moreover, they contain a myriad of beneficial phytochemicals, making them a functional superfood.\n' +
+        '\n' +
+        'Different types of nuts contain varying compositions of these phytochemicals, including flavonoids, proanthocyanidins, phytosterols, carotenoids, polyphenols, and lignans. The heat applied during roasting or cooking does not typically degrade these bioactive compounds, making them an easy and convenient addition to many meals.\n' +
+        '\n' +
+        'Flavonoids, a subclass of phenolics, are present in nuts and come mainly in the forms of flavan-3-ols, flavonols, and anthocyanins. Like proanthocyanidins, they provide similar benefits to catechin and epicatechin, the flavonoids found in green tea. These benefits may include antioxidant properties and potential improvements in heart health.\n' +
+        '\n' +
+        'Phytosterols are plant compounds structurally similar to cholesterol. They are known to lower blood cholesterol levels by inhibiting cholesterol absorption in the intestines. The phytosterol content in tree nuts is relatively high compared to fruits and vegetables, ranging from 72 to 214 milligrams per 100 grams in tree nuts versus just 4 to 5 milligrams per 100 grams in fruits and vegetables. Beta-sitosterol is the primary phytosterol in tree nuts.\n' +
+        '\n' +
+        'The tannins in tree nuts have a beneficial impact on gut microbiota. They stimulate the production of short-chain fatty acids (SCFAs), which feed beneficial gut bacteria and contribute to a healthy gut microbiome. SCFAs are linked to improved immune function, reduced inflammation, and protection against certain diseases, including colorectal cancer.\n' +
+        '\n' +
+        'Moreover, the high fiber content in nuts can aid in digestive health, further promoting a healthy gut microbiome. Nuts are also rich in antioxidants, which help combat oxidative stress, a key factor in chronic disease development.\n' +
+        '\n' +
+        'Despite their nutritional value, nuts are calorie-dense, and overconsumption can contribute to excess caloric intake. Therefore, it is recommended to consume them in moderation, ideally as part of a balanced, nutrient-rich diet.\n' +
+        '\n' +
+        'In summary, incorporating a variety of nuts into your diet can provide multiple health benefits due to their rich nutrient and phytochemical content. They can support your immune system, provide antioxidant benefits, and promote a healthy gut, among other potential health benefits.\n',
+    'oils': 'Understanding the various types of oils and their properties can indeed be complex but is essential for optimizing health benefits and cooking performance.\n\n' +
+        '\n' +
+        'The term \'omega\' in omega fatty acids refers to unsaturated fats, which have one or more double bonds in their chemical structure. The number that follows \'omega\' indicates the position of the first double bond in the molecular chain, counting from the end of the molecule. This determines the behavior of these fatty acids in the body.\n\n' +
+        '\n' +
+        'Omega fatty acids are classified as monounsaturated fatty acids (MUFAs) and polyunsaturated fatty acids (PUFAs). MUFAs, such as omega-7 and omega-9, have only one double bond in their structure, while PUFAs, like omega-3 and omega-6, have two or more.\n\n' +
+        '\n' +
+        'Each oil\'s smoke point, or the temperature at which it begins to smoke and break down, is another crucial consideration. When oils reach their smoke point, they can produce harmful oxidation products and become rancid. Generally, oils with more MUFAs and fewer PUFAs, such as those high in oleic acid, are more suitable for high-heat cooking as they have higher smoke points.\n\n' +
+        '\n' +
+        'Oils rich in tocopherols, a type of vitamin E, are also more stable when heated due to their antioxidant properties, which protect the oil against oxidation.\n\n' +
+        '\n' +
+        'On the other hand, oils with a high PUFA content are more prone to degradation when heated due to the multiple double bonds in their structure. Therefore, they are often better suited for use in salad dressings and other cold applications.\n\n' +
+        '\n' +
+        'We will delve deeper into the specific properties and uses of different oils, including their respective smoke points and health benefits. Remember, each oil has its own unique nutritional profile and is best suited to certain uses, so variety is key for a balanced and nutritious diet. A good rule of thumb is to avoid seed oils, cook with avocado and coconut oils, and flavor with olive oil.\n' +
+        '\n' +
+        'In summary, understanding the different types of fatty acids and the smoke points of different oils can help you make informed decisions about which oils to use in various cooking scenarios. This can enhance both the flavor and nutritional value of your meals, while also ensuring the safety and integrity of the oils you use.\n A good rule of thumb is to avoid seed oils, cook with avocado and coconut oils, and flavor with olive oil.\n',
+    'veggies': 'Root vegetables, as the name implies, are a category of vegetables where the edible portion is the root of the plant. This includes beets, carrots, radishes, turnips, rutabagas, and many more. Each plant typically yields one root vegetable.\n' +
+        '\n' +
+        'There\'s a subcategory within root vegetables known as tubers, which include potatoes and jicama. The key difference between the two is that tubers have growth points or "eyes" that generate hairy roots. These roots, in turn, grow into more tubers, meaning that one plant often produces multiple tubers.\n' +
+        'The function of the roots in a plant is crucial, serving as the primary channel for absorbing nutrients and water from the soil. Consequently, root vegetables are typically nutrient-dense, as they draw a rich variety of minerals and nutrients from the soil they inhabit.\n\n' +
+        '\n' +
+        'These vegetables contain an array of bioactive constituents such as phenolic compounds, glycoalkaloids, phytic acids, and saponins. Phenolic compounds have antioxidant properties, which help the body combat free radicals, potentially reducing the risk of chronic diseases. Glycoalkaloids are nitrogenous compounds that exhibit potential benefits like anti-inflammatory and antimicrobial effects but can be toxic in high amounts. Phytic acid has the ability to bind minerals, preventing their absorption in the human body, but it can also act as an antioxidant. Saponins have shown potential benefits in cholesterol management and boosting immunity.\n' +
+        '\n' +
+        'It\'s also worth mentioning that the nutritional value of root vegetables can vary depending on the soil health, the specific variety of vegetable, and the preparation method. Cooking methods can affect the nutrient content; for example, boiling can lead to a loss of water-soluble vitamins. However, certain cooking methods, like roasting, can enhance the natural sweetness of these vegetables, making them more palatable.\n' +
+        '\n' +
+        'One piece of information worth noting is the importance of consuming a diverse range of these root vegetables to ensure a varied nutrient intake. Additionally, root vegetables are often rich in dietary fiber, which is beneficial for gut health and can aid in weight management by promoting a feeling of fullness. They are also generally low in calories and fat, making them a healthy addition to most diets.\n\n' +
+        'Finally, it\'s essential to clean root vegetables thoroughly, as they can carry soil-borne diseases. In some cases, peeling might be necessary to ensure safety, but keep in mind that many nutrients are found in or near the skin.\n',
+    'seeds': 'Seeds are often overlooked despite their incredible nutritional value. They are the embryonic stage of a plant encapsulated within a protective outer covering and serve as a potent source of nutrients designed to nourish the developing plant. For us humans, they serve as a concentrated source of nutrients, including healthy fats, proteins, fiber, vitamins, minerals, and a host of bioactive compounds.\n' +
+        '\n' +
+        'Moreover, seeds contain a number of bioactive compounds including flavonoids, phenolic compounds, and phytosterols that exhibit health-promoting properties. These compounds possess antioxidant, anti-inflammatory, and heart-healthy benefits, among others.\n\n' +
+        '\n' +
+        'Like root vegetables, the preparation method can also affect the nutritional value of seeds. For example, some seeds, like flaxseeds, are best consumed ground as the body can more easily absorb their nutritional benefits. Similarly, soaking or sprouting seeds can enhance their nutrient availability.\n' +
+        '\n' +
+        'Despite their tiny size, seeds are indeed nutritional powerhouses and can provide a wide range of health benefits when incorporated into our diets. However, due to their high calorie content, they should be consumed in moderation, particularly for those monitoring their calorie intake.\n'
+}
 
 const EatToHealItem = memo(props => {
     const [currentColor, setCurrentColor] = useState('red');
     const [content, setContent] = useState([]);
     const [background, setBackground] = useState();
     const [title, setTitle] = useState('');
+    const [showLearnMore, setShowLearnMore] = useState(false);
 
     useEffect(() => {
         switch (props.currentItem) {
@@ -585,7 +646,27 @@ const EatToHealItem = memo(props => {
 
     const changeColor = useCallback((color) => {
         setCurrentColor(color);
+        switch (color) {
+            case 'red':
+                setContent(reds);
+                break;
+            case 'blue':
+                setContent(blues);
+                break;
+            case 'green':
+                setContent(greens);
+                break;
+            case 'orange':
+                setContent(oranges);
+                break;
+            case 'yellow':
+                setContent(yellows);
+                break;
+            default:
+                break;
+        }
     }, [currentColor]);
+    const toggleLearnMore = useCallback(() => setShowLearnMore(!showLearnMore), [showLearnMore]);
     return (
         <Box
             component={'div'}
@@ -605,7 +686,31 @@ const EatToHealItem = memo(props => {
                         sx={styles.whiteTitle}
                     >{title}</Box>
                 </Box>
+                <Button
+                    sx={styles.learnMoreBtn}
+                    onClick={toggleLearnMore}
+                >
+                    {
+                        showLearnMore ? 'X' : 'Learn More'
+                    }
+                </Button>
             </Box>
+            {
+                showLearnMore &&
+                <Box
+                    component={'div'}
+                    sx={styles.learnMorePanel}
+                >
+                    {
+                        learnMore[props.currentItem].split('\n').map(item => (
+                            <Box
+                                component={'span'}
+                                sx={styles.learnMoreTxt}
+                            >{item}<br/></Box>
+                        ))
+                    }
+                </Box>
+            }
             <Box
                 component={'div'}
                 sx={styles.panel}
@@ -697,9 +802,9 @@ const styles = {
         width: '100%',
         height: pixToRem(300),
         display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'flex-start',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
         backgroundImage: `url(${ColorsWide})`,
         backgroundRepeat: 'no-repeat',
         backgroundSize: 'cover',
@@ -710,6 +815,40 @@ const styles = {
         justifyContent: 'center',
         alignItems: 'flex-start',
         marginLeft: pixToRem(180)
+    },
+    learnMoreBtn: {
+        border: '1px solid #CA3C3D',
+        borderRadius: 0,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: pixToRem(250),
+        height: pixToRem(45),
+        marginRight: '7%',
+        fontFamily: fonts.roboto,
+        fontWeight: '700',
+        fontSize: pixToRem(16),
+        color: 'white'
+    },
+    learnMorePanel: {
+        width: '100%',
+        backgroundColor: '#111',
+        paddingLeft: pixToRem(300),
+        paddingRight: pixToRem(300),
+        paddingTop: pixToRem(100),
+        paddingBottom: pixToRem(100),
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        boxSizing: 'border-box'
+    },
+    learnMoreTxt: {
+        fontFamily: fonts.roboto,
+        fontSize: pixToRem(20),
+        fontWeight: '400',
+        color: '#999',
+        lineHeight: pixToRem(30)
     },
     whiteTitle: {
         fontFamily: fonts.besan,

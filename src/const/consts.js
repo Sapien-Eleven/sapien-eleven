@@ -10,21 +10,18 @@ import {useWeb3React} from "@web3-react/core";
 import {useEffect, useState} from "react";
 import Brenton from '../assets/images/about/brenton.png'
 import Svensei from '../assets/images/about/sv3nsei.jpg'
-import Meditation_active_icon from "../assets/images/academy/meditation_active_icon";
-import Meditation_inactive_icon from "../assets/images/academy/meditation_inactive_icon";
 import Mindfulness_icon from "../assets/images/academy/mindfulness_icon";
-import Mental_inactive_icon from "../assets/images/academy/mental_inactive_icon";
-import Mental_active_icon from "../assets/images/academy/mental_active_icon";
 import Physical_icon from "../assets/images/academy/physical_icon";
 import Fitness_icon from "../assets/images/academy/fitness_icon";
-import Yoga_active_icon from "../assets/images/academy/yoga_active_icon";
-import Yoga_inactive_icon from "../assets/images/academy/yoga_inactive_icon";
 import Mobility_icon from "../assets/images/academy/mobility_icon";
 import Nutritional_icon from "../assets/images/academy/nutritional_icon";
-import Recipes_active_icon from "../assets/images/academy/recipes_active_icon";
-import Recipes_inactive_icon from "../assets/images/academy/recipes_inactive_icon";
-import Diet_icon from "../assets/images/academy/diet_icon";
 import Eattoheal_icon from "../assets/images/academy/eattoheal_icon";
+import Mental from "../assets/images/academy/Mental";
+import Meditation from "../assets/images/academy/Meditation";
+import {colors} from "./uivar";
+import Yoga from "../assets/images/academy/Yoga";
+import Recipe from "../assets/images/academy/Recipe";
+import Apple from "../assets/images/academy/Apple";
 export const pages = ['ACADEMY', 'ABOUT', 'MARKETPLACE', 'RESOURCES', 'CONTACT'];
 
 export const policies = ['PRIVACY POLICY', 'TERMS AND CONDITIONS', 'DISCLAMER', 'COOKIE POLICY'];
@@ -135,62 +132,62 @@ export const teamMembers = [
 
 export const academyCategories = {
     mental: {
-        activeIcon: <Mental_active_icon />,
-        inactiveIcon: <Mental_inactive_icon />,
+        activeIcon: <Mental fill={colors.red} />,
+        inactiveIcon: <Mental fill={colors.comment} />,
         label: 'mental',
         subCategories: [
             {
                 label: 'meditation',
-                activeIcon: <Meditation_active_icon />,
-                inactiveIcon: <Meditation_inactive_icon />,
+                activeIcon: <Meditation fill={colors.red} />,
+                inactiveIcon: <Meditation fill={colors.comment} />,
             },
             {
                 label: 'mindfulness',
-                activeIcon: <Mindfulness_icon stroke={'black'} />,
-                inactiveIcon: <Mindfulness_icon stroke={'#999'} />,
+                activeIcon: <Mindfulness_icon fill={colors.red} />,
+                inactiveIcon: <Mindfulness_icon fill={colors.comment} />,
             }
         ]
     },
     physical: {
-        activeIcon: <Physical_icon stroke={'#CA3C3D'} />,
-        inactiveIcon: <Physical_icon stroke={'#999'} />,
+        activeIcon: <Physical_icon fill={colors.red} />,
+        inactiveIcon: <Physical_icon fill={colors.comment} />,
         label: 'physical',
         subCategories: [
             {
-                activeIcon: <Fitness_icon stroke={'black'} />,
-                inactiveIcon: <Fitness_icon stroke={'#999'} />,
+                activeIcon: <Fitness_icon fill={colors.red} />,
+                inactiveIcon: <Fitness_icon fill={colors.comment} />,
                 label: 'fitness'
             },
             {
-                activeIcon: <Yoga_active_icon />,
-                inactiveIcon: <Yoga_inactive_icon />,
+                activeIcon: <Yoga fill={colors.red} />,
+                inactiveIcon: <Yoga fill={colors.comment} />,
                 label: 'yoga'
             },
             {
-                activeIcon: <Mobility_icon stroke={'black'} />,
-                inactiveIcon: <Mobility_icon stroke={'#999'} />,
+                activeIcon: <Mobility_icon fill={colors.red} />,
+                inactiveIcon: <Mobility_icon fill={colors.comment} />,
                 label: 'mobility'
             }
         ]
     },
     nutritional: {
-        activeIcon: <Nutritional_icon stroke={'#CA3C3D'} />,
-        inactiveIcon: <Nutritional_icon stroke={'#999'} />,
+        activeIcon: <Nutritional_icon fill={colors.red} />,
+        inactiveIcon: <Nutritional_icon fill={colors.comment} />,
         label: 'nutritional',
         subCategories: [
             {
-                activeIcon: <Recipes_active_icon stroke={'black'} />,
-                inactiveIcon: <Recipes_inactive_icon stroke={'#999'} />,
+                activeIcon: <Recipe fill={colors.red} />,
+                inactiveIcon: <Recipe fill={colors.comment} />,
                 label: 'recipes'
             },
             {
-                activeIcon: <Diet_icon stroke={'black'} />,
-                inactiveIcon: <Diet_icon stroke={'#999'} />,
+                activeIcon: <Apple fill={colors.red} />,
+                inactiveIcon: <Apple fill={colors.comment} />,
                 label: 'diets'
             },
             {
-                activeIcon: <Eattoheal_icon stroke={'black'} />,
-                inactiveIcon: <Eattoheal_icon stroke={'#999'} />,
+                activeIcon: <Eattoheal_icon fill={colors.red} />,
+                inactiveIcon: <Eattoheal_icon fill={colors.comment} />,
                 label: 'eat to heal'
             }
         ]

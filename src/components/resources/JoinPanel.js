@@ -1,10 +1,16 @@
 import {Box, Button, Container} from "@mui/material";
-import {memo} from "react";
+import {memo, useCallback, useState} from "react";
 import {colors, fonts, pixToRem} from "../../const/uivar";
 import Mail from '../../assets/images/blog/Mail'
 import MailIcon from "../../assets/images/blog/MailIcon";
+import JoinModal from "../JoinModal";
 
 const JoinPanel = memo(props => {
+    const [modalVisible, setModalVisible] = useState(false);
+
+    const openJoinModal = useCallback(() => setModalVisible(true), []);
+    const closeJoinModal = useCallback(() => setModalVisible(false), []);
+
     return (
         <Container
             maxWidth={false}
@@ -32,9 +38,14 @@ const JoinPanel = memo(props => {
             <Button
                 sx={styles.mailButton}
                 startIcon={<MailIcon />}
+                onClick={openJoinModal}
             >
                 Sign Up
             </Button>
+            <JoinModal
+                visible={modalVisible}
+                onClose={closeJoinModal}
+            />
         </Container>
     )
 })

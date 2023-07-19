@@ -10,18 +10,22 @@ import {ChevronRight} from "@mui/icons-material";
 const contents = {
     blog: [
         {
+            id: 1,
             image: Fitness,
             title: 'Revolutionizing Fitness: How AI and VR are Transforming Your Workouts'
         },
         {
+            id: 2,
             image: Health,
             title: 'The Role of Blockchain in the Future of Healthcare and Wellness'
         },
         {
+            id: 3,
             image: Mindfulness,
             title: 'How Technology is Enhancing Mindfulness Practices'
         },
         {
+            id: 4,
             image: AI_ML,
             title: 'AI and Machine Learning are Personalizing Rehabilitation and Physical Therapy'
         },
@@ -31,7 +35,7 @@ const contents = {
     podcasts: []
 }
 
-const CategoryPanel = memo(props => {
+const ContentPanel = memo(props => {
     const [currentCategory, setCurrentCategory] = useState('blog');
     const changeCategory = useCallback((category) => setCurrentCategory(category), []);
     return (
@@ -96,6 +100,7 @@ const CategoryPanel = memo(props => {
                             >{item.title}</Box>
                             <Button
                                 sx={styles.contentButton}
+                                onClick={() => props.readContent(item)}
                             >
                                 READ MORE
                                 <ChevronRight sx={{color: colors.red}} />
@@ -107,7 +112,7 @@ const CategoryPanel = memo(props => {
         </Container>
     )
 })
-export default CategoryPanel
+export default ContentPanel
 
 const styles = {
     container: {

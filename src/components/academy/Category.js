@@ -12,9 +12,15 @@ const Category = memo(props => {
             sx={styles.panel}
         >
             {
-                Object.keys(academyCategories).map((item, index) => {
+                props.categories.filter(c => c.parent_id === 0).map((item, index) => {
                     return (
-                        <CategoryItem currentCategory={props.category} key={index} category={academyCategories[item]} setCategory={props.setCategory} />
+                        <CategoryItem
+                            key={index}
+                            categories={props.categories}
+                            currentCategory={props.selectedCategory}
+                            category={item}
+                            setCategory={props.setCategory}
+                        />
                     )
                 })
             }
@@ -124,7 +130,7 @@ const CategoryItem = memo(props => {
     return (
         <Box
             component={'div'}
-            sx={props.category.subCategories.findIndex(item => item.label === props.currentCategory.label) > -1 ? styles.activeCategoryItem : styles.inactiveCategoryItem}
+            sx={props.categories.filter(c => c.parent_id === props.category.id).findIndex(item => item.id === props.currentCategory.id) > -1 ? styles.activeCategoryItem : styles.inactiveCategoryItem}
         >
             <Box
                 component={'div'}
@@ -135,12 +141,12 @@ const CategoryItem = memo(props => {
                     component={'div'}
                     sx={styles.categoryLabelGroup}
                 >
-                    {props.category.subCategories.findIndex(item => item.label === props.currentCategory.label) > -1 ? props.category.activeIcon : props.category.inactiveIcon}
+                    <img src={props.categories.filter(c => c.parent_id === props.category.id).findIndex(item => item.id === props.currentCategory.id) > -1 ? props.category.active_icon : props.category.inactive_icon} alt=""/>
                     <Box
                         component={'span'}
-                        sx={props.category.subCategories.findIndex(item => item.label === props.currentCategory.label) > -1 ? styles.activeHeaderLabel : styles.inactiveHeaderLabel}
+                        sx={props.categories.filter(c => c.parent_id === props.category.id).findIndex(item => item.id === props.currentCategory.id) > -1 ? styles.activeHeaderLabel : styles.inactiveHeaderLabel}
                     >
-                        {props.category.label}
+                        {props.category.name}
                     </Box>
                 </Box>
                 {
@@ -153,7 +159,7 @@ const CategoryItem = memo(props => {
                 {...getCollapseProps()}
             >
                 {
-                    props.category.subCategories.map((item, index) => (
+                    props.categories.filter(c => c.parent_id === props.category.id).map((item, index) => (
                         <SubCategory key={index} currentCategory={props.currentCategory} subcategory={item} setCategory={() => props.setCategory(item)} />
                     ))
                 }
@@ -166,14 +172,14 @@ const SubCategory = memo(props => {
     return (
         <Button
             sx={styles.subcategoryHeader}
-            startIcon={props.currentCategory.label === props.subcategory.label ? props.subcategory.activeIcon : props.subcategory.inactiveIcon}
+            startIcon={<img src={props.currentCategory.id === props.subcategory.id ? props.subcategory.active_icon : props.subcategory.inactive_icon} alt=""/>}
             onClick={props.setCategory}
         >
             <Box
                 component={'span'}
-                sx={props.currentCategory.label === props.subcategory.label ? styles.activeSubCategoryLabel : styles.inactiveSubCategoryLabel}
+                sx={props.currentCategory.id === props.subcategory.id ? styles.activeSubCategoryLabel : styles.inactiveSubCategoryLabel}
             >
-                {props.subcategory.label}
+                {props.subcategory.name}
             </Box>
         </Button>
     )

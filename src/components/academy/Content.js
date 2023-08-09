@@ -11,7 +11,7 @@ import Diets from "./Diets";
 import EatToHeal from "./EatToHeal";
 
 const Content = memo(props => {
-    switch (props.category.label) {
+    switch (props.category.name) {
         case 'mindfulness':
             return (
                 <Box

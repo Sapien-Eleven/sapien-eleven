@@ -1,4 +1,4 @@
-import {Box } from "@mui/material";
+import {Box, Stack} from "@mui/material";
 import {memo, useCallback, useState} from "react";
 import {colors, fonts, pixToRem} from "../../const/uivar";
 import Ketogenic from '../../assets/images/academy/ketogenic_diet.png'
@@ -13,7 +13,7 @@ const Diets = memo(props => {
     switch (page) {
         case 'main':
             return (
-                <Main setPage={goToDetail} />
+                <Main setPage={goToDetail} content={props.content} />
             )
         case 'item':
             return <DietItem />
@@ -65,10 +65,6 @@ const styles = {
     },
     imgPanel: {
         width: '100%',
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        flexWrap: 'wrap',
         marginTop: pixToRem(10),
         marginBottom: pixToRem(10)
     },
@@ -76,7 +72,6 @@ const styles = {
         width: '49%',
         display: 'inline-flex',
         position: 'relative',
-        marginTop: pixToRem(20),
         ':hover': {
             cursor: 'pointer'
         },
@@ -141,72 +136,45 @@ const Main = memo(props => {
                 component={'span'}
                 sx={styles.redTitle}
             >
-                DIETS
+                {props.content.category.toUpperCase()}
             </Box>
             <Box
                 component={'span'}
                 sx={styles.blackTitle}
             >
-                YOUR GUIDE TO HEALTH EATING
+                {props.content.title}
             </Box>
             <Box
                 component={'span'}
                 sx={styles.comment}
             >
-                Learn the art of mindfulness and find Inner peace with our expert sessions!
+                {props.content.description}
             </Box>
-            <Box
-                component={'div'}
+            <Stack
                 sx={styles.imgPanel}
+                spacing={3}
+                direction={'row'}
+                useFlexGap
+                flexWrap={'wrap'}
             >
-                <Box
-                    component={'div'}
-                    sx={styles.imgItem}
-                    onClick={() => props.setPage('item')}
-                >
-                    <Box
-                        component={'img'}
-                        sx={styles.img}
-                        src={Ketogenic}
-                    />
-                    <Box component={'span'} sx={styles.imgTitle} >Ketogenic Diet</Box>
-                </Box>
-                <Box
-                    component={'div'}
-                    sx={styles.imgItem}
-                    onClick={() => props.setPage('item')}
-                >
-                    <Box
-                        component={'img'}
-                        sx={styles.img}
-                        src={Meditarranean}
-                    />
-                    <Box component={'span'} sx={styles.imgTitle} >Mediterranean Diet</Box>
-                </Box>
-                <Box
-                    component={'div'}
-                    sx={styles.imgItem}
-                    onClick={() => props.setPage('item')}
-                >
-                    <Box
-                        component={'img'}
-                        sx={styles.img}
-                        src={Paleo}
-                    />
-                    <Box component={'span'} sx={styles.imgTitle} >Paleo Diet</Box>
-                </Box>
-                <Box
-                    component={'div'}
-                    sx={styles.imgItem}
-                >
-                    <Box
-                        component={'img'}
-                        sx={styles.img}
-                        src={Whole}
-                    />
-                    <Box component={'span'} sx={styles.imgTitle} >Whole 30 Diet</Box>
-                </Box>
-            </Box>
+                {
+                    props.content.image.map((item, index) => (
+                        <Box
+                            key={index}
+                            component={'div'}
+                            sx={styles.imgItem}
+                            onClick={() => props.setPage('item')}
+                        >
+                            <Box
+                                component={'img'}
+                                sx={styles.img}
+                                src={item.image}
+                            />
+                            <Box component={'span'} sx={styles.imgTitle} >{item.label}</Box>
+                        </Box>
+                    ))
+                }
+            </Stack>
         </Box>
     )
 })

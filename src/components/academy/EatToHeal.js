@@ -13,7 +13,7 @@ const EatToHeal = memo(props => {
     const [page, setPage] = useState('main');
     const goToDetail = useCallback((next) => setPage(next), [page]);
     if (page === 'main')
-        return <Main setPage={goToDetail} />
+        return <Main setPage={goToDetail} content={props.content} />
     else return <EatToHealItem currentItem={page} setPage={goToDetail} />
 })
 
@@ -62,6 +62,7 @@ const styles = {
         marginBottom: pixToRem(15),
     },
     comment: {
+        maxWidth: '70%',
         fontFamily: fonts.roboto,
         fontStyle: 'normal',
         fontWeight: 400,
@@ -139,19 +140,19 @@ const Main = memo(props => {
                 component={'span'}
                 sx={styles.redTitle}
             >
-                EAT TO HEAL
+                {props.content.category.toUpperCase()}
             </Box>
             <Box
                 component={'span'}
                 sx={styles.blackTitle}
             >
-                FOOD IS THE MEDICINE
+                {props.content.title}
             </Box>
             <Box
                 component={'span'}
                 sx={styles.comment}
             >
-                "Eat to heal!" is a philosophy emphasizing the consumption of nutrient-dense foods to support the body's natural healing processes, enhance overall wellness, and prevent disease.
+                {props.content.description}
             </Box>
             <Box
                 component={'span'}
@@ -185,84 +186,46 @@ const Main = memo(props => {
                     spacing={3}
                     direction={'row'}
                 >
-                    <Box
-                        component={'div'}
-                        sx={styles.imgItem}
-                        onClick={() => props.setPage('colors')}
-                    >
-                        <Box
-                            component={'img'}
-                            sx={styles.img}
-                            src={ColorsImg}
-                        />
-                        <Box component={'span'} sx={styles.imgTitle} >COLORS</Box>
-                    </Box>
-                    <Box
-                        component={'div'}
-                        sx={styles.imgItem}
-                        onClick={() => props.setPage('herbs')}
-                    >
-                        <Box
-                            component={'img'}
-                            sx={styles.img}
-                            src={HerbsImg}
-                        />
-                        <Box component={'span'} sx={styles.imgTitle} >HERBS</Box>
-                    </Box>
-                    <Box
-                        component={'div'}
-                        sx={styles.imgItem}
-                        onClick={() => props.setPage('nuts')}
-                    >
-                        <Box
-                            component={'img'}
-                            sx={styles.img}
-                            src={NutsImg}
-                        />
-                        <Box component={'span'} sx={styles.imgTitle} >NUTS</Box>
-                    </Box>
+                    {
+                        props.content.image.filter(i => i.position === 'up').map((item, index) => (
+                            <Box
+                                key={index}
+                                component={'div'}
+                                sx={styles.imgItem}
+                                onClick={() => props.setPage(item.label.toLowerCase())}
+                            >
+                                <Box
+                                    component={'img'}
+                                    sx={styles.img}
+                                    src={item.image}
+                                />
+                                <Box component={'span'} sx={styles.imgTitle} >{item.label}</Box>
+                            </Box>
+                        ))
+                    }
                 </Stack>
                 <Stack
                     sx={{width: '100%'}}
                     spacing={3}
                     direction={'row'}
                 >
-                    <Box
-                        component={'div'}
-                        sx={styles.imgItem}
-                        onClick={() => props.setPage('oils')}
-                    >
-                        <Box
-                            component={'img'}
-                            sx={styles.img}
-                            src={OilsImg}
-                        />
-                        <Box component={'span'} sx={styles.imgTitle} >OILS</Box>
-                    </Box>
-                    <Box
-                        component={'div'}
-                        sx={styles.imgItem}
-                        onClick={() => props.setPage('veggies')}
-                    >
-                        <Box
-                            component={'img'}
-                            sx={styles.img}
-                            src={VeggiesImg}
-                        />
-                        <Box component={'span'} sx={styles.imgTitle} >ROOT VEGETABLES</Box>
-                    </Box>
-                    <Box
-                        component={'div'}
-                        sx={styles.imgItem}
-                        onClick={() => props.setPage('seeds')}
-                    >
-                        <Box
-                            component={'img'}
-                            sx={styles.img}
-                            src={SeedsImg}
-                        />
-                        <Box component={'span'} sx={styles.imgTitle} >SEEDS</Box>
-                    </Box>
+                    {
+                        props.content.image.filter(i => i.position === 'down').map((item, index) => (
+                            <Box
+                                key={index}
+                                component={'div'}
+                                sx={styles.imgItem}
+                                onClick={() => props.setPage(item.label.toLowerCase())}
+                            >
+                                <Box
+                                    component={'img'}
+                                    sx={styles.img}
+                                    src={item.image}
+                                />
+                                <Box component={'span'} sx={styles.imgTitle} >{item.label}</Box>
+                            </Box>
+                        ))
+                    }
                 </Stack>
             </Stack>
         </Box>

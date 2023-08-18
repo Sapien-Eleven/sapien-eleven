@@ -9,73 +9,35 @@ import Fitness from "./Fitness";
 import Recipes from "./Recipes";
 import Diets from "./Diets";
 import EatToHeal from "./EatToHeal";
+import MainContent from "./MainContent";
 
 const Content = memo(props => {
-    switch (props.category.name) {
-        case 'mindfulness':
+    if (props.selectedCategory.parent_id !== 3) {
+        return (
+            <Box
+                component={'div'}
+                sx={styles.panel}
+            >
+                <MainContent content={props.content} />
+            </Box>
+        )
+    } else {
+        if (props.selectedCategory.id === 9) {
             return (
                 <Box
                     component={'div'}
                     sx={styles.panel}
                 >
-                    <Mindfulness />
+                    <Recipes content={props.content} />
                 </Box>
             )
-        case 'meditation':
-            return (
-                <Box
-                    component={'div'}
-                    sx={styles.panel}
-                >
-                    <Meditation />
-                </Box>
-            )
-        case 'yoga':
-            return (
-                <Box
-                    component={'div'}
-                    sx={styles.panel}
-                >
-                    <Yoga />
-                </Box>
-            )
-        case 'mobility':
-            return (
-                <Box
-                    component={'div'}
-                    sx={styles.panel}
-                >
-                    <Mobility />
-                </Box>
-            )
-        case 'fitness':
-            return (
-                <Box
-                    component={'div'}
-                    sx={styles.panel}
-                >
-                    <Fitness />
-                </Box>
-            )
-        case 'recipes':
-            return (
-                <Box
-                    component={'div'}
-                    sx={styles.panel}
-                >
-                    <Recipes />
-                </Box>
-            )
-        case 'diets':
-            return (
-                <Diets />
-            )
-        case 'eat to heal':
-            return (
-                <EatToHeal />
-            )
-        default:
-            return <Box></Box>;
+        }
+        else if (props.selectedCategory.id === 10) {
+            return <Diets content={props.content} />
+        }
+        else if (props.selectedCategory.id === 11) {
+            return <EatToHeal content={props.content} />
+        }
     }
 })
 

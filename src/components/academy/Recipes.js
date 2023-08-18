@@ -1,4 +1,4 @@
-import {Box} from "@mui/material";
+import {Box, Stack} from "@mui/material";
 import {memo, useCallback, useState} from "react";
 import {colors, fonts, pixToRem} from "../../const/uivar";
 import BreakfastImg from '../../assets/images/academy/breakfast.png'
@@ -16,7 +16,7 @@ const Recipes = memo(props => {
     const goToDetail = useCallback((next) => setPage(next), [page]);
     switch (page) {
         case 'main':
-            return <Main setPage={goToDetail} />
+            return <Main setPage={goToDetail} content={props.content} />
         case 'breakfast':
             return <Breakfast setPage={goToDetail} />
         case 'mealdetail':
@@ -37,86 +37,65 @@ const Main = memo(props => {
                 component={'span'}
                 sx={styles.redTitle}
             >
-                RECIPES
+                {props.content.category.toUpperCase()}
             </Box>
             <Box
                 component={'span'}
                 sx={styles.blackTitle}
             >
-                HEALTH EATING MADE EASY
+                {props.content.title}
             </Box>
             <Box
                 component={'span'}
                 sx={styles.comment}
             >
-                Learn the art of mindfulness and find Inner peace with our expert sessions!
+                {props.content.description}
             </Box>
-            <Box
-                component={'div'}
+            <Stack
                 sx={styles.upImgPanel}
+                spacing={3}
+                direction={'row'}
             >
-                <Box
-                    component={'div'}
-                    sx={styles.upImgItem}
-                    onClick={() => props.setPage('breakfast')}
-                >
-                    <Box
-                        component={'img'}
-                        sx={styles.upImg}
-                        src={BreakfastImg}
-                    />
-                    <Box component={'span'} sx={styles.imgTitle} >BREAKFAST</Box>
-                </Box>
-                <Box
-                    component={'div'}
-                    sx={styles.upImgItem}
-                >
-                    <Box
-                        component={'img'}
-                        sx={styles.upImg}
-                        src={LunchImg}
-                    />
-                    <Box component={'span'} sx={styles.imgTitle} >LUNCH</Box>
-                </Box>
-                <Box
-                    component={'div'}
-                    sx={styles.upImgItem}
-                >
-                    <Box
-                        component={'img'}
-                        sx={styles.upImg}
-                        src={DinnerImg}
-                    />
-                    <Box component={'span'} sx={styles.imgTitle} >DINNER</Box>
-                </Box>
-            </Box>
-            <Box
-                component={'div'}
+                {
+                    props.content.image.filter(i => i.position === 'up').map((item, index) => (
+                        <Box
+                            key={index}
+                            component={'div'}
+                            sx={styles.upImgItem}
+                            onClick={() => props.setPage(item.label.toLowerCase())}
+                        >
+                            <Box
+                                component={'img'}
+                                sx={styles.upImg}
+                                src={item.image}
+                            />
+                            <Box component={'span'} sx={styles.imgTitle} >{item.label}</Box>
+                        </Box>
+                    ))
+                }
+            </Stack>
+            <Stack
                 sx={styles.downImgPanel}
+                spacing={3}
+                direction={'row'}
             >
-                <Box
-                    component={'div'}
-                    sx={styles.downImgItem}
-                >
-                    <Box
-                        component={'img'}
-                        sx={styles.downImg}
-                        src={SidesImg}
-                    />
-                    <Box component={'span'} sx={styles.imgTitle}>SIDES</Box>
-                </Box>
-                <Box
-                    component={'div'}
-                    sx={styles.downImgItem}
-                >
-                    <Box
-                        component={'img'}
-                        sx={styles.downImg}
-                        src={SnacksImg}
-                    />
-                    <Box component={'span'} sx={styles.imgTitle}>SNACKS</Box>
-                </Box>
-            </Box>
+                {
+                    props.content.image.filter(i => i.position === 'down').map((item, index) => (
+                        <Box
+                            key={index}
+                            component={'div'}
+                            sx={styles.downImgItem}
+                        >
+                            <Box
+                                component={'img'}
+                                sx={styles.downImg}
+                                src={item.image}
+                            />
+                            <Box component={'span'} sx={styles.imgTitle}>{item.label}</Box>
+                        </Box>
+                    ))
+                }
+            </Stack>
         </Box>
     )
 })
@@ -162,13 +141,10 @@ const styles = {
     },
     upImgPanel: {
         width: '100%',
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
         marginTop: pixToRem(20),
     },
     upImgItem: {
-        width: '32%',
+        flex: 1,
         display: 'inline-flex',
         position: 'relative',
         ':hover': {
@@ -181,16 +157,13 @@ const styles = {
     },
     downImgPanel: {
         width: '100%',
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
         marginTop: pixToRem(20),
         marginBottom: pixToRem(80)
     },
     downImgItem: {
         display: 'inline-flex',
         position: 'relative',
-        width: '49%',
+        flex: 1,
         ':hover': {
             cursor: 'pointer'
         }

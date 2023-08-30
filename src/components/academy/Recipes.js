@@ -31,7 +31,7 @@ const Recipes = memo(props => {
         case 'sub':
             return <SubContent setPage={setSubDetail} recipe={recipe} />
         case 'detail':
-            return <FoodDetail food={food} />
+            return <FoodDetail food={food} recipe={recipe} />
         default:
             break;
     }

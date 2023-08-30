@@ -1,22 +1,22 @@
 import {Box, Stack} from "@mui/material";
 import {memo, useCallback, useState} from "react";
 import {colors, fonts, pixToRem} from "../../const/uivar";
-import Ketogenic from '../../assets/images/academy/ketogenic_diet.png'
-import Meditarranean from '../../assets/images/academy/meditarranean_diet.png'
-import Paleo from '../../assets/images/academy/paleo_diet.png'
-import Whole from '../../assets/images/academy/whole_diet.png'
-import DietItem from "./DietItem";
+import DietDetail from "./DietDetail";
 
 const Diets = memo(props => {
-    const [page, setPage] = useState('main');
-    const goToDetail = useCallback((next) => setPage(next), [page]);
-    switch (page) {
+    const [type, setType] = useState('main');
+    const [diet, setDiet] = useState('');
+    const changeDetail = useCallback((next) => {
+        setType('detail');
+        setDiet(next);
+    }, []);
+    switch (type) {
         case 'main':
             return (
-                <Main setPage={goToDetail} content={props.content} />
+                <Main setPage={changeDetail} content={props.content} />
             )
-        case 'item':
-            return <DietItem />
+        case 'detail':
+            return <DietDetail diet={diet} />
     }
 })
 
@@ -163,7 +163,7 @@ const Main = memo(props => {
                             key={index}
                             component={'div'}
                             sx={styles.imgItem}
-                            onClick={() => props.setPage('item')}
+                            onClick={() => props.setPage(item.label)}
                         >
                             <Box
                                 component={'img'}

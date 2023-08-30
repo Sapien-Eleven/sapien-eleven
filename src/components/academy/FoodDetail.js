@@ -1,5 +1,5 @@
 import {Box, Breadcrumbs, Link, Stack, Typography} from "@mui/material";
-import {memo, useEffect, useState} from "react";
+import {memo, useCallback, useEffect, useState} from "react";
 import {colors, fonts, pixToRem} from "../../const/uivar";
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import Portion from "../../assets/images/academy/portion";
@@ -9,18 +9,17 @@ import MealDetailImg from '../../assets/images/academy/meal_detail_img.png'
 import PlayIcon from "../../assets/images/academy/PlayIcon";
 import ManualBook from "../../assets/images/academy/ManualBook";
 import Ingredient from "../../assets/images/academy/Ingredient";
-import BlueberryImg from "../../assets/images/academy/blueberry_banana_protein_waffle.png";
-import DragonbowlImg from "../../assets/images/academy/dragon_bowl.png";
-import PeanutImg from "../../assets/images/academy/peanut_butter.png";
 import axios from "axios";
 import {StrapiBaseURL, StrapiToken, StrapiURL} from "../../const/consts";
 
 const FoodDetail = memo(props => {
     const [content, setContent] = useState({});
+    const [recommendedFoods, setRecommendedFoods] = useState([]);
     useEffect(() => {
         fetchFoodDetail().then();
+        fetchRecommendFoods().then();
     }, []);
-    const fetchFoodDetail = async () => {
+    const fetchFoodDetail = useCallback(async () => {
         const data = (await axios.get(`${StrapiURL}academy-recipes-foods`, {
             headers: {
                 'Authorization': `bearer ${StrapiToken}`
@@ -48,7 +47,6 @@ const FoodDetail = memo(props => {
                 'populate': '*'
             }
         })).data;
-        console.log(instruction.data);
         setContent({
             id: data.data[0].id,
             recipe: data.data[0].attributes.recipe,
@@ -59,7 +57,29 @@ const FoodDetail = memo(props => {
             ingredient: ingredient.data.reduce((acc, cur) => [...acc, cur.attributes.description], []),
             instruction: instruction.data.reduce((acc, cur) => [...acc, cur.attributes.description], []),
         });
-    }
+    }, []);
+    const fetchRecommendFoods = useCallback(async () => {
+        let foods = [];
+        const image = (await axios.get(`${StrapiURL}academy-recipes-image-labels`, {
+            headers: {
+                'Authorization': `bearer ${StrapiToken}`
+            },
+            params: {
+                'filters[recipe][$eq]': props.recipe,
+                'populate': '*'
+            }
+        })).data;
+        foods = image.data.reduce((acc, cur) => [...acc,
+            {
+                imageID: cur.id,
+                recipe: cur.attributes.recipe,
+                label: cur.attributes.label,
+                image: `${StrapiBaseURL}${cur.attributes.image.data.attributes.url}`
+            }],
+        []);
+        setRecommendedFoods(foods);
+    }, [])
+
     if (content.food !== undefined) {
         return (
             <Box
@@ -74,7 +94,7 @@ const FoodDetail = memo(props => {
                         component={'div'}
                         sx={styles.leftPanel}
                     >
-                        <Breadcrumb />
+                        <Breadcrumb recipe={content.recipe} food={content.food} />
                         <Box
                             component={'span'}
                             sx={styles.blackTitle}
@@ -264,39 +284,22 @@ const FoodDetail = memo(props => {
                         Recipes
                     </Box>
                     <Stack direction={'row'} spacing={3} sx={{width: '100%', marginTop: pixToRem(30)}}>
-                        <Box
-                            component={'div'}
-                            sx={styles.upImgItem}
-                        >
-                            <Box
-                                component={'img'}
-                                sx={styles.upImg}
-                                src={BlueberryImg}
-                            />
-                            <Box component={'span'} sx={styles.imgTitle} >Blueberry Banana Protein Waffles</Box>
-                        </Box>
-                        <Box
-                            component={'div'}
-                            sx={styles.upImgItem}
-                        >
-                            <Box
-                                component={'img'}
-                                sx={styles.upImg}
-                                src={DragonbowlImg}
-                            />
-                            <Box component={'span'} sx={styles.imgTitle} >Dragon Bowl</Box>
-                        </Box>
-                        <Box
-                            component={'div'}
-                            sx={styles.upImgItem}
-                        >
-                            <Box
-                                component={'img'}
-                                sx={styles.upImg}
-                                src={PeanutImg}
-                            />
-                            <Box component={'span'} sx={styles.imgTitle}>Peanut Butter + Coconut Overnight Protein Oats</Box>
-                        </Box>
+                        {
+                            recommendedFoods.map((item, index) => (
+                                <Box
+                                    key={index}
+                                    component={'div'}
+                                    sx={styles.upImgItem}
+                                >
+                                    <Box
+                                        component={'img'}
+                                        sx={styles.upImg}
+                                        src={item.image}
+                                    />
+                                    <Box component={'span'} sx={styles.imgTitle} >{item.label}</Box>
+                                </Box>
+                            ))
+                        }
                     </Stack>
                 </Box>
             </Box>
@@ -374,7 +377,8 @@ const styles = {
         fontFamily: fonts.roboto,
         fontSize: pixToRem(14),
         fontWeight: '700',
-        color: colors.red
+        color: colors.red,
+        textTransform: 'capitalize'
     },
     explainStack: {
         width: '100%'
@@ -432,7 +436,6 @@ const styles = {
         height: pixToRem(84)
     },
     instructionHeader: {
-        backgroundColor: 'white',
         padding: pixToRem(10),
         marginTop: pixToRem(50),
         display: 'flex',
@@ -537,33 +540,11 @@ const Breadcrumb = memo(props => {
                 key="2"
                 sx={styles.breadcrumb}
             >
-                Breakfast
+                {props.recipe}
             </Link>,
             <Typography key="3" color={colors.red} sx={styles.breadcrumb}>
-                Blueberry Protein Waffles
+                {props.food}
             </Typography>,
         </Breadcrumbs>
     )
 })
-
-const instructions = [
-    'Preheat waffle iron and spray with nonstick cooking spray (recommend organic avocado spray). In a large bowl, whisk together almond butter, eggs, banana, almond extract, coconut oil and almond milk until well combined and there aren\'t any large lumps.',
-    'Stir in coconut flour, baking soda, cinnamon and salt; mix until well combined. Gently fold in blueberries.',
-    'Spoon batter into waffle iron and cook until waffles are golden brown and slightly crispy on the outside. Repeat with remaining batter. The recipe makes about 3 waffles. Be sure to top with Banans, Granola, and honey!'
-]
-
-const ingredients = [
-    '2/3 cup natural creamy almond butter',
-    '2 eggs',
-    '1/2 banana, mashed',
-    '1/4 teaspoon almond extract',
-    '1/2 tablespoon coconut oil, melted and cooled',
-    '1/3 cup unsweetened almond milk',
-    '1 tablespooon coconut flour',
-    '1/2 teaspoon baking soda',
-    '1 teaspoon cinnamon',
-    '1/8 teaspoon salt (only if your almond butter isn\'t salted)',
-    '2/3 cup fresh or frozen blueberries',
-    '1 tablespoon Honey (for topping) 1/2 Banana (for topping)',
-    'Granola Crunch (for topping)'
-]

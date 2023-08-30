@@ -1,5 +1,5 @@
 import {Box, Stack} from "@mui/material";
-import {memo, useCallback, useState} from "react";
+import {memo, useCallback, useEffect, useState} from "react";
 import {colors, fonts, pixToRem} from "../../const/uivar";
 import BreakfastImg from '../../assets/images/academy/breakfast.png'
 import LunchImg from '../../assets/images/academy/lunch.png'
@@ -9,18 +9,29 @@ import SnacksImg from '../../assets/images/academy/snacks.png'
 import BlueberryImg from '../../assets/images/academy/blueberry_banana_protein_waffle.png'
 import DragonbowlImg from '../../assets/images/academy/dragon_bowl.png'
 import PeanutImg from '../../assets/images/academy/peanut_butter.png'
-import MealDetail from "./MealDetail";
+import FoodDetail from "./FoodDetail";
+import axios from "axios";
+import {StrapiBaseURL, StrapiToken, StrapiURL} from "../../const/consts";
 
 const Recipes = memo(props => {
-    const [page, setPage] = useState('main');
-    const goToDetail = useCallback((next) => setPage(next), [page]);
-    switch (page) {
+    const [type, setType] = useState('main');
+    const [recipe, setRecipe] = useState('');
+    const [food, setFood] = useState('');
+    const setSubContent = useCallback((next) => {
+        setType('sub');
+        setRecipe(next);
+    }, []);
+    const setSubDetail = useCallback((next) => {
+        setType('detail');
+        setFood(next);
+    }, [])
+    switch (type) {
         case 'main':
-            return <Main setPage={goToDetail} content={props.content} />
-        case 'breakfast':
-            return <Breakfast setPage={goToDetail} />
-        case 'mealdetail':
-            return <MealDetail />
+            return <Main setPage={setSubContent} content={props.content} />
+        case 'sub':
+            return <SubContent setPage={setSubDetail} recipe={recipe} />
+        case 'detail':
+            return <FoodDetail food={food} />
         default:
             break;
     }
@@ -186,70 +197,96 @@ const styles = {
     }
 }
 
-const Breakfast = memo(props => {
-    return (
-        <Box
-            component={'div'}
-            sx={styles.panel}
-        >
-            <Box
-                component={'span'}
-                sx={styles.redTitle}
-            >
-                BREAKFAST
-            </Box>
-            <Box
-                component={'span'}
-                sx={styles.blackTitle}
-            >
-                FUEL UP TO CRUSH EVERY DAY
-            </Box>
-            <Box
-                component={'span'}
-                sx={styles.comment}
-            >
-                Whether you don't have the time to cook, or just have trouble deciding, we're constantly adding new healthy recipes to get you back on track with your health goals. Many of our recipes take minutes to prepare, slow cook while you're at work, and are formatted in an easy-to-follow way to help you be the chef you've always dreamed of being.
-            </Box>
+const SubContent = memo(props => {
+    const [content, setContent] = useState({});
+    useEffect(() => {
+        fetchContent().then();
+    }, []);
+    const fetchContent = async () => {
+        let images = [];
+        const data = (await axios.get(`${StrapiURL}academy-recipes-contents`, {
+            headers: {
+                'Authorization': `bearer ${StrapiToken}`
+            },
+            params: {
+                'filters[recipe][$eq]': props.recipe,
+                'populate': '*'
+            }
+        })).data;
+        const image = (await axios.get(`${StrapiURL}academy-recipes-image-labels`, {
+            headers: {
+                'Authorization': `bearer ${StrapiToken}`
+            },
+            params: {
+                'filters[recipe][$eq]': props.recipe,
+                'populate': '*'
+            }
+        })).data;
+        images = image.data.reduce((acc, cur) => [...acc,
+            {
+                imageID: cur.id,
+                recipe: cur.attributes.recipe,
+                label: cur.attributes.label,
+                image: `${StrapiBaseURL}${cur.attributes.image.data.attributes.url}`
+            }],
+        []);
+        setContent({
+            id: data.data[0].id,
+            recipe: data.data[0].attributes.recipe,
+            title: data.data[0].attributes.title,
+            description: data.data[0].attributes.description,
+            image: images
+        });
+    }
+    if (content.recipe !== undefined) {
+        return (
             <Box
                 component={'div'}
-                sx={styles.upImgPanel}
+                sx={styles.panel}
             >
                 <Box
-                    component={'div'}
-                    sx={styles.upImgItem}
-                    onClick={() => props.setPage('mealdetail')}
+                    component={'span'}
+                    sx={styles.redTitle}
                 >
-                    <Box
-                        component={'img'}
-                        sx={styles.upImg}
-                        src={BlueberryImg}
-                    />
-                    <Box component={'span'} sx={styles.imgTitle} >Blueberry Banana Protein Waffles</Box>
+                    {content.recipe.toUpperCase()}
                 </Box>
                 <Box
-                    component={'div'}
-                    sx={styles.upImgItem}
+                    component={'span'}
+                    sx={styles.blackTitle}
                 >
-                    <Box
-                        component={'img'}
-                        sx={styles.upImg}
-                        src={DragonbowlImg}
-                    />
-                    <Box component={'span'} sx={styles.imgTitle} >Dragon Bowl</Box>
+                    {content.title.toUpperCase()}
                 </Box>
                 <Box
-                    component={'div'}
-                    sx={styles.upImgItem}
+                    component={'span'}
+                    sx={styles.comment}
                 >
-                    <Box
-                        component={'img'}
-                        sx={styles.upImg}
-                        src={PeanutImg}
-                    />
-                    <Box component={'span'} sx={styles.imgTitle}>Peanut Butter + Coconut Overnight Protein Oats</Box>
+                    {content.description}
                 </Box>
+                <Stack
+                    sx={styles.upImgPanel}
+                    direction={'row'}
+                    spacing={3}
+                >
+                    {
+                        content.image.map((item, index) => (
+                            <Box
+                                key={index}
+                                component={'div'}
+                                sx={styles.upImgItem}
+                                onClick={() => props.setPage(item.label)}
+                            >
+                                <Box
+                                    component={'img'}
+                                    sx={styles.upImg}
+                                    src={item.image}
+                                />
+                                <Box component={'span'} sx={styles.imgTitle} >{item.label}</Box>
+                            </Box>
+                        ))
+                    }
+                </Stack>
+                <Box sx={{height: pixToRem(200)}} />
             </Box>
-            <Box sx={{height: pixToRem(200)}} />
-        </Box>
-    )
+        )
+    } else return <Box/>
 })

@@ -11,10 +11,15 @@ import SeedsImg from '../../assets/images/academy/seeds.png'
 
 const EatToHeal = memo(props => {
     const [page, setPage] = useState('main');
-    const goToDetail = useCallback((next) => setPage(next), [page]);
+    const [category, setCategory] = useState('');
+    const goToDetail = useCallback((next) => {
+        setPage('detail');
+        setCategory(next);
+    }, []);
+    const goToMain = useCallback(() => setPage('main'), []);
     if (page === 'main')
-        return <Main setPage={goToDetail} content={props.content} />
-    else return <EatToHealItem currentItem={page} setPage={goToDetail} />
+        return <Main goToDetail={goToDetail} content={props.content} />
+    else return <EatToHealItem category={category} goToMain={goToMain} />
 })
 
 export default EatToHeal
@@ -192,7 +197,7 @@ const Main = memo(props => {
                                 key={index}
                                 component={'div'}
                                 sx={styles.imgItem}
-                                onClick={() => props.setPage(item.label.toLowerCase())}
+                                onClick={() => props.goToDetail(item.label.toLowerCase())}
                             >
                                 <Box
                                     component={'img'}
@@ -215,7 +220,7 @@ const Main = memo(props => {
                                 key={index}
                                 component={'div'}
                                 sx={styles.imgItem}
-                                onClick={() => props.setPage(item.label.toLowerCase())}
+                                onClick={() => props.goToDetail(item.label.toLowerCase())}
                             >
                                 <Box
                                     component={'img'}

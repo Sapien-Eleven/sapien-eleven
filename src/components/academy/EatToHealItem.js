@@ -608,7 +608,7 @@ const EatToHealItem = memo(props => {
     const [showLearnMore, setShowLearnMore] = useState(false);
 
     useEffect(() => {
-        switch (props.currentItem) {
+        switch (props.category) {
             case 'colors':
                 setContent(reds);
                 setBackground(ColorsWide);
@@ -680,7 +680,7 @@ const EatToHealItem = memo(props => {
                     component={'div'}
                     sx={styles.headerContent}
                 >
-                    <Breadcrumb currentPage={title} goToMain={() => props.setPage('main')} />
+                    <Breadcrumb currentPage={title} goToMain={props.goToMain} />
                     <Box
                         component={'span'}
                         sx={styles.whiteTitle}
@@ -702,7 +702,7 @@ const EatToHealItem = memo(props => {
                     sx={styles.learnMorePanel}
                 >
                     {
-                        learnMore[props.currentItem].split('\n').map(item => (
+                        learnMore[props.category].split('\n').map(item => (
                             <Box
                                 component={'span'}
                                 sx={styles.learnMoreTxt}
@@ -716,7 +716,7 @@ const EatToHealItem = memo(props => {
                 sx={styles.panel}
             >
                 {
-                    props.currentItem === 'colors' &&
+                    props.category === 'colors' &&
                     <Stack
                         sx={{width: '100%'}}
                         direction={'row'}
@@ -767,7 +767,7 @@ const EatToHealItem = memo(props => {
                 <Box sx={{height: pixToRem(50)}} />
                 {
                     content.map((item, index) => (
-                        <ContentItem key={index} item={item} borderColor={props.currentItem === 'colors' ? Colors[currentColor].color : colors.red} />
+                        <ContentItem key={index} item={item} borderColor={props.category === 'colors' ? Colors[currentColor].color : colors.red} />
                     ))
                 }
                 <Box sx={{height: pixToRem(50)}} />

@@ -197,7 +197,7 @@ const Main = memo(props => {
                                 key={index}
                                 component={'div'}
                                 sx={styles.imgItem}
-                                onClick={() => props.goToDetail(item.label.toLowerCase())}
+                                onClick={() => props.goToDetail(item.label)}
                             >
                                 <Box
                                     component={'img'}
@@ -220,7 +220,7 @@ const Main = memo(props => {
                                 key={index}
                                 component={'div'}
                                 sx={styles.imgItem}
-                                onClick={() => props.goToDetail(item.label.toLowerCase())}
+                                onClick={() => props.goToDetail(item.label)}
                             >
                                 <Box
                                     component={'img'}

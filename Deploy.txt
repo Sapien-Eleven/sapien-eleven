@@ -3,6 +3,6 @@ https://uscloud02.blinkinblox.net/
 username: BBX-SapienEleven
 password: Tbl%%ur#gmLor!pFGh@bl$ap
 
-VM virtual console auth pair: root / blinkinbl0x
+VM virtual console auth pair: root / blinkinbl0x / blinkinblox
 
 ssh root@162.247.131.12

@@ -76,7 +76,7 @@ const DietDetail = memo(props => {
             foodsToEats: foodsToEats.data.reduce((acc, cur) => [...acc, cur.attributes.food], []),
             foodsToAvoids: foodsToAvoids.data.reduce((acc, cur) => [...acc, cur.attributes.food], []),
         });
-    }, []);
+    }, [props.diet]);
     const fetchRecommendDiets = useCallback(async () => {
         let diets = [];
         const image = (await axios.get(`${StrapiURL}image-labels`, {
@@ -97,7 +97,7 @@ const DietDetail = memo(props => {
             }],
         []);
         setRecommendedDiets(diets);
-    }, []);
+    }, [props.diet]);
     if (content.diet !== undefined) {
         return (
             <Box

@@ -1,4 +1,4 @@
-import {Box, Button, Container, Stack} from "@mui/material";
+import {Box, Button, Stack} from "@mui/material";
 import {memo} from "react";
 import {colors, fonts, pixToRem} from "../../const/uivar";
 import {AccessTime, ChevronLeft, ChevronRight} from "@mui/icons-material";

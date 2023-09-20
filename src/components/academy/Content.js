@@ -1,11 +1,6 @@
 import {Box} from "@mui/material";
 import {memo} from "react";
 import {colors, pixToRem} from "../../const/uivar";
-import Mindfulness from "./Mindfulness";
-import Meditation from "./Meditation";
-import Yoga from "./Yoga";
-import Mobility from "./Mobility";
-import Fitness from "./Fitness";
 import Recipes from "./Recipes";
 import Diets from "./Diets";
 import EatToHeal from "./EatToHeal";

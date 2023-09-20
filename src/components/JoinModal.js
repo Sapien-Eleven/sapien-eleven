@@ -3,7 +3,7 @@ import React, {memo} from "react";
 import {useSpring, animated} from "@react-spring/web";
 import PropTypes from "prop-types";
 import {colors, fonts, pixToRem} from "../const/uivar";
-import Triangle_vectors from "../assets/images/triangle_vectors";
+import TriangleVectors from "../assets/images/triangle_vectors";
 
 const Fade = React.forwardRef(function Fade(props, ref) {
     const {
@@ -66,7 +66,7 @@ const JoinModal = memo(props => {
                     sx={styles.panel}
                 >
                     <Box style={styles.vectorBg}>
-                        <Triangle_vectors />
+                        <TriangleVectors />
                     </Box>
                     <Box
                         component={'span'}

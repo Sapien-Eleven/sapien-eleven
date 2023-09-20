@@ -3,7 +3,6 @@ import {Box, Container} from "@mui/material";
 import {colors, fonts, pixToRem} from "../../const/uivar";
 import Wellness from '../../assets/images/academy/wellness.png'
 import {connect} from "react-redux";
-import WalletModal from "../WalletModal";
 
 const IntroPanel = memo(props => {
     return (

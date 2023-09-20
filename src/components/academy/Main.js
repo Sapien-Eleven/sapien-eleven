@@ -2,7 +2,7 @@ import {Container} from "@mui/material";
 import {memo, useCallback, useEffect, useState} from "react";
 import Category from "./Category";
 import Content from "./Content";
-import {academyCategories, StrapiBaseURL, StrapiToken, StrapiURL} from "../../const/consts";
+import {StrapiBaseURL, StrapiToken, StrapiURL} from "../../const/consts";
 import axios from "axios";
 
 const Main = memo(props => {

@@ -1,14 +1,6 @@
 import {Box, Stack} from "@mui/material";
 import {memo, useCallback, useEffect, useState} from "react";
 import {colors, fonts, pixToRem} from "../../const/uivar";
-import BreakfastImg from '../../assets/images/academy/breakfast.png'
-import LunchImg from '../../assets/images/academy/lunch.png'
-import DinnerImg from '../../assets/images/academy/dinner.png'
-import SidesImg from '../../assets/images/academy/sides.png'
-import SnacksImg from '../../assets/images/academy/snacks.png'
-import BlueberryImg from '../../assets/images/academy/blueberry_banana_protein_waffle.png'
-import DragonbowlImg from '../../assets/images/academy/dragon_bowl.png'
-import PeanutImg from '../../assets/images/academy/peanut_butter.png'
 import FoodDetail from "./FoodDetail";
 import axios from "axios";
 import {StrapiBaseURL, StrapiToken, StrapiURL} from "../../const/consts";
@@ -200,44 +192,44 @@ const styles = {
 const SubContent = memo(props => {
     const [content, setContent] = useState({});
     useEffect(() => {
+        const fetchContent = async () => {
+            let images = [];
+            const data = (await axios.get(`${StrapiURL}academy-recipes-contents`, {
+                headers: {
+                    'Authorization': `bearer ${StrapiToken}`
+                },
+                params: {
+                    'filters[recipe][$eq]': props.recipe,
+                    'populate': '*'
+                }
+            })).data;
+            const image = (await axios.get(`${StrapiURL}academy-recipes-image-labels`, {
+                headers: {
+                    'Authorization': `bearer ${StrapiToken}`
+                },
+                params: {
+                    'filters[recipe][$eq]': props.recipe,
+                    'populate': '*'
+                }
+            })).data;
+            images = image.data.reduce((acc, cur) => [...acc,
+                    {
+                        imageID: cur.id,
+                        recipe: cur.attributes.recipe,
+                        label: cur.attributes.label,
+                        image: `${StrapiBaseURL}${cur.attributes.image.data.attributes.url}`
+                    }],
+                []);
+            setContent({
+                id: data.data[0].id,
+                recipe: data.data[0].attributes.recipe,
+                title: data.data[0].attributes.title,
+                description: data.data[0].attributes.description,
+                image: images
+            });
+        }
         fetchContent().then();
-    }, []);
-    const fetchContent = async () => {
-        let images = [];
-        const data = (await axios.get(`${StrapiURL}academy-recipes-contents`, {
-            headers: {
-                'Authorization': `bearer ${StrapiToken}`
-            },
-            params: {
-                'filters[recipe][$eq]': props.recipe,
-                'populate': '*'
-            }
-        })).data;
-        const image = (await axios.get(`${StrapiURL}academy-recipes-image-labels`, {
-            headers: {
-                'Authorization': `bearer ${StrapiToken}`
-            },
-            params: {
-                'filters[recipe][$eq]': props.recipe,
-                'populate': '*'
-            }
-        })).data;
-        images = image.data.reduce((acc, cur) => [...acc,
-            {
-                imageID: cur.id,
-                recipe: cur.attributes.recipe,
-                label: cur.attributes.label,
-                image: `${StrapiBaseURL}${cur.attributes.image.data.attributes.url}`
-            }],
-        []);
-        setContent({
-            id: data.data[0].id,
-            recipe: data.data[0].attributes.recipe,
-            title: data.data[0].attributes.title,
-            description: data.data[0].attributes.description,
-            image: images
-        });
-    }
+    }, [props.recipe]);
     if (content.recipe !== undefined) {
         return (
             <Box

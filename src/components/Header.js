@@ -56,8 +56,8 @@ const Header = memo((props) => {
 		if (active) {
 			props.setWalletAddress(account)
 		}
-	}, []);
-	const connectWallet = useCallback(() => {
+	}, [props]);
+	const connectWallet = () => {
 		if (active) {
 			deactivate();
 			props.setConnectedWallet('');
@@ -67,7 +67,7 @@ const Header = memo((props) => {
 			console.log(active)
 			setWalletModalVisible(true);
 		}
-	}, [active]);
+	};
 	const onNavigate = (page) => {
 		navigate(`/${page.toLowerCase()}`)
 	}

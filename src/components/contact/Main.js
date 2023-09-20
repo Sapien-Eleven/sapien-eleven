@@ -1,5 +1,5 @@
 import {Box, Button, TextField} from "@mui/material";
-import {memo, useCallback, useEffect, useRef, useState} from "react";
+import {memo, useState} from "react";
 import StepBg from '../../assets/images/contact/step_bg.png'
 import FinalBg from '../../assets/images/contact/final_bg.png'
 import {colors, fonts, pixToRem} from "../../const/uivar";
@@ -18,13 +18,13 @@ const Main = memo(props => {
     const [qc, setQC] = useState('')
     const [stepForwardBtnDisabled, setStepForwardBtnDisabled] = useState(true)
 
-    const stepBack = useCallback(() => {
+    const stepBack = () => {
         if (step > 0) {
             setStep(step - 1);
             setStepForwardBtnDisabled(false)
         }
-    }, [step])
-    const stepForward = useCallback(() => {
+    }
+    const stepForward = () => {
         if (step === 0) {
            if (firstName === '' || lastName === '') return;
         }
@@ -51,33 +51,33 @@ const Main = memo(props => {
             else if (step === 2 && qc !== '') setStepForwardBtnDisabled(false)
             else setStepForwardBtnDisabled(true)
         }
-    })
+    }
 
-    const onChangeFirstName = useCallback((e) => {
+    const onChangeFirstName = (e) => {
         setFirstName(e.target.value)
         if (lastName) setStepForwardBtnDisabled(false)
         if (e.target.value === '') setStepForwardBtnDisabled(true)
-    })
-    const onChangeLastName = useCallback((e) => {
+    }
+    const onChangeLastName = (e) => {
         setLastName(e.target.value)
         if (firstName) setStepForwardBtnDisabled(false)
         if (e.target.value === '') setStepForwardBtnDisabled(true)
-    })
-    const onChangeEmail = useCallback((e) => {
+    }
+    const onChangeEmail = (e) => {
         setEmail(e.target.value)
         if (e.target.value === '') setStepForwardBtnDisabled(true)
         else setStepForwardBtnDisabled(false)
-    })
-    const onChangePhoneNumber = useCallback((e) => {
+    }
+    const onChangePhoneNumber = (e) => {
         setPhoneNumber(e.target.value);
         if (e.target.value === '') setStepForwardBtnDisabled(true)
         else setStepForwardBtnDisabled(false)
-    })
-    const onChangeQC = useCallback((e) => {
+    }
+    const onChangeQC = (e) => {
         setQC(e.target.value);
         if (e.target.value === '') setStepForwardBtnDisabled(true)
         else setStepForwardBtnDisabled(false)
-    })
+    }
     return (
         <Box
             component={'div'}
@@ -143,7 +143,7 @@ const Main = memo(props => {
                             step === 2 && <PhoneNumber defaultValue={phoneNumber} onChangePhoneNumber={onChangePhoneNumber} />
                         }
                         {
-                            step === 3 && <Questions_Concerns defaultValue={qc} onChangeQC={onChangeQC} />
+                            step === 3 && <QuestionsConcerns defaultValue={qc} onChangeQC={onChangeQC} />
                         }
                         <Box
                             component={'div'}
@@ -638,7 +638,7 @@ const PhoneNumber = memo(props => {
     )
 })
 
-const Questions_Concerns = memo(props => {
+const QuestionsConcerns = memo(props => {
     return (
         <Box
             component={'div'}

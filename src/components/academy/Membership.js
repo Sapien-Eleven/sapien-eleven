@@ -35,7 +35,7 @@ const Membership = memo(props => {
                 </Box>
                 <Button
                     sx={styles.joinBtn}
-                    startIcon={<img src={Mark} style={{width: '14px', height: '22px', marginRight: '6px'}} />}
+                    startIcon={<img src={Mark} style={{width: '14px', height: '22px', marginRight: '6px'}} alt={'mark'} />}
                 >
                     Join Sapien Eleven
                 </Button>

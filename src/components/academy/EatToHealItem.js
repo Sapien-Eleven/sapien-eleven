@@ -1,5 +1,5 @@
 import {memo, useCallback, useEffect, useState} from "react";
-import {Box, Breadcrumbs, Button, dividerClasses, Link, Stack, Typography} from "@mui/material";
+import {Box, Breadcrumbs, Button, Link, Stack, Typography} from "@mui/material";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import {colors, fonts, pixToRem} from "../../const/uivar";
 import ColorsWide from '../../assets/images/academy/colors_wide.png'
@@ -17,11 +17,11 @@ const EatToHealItem = memo(props => {
         fetchContent().then();
     }, [])
 
-    const changeColor = useCallback((color) => {
+    const changeColor = (color) => {
         setCurrentColor(color);
-    }, [currentColor]);
+    };
 
-    const fetchContent = useCallback(async () => {
+    const fetchContent = async () => {
         let tempContent;
         const data = (await axios.get(`${StrapiURL}academy-eattoheal-contents`, {
             headers: {
@@ -79,7 +79,7 @@ const EatToHealItem = memo(props => {
             }], [])
         }
         setContent(tempContent);
-    }, []);
+    };
     const toggleLearnMore = useCallback(() => setShowLearnMore(!showLearnMore), [showLearnMore]);
     if (content.title === undefined) return <Box></Box>
     else return (

@@ -17,6 +17,8 @@ const Diets = memo(props => {
             )
         case 'detail':
             return <DietDetail diet={diet} />
+        default:
+            return null;
     }
 })
 

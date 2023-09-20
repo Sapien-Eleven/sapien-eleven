@@ -1,4 +1,4 @@
-import {cloneElement, forwardRef, memo, useCallback, useEffect, useState} from "react";
+import {cloneElement, forwardRef, memo, useEffect, useState} from "react";
 import PropTypes from "prop-types";
 import {Backdrop, Box, Button, IconButton, Modal} from "@mui/material";
 import {useSpring, animated} from "@react-spring/web";
@@ -9,26 +9,11 @@ import WalletExplainationNewWay from '../assets/images/icons/explaination_newway
 import CreateWallet from '../assets/images/icons/create.png'
 import ScanWallet from '../assets/images/icons/scan.png'
 import {wallets} from "../const/consts";
-import {useWeb3React, UnsupportedChainIdError} from "@web3-react/core";
-import {NoEthereumProviderError, UserRejectedRequestError as UserRejectedRequestErrorInjected} from "@web3-react/injected-connector";
-import {UserRejectedRequestError as UserRejectedRequestErrorWalletConnect} from "@web3-react/walletconnect-connector";
+import {useWeb3React} from "@web3-react/core";
 import {QRCode} from "react-qrcode-logo";
 import {connect} from "react-redux";
 import {setConnectedWallet, setWalletAddress} from "../store/actions/auth";
 import {injected} from "../const/connectors";
-
-const getErrorMessage = (err) => {
-    if (err instanceof NoEthereumProviderError) {
-        return 'No Ethereum browser extension detected, install MetaMask on desktop or visit from a dApp browser on mobile.'
-    } else if (err instanceof UnsupportedChainIdError) {
-        return "You're connected to an unsupported network."
-    } else if (err instanceof UserRejectedRequestErrorInjected || err instanceof UserRejectedRequestErrorWalletConnect) {
-        return 'Please authorize this website to access your Ethereum account.'
-    } else {
-        console.error(err);
-        return 'An unknown error occurred. Check the console for more details.'
-    }
-}
 
 const Fade = forwardRef((props, ref) => {
     const {
@@ -72,8 +57,8 @@ Fade.propTypes = {
 
 const WalletModal = memo((props) => {
     const {connector, account, activate, active} = useWeb3React();
-    const [recentWallets, setRecentWallets] = useState(['metamask']);
-    const [popularWallets, setPopularWallets] = useState(['rainbow', 'coinbase', 'walletconnect', 'phantom']);
+    const [recentWallets] = useState(['metamask']);
+    const [popularWallets] = useState(['rainbow', 'coinbase', 'walletconnect', 'phantom']);
     const [actionStep, setActionStep] = useState(-1);
     // step0: AboutWallet
     // step1: Scan with WalletName
@@ -96,45 +81,45 @@ const WalletModal = memo((props) => {
     }
     useInactiveListener(!triedEager || !!activatingConnector);
 
-    const onSelectWallet = useCallback(async(wallet) => {
+    const onSelectWallet = async (wallet) => {
         if (wallet === 'metamask') {
             await onConnectMetamask();
             return;
         }
         setSelectedWallet(wallet);
         if (wallets[wallet].stepCount > 0) setActionStep(1);
-    }, []);
-    const onStepBack = useCallback(() => {
+    };
+    const onStepBack = () => {
         if (actionStep < -1) return;
         if (actionStep === 2 && canBack) {
             setActionStep(0);
             return;
         }
         if (actionStep > 0) setActionStep(actionStep - 1);
-    }, [actionStep, canBack]);
-    const onStepForward = useCallback(() => {
+    };
+    const onStepForward = () => {
         if (actionStep < 3) {
             setActionStep(actionStep + 1);
         }
         else setActionStep(1);
-    }, [actionStep]);
+    };
     const onLearnMore = () => {
     }
-    const onGetWallet = useCallback((wallet) => {
+    const onGetWallet = (wallet) => {
         if (wallet === 'metamask') return;
         setSelectedWallet(wallet);
         setActionStep(2);
         setCanBack(true);
-    });
+    };
     const onOpenWallet = async () => {
         if (selectedWallet === 'walletconnect') await onOpenWalletConnectAPI();
         else if (selectedWallet === 'phantom') onOpenPhantom();
     };
-    const onOpenWalletConnectAPI = useCallback(async () => {
+    const onOpenWalletConnectAPI = async () => {
         setActivatingConnector(wallets['walletconnect'].connector);
         await activate(wallets['walletconnect'].connector)
-    }, []);
-    const onOpenPhantom = useCallback(async () => {
+    };
+    const onOpenPhantom = async () => {
         const provider = getPhantomeProvider();
         if (provider) {
             try {
@@ -149,27 +134,27 @@ const WalletModal = memo((props) => {
         } else {
             window.open('https://phantom.app/')
         }
-    }, [])
+    }
     const getPhantomeProvider = () => {
         if ('solana' in window) {
             const provider = window.solana;
             if (provider.isPhantom) return provider;
         }
     }
-    const onConnectMetamask = useCallback(async () => {
+    const onConnectMetamask = async () => {
         setActivatingConnector(wallets['metamask'].connector);
         await activate(wallets['metamask'].connector);
         props.setConnectedWallet('metamask');
         console.log('connect metamask')
         // props.setWalletAddress(account.toString());
         onCloseModal();
-    }, [active]);
-    const onCloseModal = useCallback(() => {
+    };
+    const onCloseModal = () => {
         props.closeModal();
         setSelectedWallet('');
         setActionStep(-1);
         setCanBack(false);
-    }, [props]);
+    };
     return (
         <Modal
             aria-labelledby={"spring-modal-title"}
@@ -294,7 +279,7 @@ export default connect(
 )(WalletModal);
 
 const useEagerConnect = () => {
-    const {active, activate, account} = useWeb3React();
+    const {active, activate} = useWeb3React();
     const [tried, setTried] = useState(false);
 
     useEffect(() => {

@@ -1,7 +1,6 @@
 import {Box, Button} from "@mui/material";
-import {memo, useCallback, useState} from "react";
-import {colors, fonts, pixToRem} from "../../const/uivar";
-import {academyCategories} from "../../const/consts";
+import {memo} from "react";
+import {fonts, pixToRem} from "../../const/uivar";
 import {useCollapse} from "react-collapsed";
 import {BiChevronRight, BiChevronDown} from 'react-icons/bi';
 

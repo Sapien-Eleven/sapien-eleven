@@ -2,12 +2,6 @@ import {Box, Stack} from "@mui/material";
 import {memo, useCallback, useState} from "react";
 import {colors, fonts, pixToRem} from "../../const/uivar";
 import EatToHealItem from "./EatToHealItem";
-import ColorsImg from '../../assets/images/academy/colors.png'
-import HerbsImg from '../../assets/images/academy/herbs.png'
-import NutsImg from '../../assets/images/academy/nuts.png'
-import OilsImg from '../../assets/images/academy/oils.png'
-import VeggiesImg from '../../assets/images/academy/veggies.png'
-import SeedsImg from '../../assets/images/academy/seeds.png'
 
 const EatToHeal = memo(props => {
     const [page, setPage] = useState('main');

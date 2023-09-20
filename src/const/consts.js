@@ -6,8 +6,6 @@ import CoinbaseIcon from '../assets/images/icons/coinbase.png';
 import WalletConnectIcon from '../assets/images/icons/walletconnect.png';
 import PhantomIcon from '../assets/images/icons/phantom.jpg'
 import {injected, walletconnect} from "./connectors";
-import {useWeb3React} from "@web3-react/core";
-import {useEffect, useState} from "react";
 import Brenton from '../assets/images/about/brenton.png'
 import Svensei from '../assets/images/about/sv3nsei.jpg'
 export const pages = ['ACADEMY', 'ABOUT', 'MARKETPLACE', 'RESOURCES', 'CONTACT'];
@@ -120,4 +118,4 @@ export const teamMembers = [
 
 export const StrapiURL = 'http://162.247.131.12:3000/api/'
 export const StrapiBaseURL = 'http://162.247.131.12:1337'
-export const StrapiToken = '7c00ee7a00372d4c2bbf7255ab3e9b40f6aff3d0a117cc62039bd42419faa4b6f9f58e1319d4227dfea4f0fe57282abc4d9e1668f0917b42e4842b3b66f28d4768244fcae5c6fa6cea8d7b60d3b2353311a021ef910f6abb9bf0792a36153958652f39fce4e707d5318b937f8236b140e3d96175657eb8d6f4820b52c9f91279'
+export const StrapiToken = '19af21921143805a3c206a83551206a0c9e745e3b4a3943897d2a315985df9955da0f1563c615c0b6cb557e38b374f3eedbdf12ad9415f721e4efd2446162b8fbdb185b71387e8c3ba9b85f08b820ed14646e3a2146e7d697e5183ebf0b1863bb0b5c405d97e8bce3f02d7f5fde5e2f7b5b8955ea0b1ec636bf2baaa81a7547a'

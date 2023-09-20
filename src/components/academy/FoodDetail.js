@@ -1,5 +1,5 @@
 import {Box, Breadcrumbs, Link, Stack, Typography} from "@mui/material";
-import {memo, useCallback, useEffect, useState} from "react";
+import {memo, useEffect, useState} from "react";
 import {colors, fonts, pixToRem} from "../../const/uivar";
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import Portion from "../../assets/images/academy/portion";
@@ -19,7 +19,7 @@ const FoodDetail = memo(props => {
         fetchFoodDetail().then();
         fetchRecommendFoods().then();
     }, []);
-    const fetchFoodDetail = useCallback(async () => {
+    const fetchFoodDetail = async () => {
         const data = (await axios.get(`${StrapiURL}academy-recipes-foods`, {
             headers: {
                 'Authorization': `bearer ${StrapiToken}`
@@ -57,8 +57,8 @@ const FoodDetail = memo(props => {
             ingredient: ingredient.data.reduce((acc, cur) => [...acc, cur.attributes.description], []),
             instruction: instruction.data.reduce((acc, cur) => [...acc, cur.attributes.description], []),
         });
-    }, []);
-    const fetchRecommendFoods = useCallback(async () => {
+    };
+    const fetchRecommendFoods = async () => {
         let foods = [];
         const image = (await axios.get(`${StrapiURL}academy-recipes-image-labels`, {
             headers: {
@@ -78,7 +78,7 @@ const FoodDetail = memo(props => {
             }],
         []);
         setRecommendedFoods(foods);
-    }, [])
+    }
 
     if (content.food !== undefined) {
         return (

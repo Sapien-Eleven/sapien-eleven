@@ -117,5 +117,5 @@ export const teamMembers = [
 ]
 
 export const StrapiURL = 'http://162.247.131.12:3000/api/'
-export const StrapiBaseURL = 'http://162.247.131.12:1337'
+export const StrapiBaseURL = 'http://162.247.131.12:3000'
 export const StrapiToken = '19af21921143805a3c206a83551206a0c9e745e3b4a3943897d2a315985df9955da0f1563c615c0b6cb557e38b374f3eedbdf12ad9415f721e4efd2446162b8fbdb185b71387e8c3ba9b85f08b820ed14646e3a2146e7d697e5183ebf0b1863bb0b5c405d97e8bce3f02d7f5fde5e2f7b5b8955ea0b1ec636bf2baaa81a7547a'

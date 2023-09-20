@@ -1,5 +1,5 @@
-import {BrowserRouter, Route, Routes} from "react-router-dom";
-import {Home} from "../pages/Home";
+import {HashRouter, Route, Routes} from "react-router-dom";
+import Home from "../pages/Home";
 import About from "../pages/About";
 import Contact from "../pages/Contact";
 import Academy from "../pages/Academy";
@@ -8,7 +8,7 @@ import Resources from "../pages/Resources";
 
 const Router = () => {
     return (
-        <BrowserRouter>
+        <HashRouter>
             <Routes>
                 <Route path="/">
                     <Route index element={<Home />} />
@@ -19,7 +19,7 @@ const Router = () => {
                     <Route path={'contact'} element={<Contact />} />
                 </Route>
             </Routes>
-        </BrowserRouter>
+        </HashRouter>
     )
 }
 

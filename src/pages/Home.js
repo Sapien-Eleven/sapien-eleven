@@ -9,7 +9,7 @@ import IntroPanel from "../components/home/IntroPanel";
 import Drop from "../components/home/Drop";
 import '../styles/common.css'
 
-export function Home() {
+export default function Home() {
     return (
         <div
             className="app"

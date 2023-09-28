@@ -1,8 +1,9 @@
-import {Box, Container} from "@mui/material";
+import {Box, Container, Stack} from "@mui/material";
 import {memo} from "react";
 import {colors, fonts, pixToRem} from "../../const/uivar";
 import CEOPhoto from '../../assets/images/about/ceo_jeremy.png'
 import {teamMembers} from "../../const/consts";
+import Twitter from "../../assets/images/blog/twitter";
 
 const Team = memo(props => {
     return (
@@ -51,6 +52,7 @@ const Team = memo(props => {
                     >
                         A licensed medical provider in the United States with a degree in Nutrition, Exercise, and Health Sciences. Having experienced the pros and, particularly, the cons of the healthcare system from both the provider and patient sides, I made it my mission to create change. To educate and empower individuals to take control of their own wellness to live healthier and happier.
                     </Box>
+                    <Twitter />
                 </Box>
                 <Box
                     component={'img'}
@@ -58,9 +60,12 @@ const Team = memo(props => {
                     sx={styles.ceoPhoto}
                 />
             </Box>
-            <Box
-                component={'div'}
+            <Stack
                 sx={styles.memberPanel}
+                spacing={2.5}
+                direction={'row'}
+                useFlexGap
+                flexWrap={'wrap'}
             >
                 {
                     teamMembers.map((member, index) => (
@@ -94,7 +99,7 @@ const Team = memo(props => {
                         </Box>
                     ))
                 }
-            </Box>
+            </Stack>
         </Container>
     )
 })
@@ -113,16 +118,16 @@ const styles = {
     },
     redTitle: {
         fontFamily: fonts.roboto,
-        fontSize: pixToRem(45),
+        fontSize: pixToRem(30),
         fontWeight: 700,
         fontStyle: 'normal',
         color: '#CA3C3D',
-        lineHeight: pixToRem(55),
+        lineHeight: pixToRem(45),
         marginTop: pixToRem(40)
     },
     blackTitle: {
         fontFamily: fonts.besan,
-        fontSize: pixToRem(45),
+        fontSize: pixToRem(30),
         fontWeight: 700,
         fontStyle: 'normal',
         color: colors.black,
@@ -134,8 +139,8 @@ const styles = {
         fontFamily: fonts.roboto,
         fontStyle: 'normal',
         fontWeight: 400,
-        fontSize: pixToRem(28),
-        lineHeight: pixToRem(40),
+        fontSize: pixToRem(18),
+        lineHeight: pixToRem(30),
         color: colors.comment,
         marginTop: pixToRem(20),
         marginBottom: pixToRem(30),
@@ -151,7 +156,6 @@ const styles = {
         marginBottom: pixToRem(30)
     },
     ceoCommentPanel: {
-        height: pixToRem(640),
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'flex-start',
@@ -163,36 +167,31 @@ const styles = {
         fontFamily: fonts.roboto,
         fontStyle: 'normal',
         fontWeight: 400,
-        fontSize: pixToRem(28),
-        lineHeight: pixToRem(40),
+        fontSize: pixToRem(18),
+        lineHeight: pixToRem(30),
         color: colors.comment,
         marginTop: pixToRem(20),
         marginBottom: pixToRem(30),
     },
     ceoPhoto: {
         width: 'auto',
-        height: pixToRem(640),
+        height: '100%',
         backgroundSize: '100% 100%'
     },
     memberPanel: {
         width: '92%',
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        flexWrap: 'wrap',
         marginTop: pixToRem(20),
         marginBottom: pixToRem(10)
     },
     memberBox: {
-        width: '22%',
-        height: pixToRem(440),
+        width: '21%',
+        height: pixToRem(300),
         backgroundColor: '#1F1F1F',
         padding: '17px 17px',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'flex-start',
-        marginBottom: pixToRem(30)
+        marginBottom: pixToRem(10)
     },
     memberPhoto: {
         width: '100%',
@@ -200,7 +199,7 @@ const styles = {
         backgroundSize: 'cover'
     },
     memberComment: {
-        marginTop: pixToRem(-140),
+        marginTop: pixToRem(-125),
         paddingTop: pixToRem(30),
         paddingBottom: pixToRem(40),
         display: 'flex',
@@ -211,19 +210,20 @@ const styles = {
     },
     memberName: {
         fontFamily: fonts.besan,
-        fontSize: pixToRem(32),
+        fontSize: pixToRem(25),
         fontWeight: 400,
         fontStyle: 'normal',
-        lineHeight: pixToRem(33),
+        lineHeight: pixToRem(27),
         color: 'white',
     },
     memberRole: {
         fontFamily: fonts.roboto,
-        fontSize: pixToRem(20),
+        fontSize: pixToRem(16),
         fontWeight: 700,
         fontStyle: 'normal',
         color: '#CA3C3D',
-        lineHeight: pixToRem(33),
-        marginTop: pixToRem(5)
+        lineHeight: pixToRem(27),
+        marginTop: pixToRem(5),
+        textAlign: 'center'
     }
 }

@@ -71,43 +71,45 @@ const styles = {
         backgroundColor: colors.bgBlackColor,
         backgroundImage: `url(${Running})`,
         backgroundRepeat: 'no-repeat',
-        height: pixToRem(770),
-        backgroundSize: 'contain',
+        backgroundSize: 'cover',
+        backgroundPosition: 'start',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'flex-end',
+        paddingTop: pixToRem(150),
+        paddingBottom: pixToRem(150)
     },
     explaination: {
-        width: '38%',
+        width: '45%',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'flex-start',
-        marginRight: '5em'
+        marginRight: pixToRem(50)
     },
     whiteTitle: {
         fontFamily: fonts.roboto,
         color: 'white',
         fontStyle: 'normal',
         fontWeight: '700',
-        fontSize: pixToRem(40),
-        lineHeight: pixToRem(54)
+        fontSize: pixToRem(35),
+        lineHeight: pixToRem(45)
     },
     redTitle: {
         fontFamily: fonts.besan,
         color: colors.red,
         fontStyle: 'normal',
         fontWeight: '700',
-        fontSize: pixToRem(40),
-        lineHeight: pixToRem(54)
+        fontSize: pixToRem(35),
+        lineHeight: pixToRem(45)
     },
     comment: {
         fontFamily: fonts.roboto,
         fontStyle: 'normal',
         fontWeight: '400',
-        fontSize: pixToRem(24),
-        lineHeight: pixToRem(44),
+        fontSize: pixToRem(23),
+        lineHeight: pixToRem(35),
         color: colors.comment,
         marginTop: '1.6em'
     },

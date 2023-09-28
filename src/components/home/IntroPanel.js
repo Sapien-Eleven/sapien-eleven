@@ -6,6 +6,7 @@ import WalletModal from "../WalletModal";
 import {memo, useCallback, useState} from "react";
 import {connect} from "react-redux";
 import {wallets} from "../../const/consts";
+import {pixToRem} from "../../const/uivar";
 
 const WalletButton = styled(Button)((props) => ({
 	boxSizing: 'border-box',
@@ -75,15 +76,16 @@ export default connect(
 const styles = {
     introPanel: {
         width: '100%',
-        height: '850px',
-        paddingLeft: '70px',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'flex-start',
         backgroundImage: `url(${MainBg})`,
+        backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
-        backgroundSize: 'cover'
+        backgroundSize: 'cover',
+        paddingTop: pixToRem(210),
+        paddingBottom: pixToRem(210)
     },
     redTxt: {
         fontFamily: 'Roboto',
@@ -91,7 +93,7 @@ const styles = {
         fontWeight: 700,
         fontStyle: 'normal',
         color: '#CA3C3D',
-        marginLeft: '70px'
+        marginLeft: '70px',
     },
     title: {
         fontFamily: 'besan',

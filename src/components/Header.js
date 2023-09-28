@@ -1,4 +1,4 @@
-import { AppBar, Box, Button, Container, Toolbar, styled } from '@mui/material'
+import {AppBar, Box, Button, Container, Toolbar, styled, Stack} from '@mui/material'
 import '../styles/common.css'
 import '@fontsource/roboto/700.css';
 import SapienLogo from '../assets/logo.png'
@@ -13,7 +13,6 @@ import {useWeb3React} from "@web3-react/core";
 import {useNavigate} from "react-router-dom";
 
 const NavButton = styled(Button)((props) => ({
-	marginRight: 69.5,
 	height: 81,
 	color: '#333333',
 	fontFamily: 'Roboto',
@@ -34,7 +33,6 @@ const WalletButton = styled(Button)((props) => ({
 	paddingBottom: pixToRem(10),
 	paddingLeft: pixToRem(20),
 	paddingRight: pixToRem(20),
-	gap: pixToRem(10),
 	height: pixToRem(35),
 	backgroundColor: '#F8F8F8',
 	color: '#333333',
@@ -86,7 +84,11 @@ const Header = memo((props) => {
 							src={SapienLogo}
 						/>
 					</Button>
-					<Container sx={styles.navBar}>
+					<Stack
+						// sx={styles.navBar}
+						spacing={5}
+						direction={'row'}
+					>
 						{
 							pages.map((page, index) => {
 								return (
@@ -107,7 +109,7 @@ const Header = memo((props) => {
 								)
 							})
 						}
-					</Container>
+					</Stack>
 					<WalletButton
 						startIcon={<img src={props.connectedWallet === '' ? MetaMaskLogo : wallets[props.connectedWallet].remoteIcon} style={styles.metamaskLogo} alt='metamask' />}
 						onClick={connectWallet}

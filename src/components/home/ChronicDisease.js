@@ -1,5 +1,6 @@
 import { Box, Container } from "@mui/material";
 import Chronic_Disease from '../../assets/images/chronic_disease.png'
+import {pixToRem} from "../../const/uivar";
 
 export function ChronicDisease() {
     return (
@@ -37,13 +38,15 @@ export function ChronicDisease() {
 
 const styles = {
     panel: {
-        height: '70rem',
+        width: '100%',
         zIndex: 1,
         backgroundColor: '#1D1D1D',
         backgroundImage: `url(${Chronic_Disease})`,
         backgroundRepeat: 'no-repeat',
+        backgroundPosition: 'start',
         backgroundSize: 'cover',
-        paddingTop: '100px',
+        paddingTop: pixToRem(90),
+        paddingBottom: pixToRem(600)
     },
     explaination: {
         marginLeft: '5rem',
@@ -54,28 +57,28 @@ const styles = {
     },
     whiteTxt: {
         fontFamily: 'Roboto',
-        fontSize: '3rem',
+        fontSize: pixToRem(30),
         fontStyle: 'normal',
         fontWeight: '700',
-        lineHeight: '4rem',
+        lineHeight: pixToRem(40),
         color: 'white'
     },
     redTxt: {
         fontFamily: 'besan',
-        fontSize: '3rem',
+        fontSize: pixToRem(30),
         fontStyle: 'normal',
         fontWeight: '700',
-        lineHeight: '3rem',
+        lineHeight: pixToRem(40),
         color: '#CA3C3D'
     },
     comment: {
         fontFamily: 'Roboto',
-        fontSize: '1.4rem',
+        fontSize: pixToRem(18),
         fontStyle: 'normal',
         fontWeight: '400',
-        lineHeight: '2rem',
+        lineHeight: pixToRem(30),
         color: '#999999',
-        marginTop: '2rem',
-        width: '47%'
+        marginTop: pixToRem(10),
+        width: '50%'
     }
 }

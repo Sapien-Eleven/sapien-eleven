@@ -51,12 +51,14 @@ const styles = {
         backgroundColor: colors.bgBlackColor,
         backgroundImage: `url(${Running})`,
         backgroundRepeat: 'no-repeat',
-        height: pixToRem(770),
-        backgroundSize: 'contain',
+        backgroundSize: 'cover',
+        backgroundPosition: 'start',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'flex-end',
+        paddingTop: pixToRem(150),
+        paddingBottom: pixToRem(150)
     },
     explaination: {
         width: '45%',
@@ -64,7 +66,7 @@ const styles = {
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'flex-start',
-        marginRight: '5em'
+        marginRight: pixToRem(50)
     },
     whiteTitle: {
         fontFamily: fonts.roboto,
@@ -83,7 +85,7 @@ const styles = {
         lineHeight: pixToRem(54)
     },
     comment: {
-        width: '60%',
+        width: '80%',
         fontFamily: fonts.roboto,
         fontStyle: 'normal',
         fontWeight: '400',

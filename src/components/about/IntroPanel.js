@@ -39,31 +39,33 @@ export default IntroPanel
 const styles = {
     panel: {
         width: '100%',
-        height: pixToRem(630),
         backgroundImage: `url(${PanelBg})`,
         backgroundRepeat: 'no-repeat',
         backgroundSize: 'cover',
+        backgroundPosition: 'center',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'flex-start',
+        paddingTop: pixToRem(100),
+        paddingBottom: pixToRem(100)
     },
     redTitle: {
         fontFamily: fonts.roboto,
-        fontSize: pixToRem(45),
+        fontSize: pixToRem(35),
         fontWeight: 700,
         fontStyle: 'normal',
         color: '#CA3C3D',
-        lineHeight: pixToRem(55),
+        lineHeight: pixToRem(45),
         marginLeft: pixToRem(70)
     },
     whiteTitle: {
         fontFamily: fonts.besan,
-        fontSize: pixToRem(45),
+        fontSize: pixToRem(35),
         fontWeight: 700,
         fontStyle: 'normal',
         color: 'white',
-        lineHeight: pixToRem(55),
+        lineHeight: pixToRem(45),
         marginTop: pixToRem(5),
         marginBottom: pixToRem(15),
         marginLeft: pixToRem(70)
@@ -71,11 +73,11 @@ const styles = {
     comment: {
         width: '28%',
         fontFamily: fonts.roboto,
-        fontSize: pixToRem(26),
+        fontSize: pixToRem(20),
         fontWeight: 400,
         fontStyle: 'normal',
         color: 'white',
-        lineHeight: pixToRem(40),
+        lineHeight: pixToRem(30),
         marginTop: pixToRem(15),
         marginBottom: pixToRem(20),
         marginLeft: pixToRem(70)

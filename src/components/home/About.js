@@ -57,7 +57,7 @@ export function About() {
                         component={'span'}
                         sx={styles.boxComment}
                     >
-                        Physical activity is essential for maintaining good health because it helps to <br/> improve cardiovascular and respiratory function, increase muscle strength and <br/> endurance, and reduce the risk of chronic diseases. Regular physical activity also <br/> promotes mental well-being by improving mood, cognitive function, and <br/> managing stress and anxiety.
+                        Physical activity is essential for maintaining good health because it helps to improve cardiovascular and respiratory function, increase muscle strength and endurance, and reduce the risk of chronic diseases. Regular physical activity also promotes mental well-being by improving mood, cognitive function, and managing stress and anxiety.
                     </Box>
                 </Box>
                 <Box
@@ -80,7 +80,7 @@ export function About() {
                         component={'span'}
                         sx={styles.boxComment}
                     >
-                        A diet rich in nutrient dense foods is the best way to nourish the <br/> body with the nutrients necessary. When the foods we consume <br/> are void of necessary nutrients, imbalances in the body's <br/> chemistry can occur and illness ensues. Supplements ensure that <br/> the necessary nutrients are consumed.
+                        A diet rich in nutrient dense foods is the best way to nourish the body with the nutrients necessary. When the foods we consume are void of necessary nutrients, imbalances in the body's chemistry can occur and illness ensues. Supplements ensure that the necessary nutrients are consumed.
                     </Box>
                 </Box>
             </Box>

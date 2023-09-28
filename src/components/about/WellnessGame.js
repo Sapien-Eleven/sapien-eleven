@@ -64,7 +64,8 @@ const styles = {
     },
     redTitle: {
         fontFamily: fonts.roboto,
-        fontSize: pixToRem(45),
+        fontSize: pixToRem(30),
+        lineHeight: pixToRem(45),
         fontWeight: 700,
         fontStyle: 'normal',
         color: colors.red,
@@ -72,10 +73,11 @@ const styles = {
     },
     blackTitle: {
         fontFamily: fonts.besan,
-        fontSize: pixToRem(45),
+        fontSize: pixToRem(30),
         fontWeight: 700,
         fontStyle: 'normal',
         color: colors.black,
+        lineHeight: pixToRem(45),
         marginTop: pixToRem(5),
         marginBottom: pixToRem(15),
         marginLeft: pixToRem(70)
@@ -85,8 +87,8 @@ const styles = {
         fontFamily: fonts.roboto,
         fontStyle: 'normal',
         fontWeight: 400,
-        fontSize: pixToRem(28),
-        lineHeight: pixToRem(40),
+        fontSize: pixToRem(18),
+        lineHeight: pixToRem(30),
         color: colors.comment,
         marginLeft: pixToRem(70),
         marginTop: pixToRem(15)

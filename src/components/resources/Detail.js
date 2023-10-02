@@ -186,6 +186,7 @@ const styles = {
         height: pixToRem(430),
         backgroundRepeat: 'no-repeat',
         backgroundSize: 'cover',
+        backgroundPosition: 'center',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
@@ -328,7 +329,7 @@ const styles = {
         flex: 1,
         display: 'flex',
         flexDirection: 'column',
-        justifyContent: 'center',
+        justifyContent: 'space-between',
         alignItems: 'center',
         backgroundColor: '#F8F8F8'
     },
@@ -339,7 +340,7 @@ const styles = {
         backgroundSize: 'cover'
     },
     recommendItemTitle: {
-        width: '60%',
+        width: '75%',
         fontFamily: fonts.roboto,
         fontSize: pixToRem(16),
         fontWeight: '700',

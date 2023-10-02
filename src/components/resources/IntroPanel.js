@@ -1,7 +1,7 @@
 import {memo} from "react";
 import {Box, Container} from "@mui/material";
 import IntroBg from '../../assets/images/blog/intro_bg.png';
-import {fonts, pixToRem} from "../../const/uivar";
+import {colors, fonts, pixToRem} from "../../const/uivar";
 
 const IntroPanel = memo(props => {
     return (
@@ -34,14 +34,17 @@ export default IntroPanel
 const styles = {
     container: {
         width: '100%',
-        height: pixToRem(455),
         backgroundImage: `url(${IntroBg})`,
         backgroundRepeat: 'no-repeat',
-        backgroundSize: 'cover',
+        backgroundSize: 'contain',
+        backgroundPosition: 'right bottom',
+        backgroundColor: colors.bgBlackColor,
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'flex-start',
+        paddingTop: pixToRem(120),
+        paddingBottom: pixToRem(70)
     },
     redTitle: {
         fontFamily: fonts.roboto,
@@ -64,7 +67,7 @@ const styles = {
         marginLeft: pixToRem(70)
     },
     comment: {
-        width: '40%',
+        width: '52%',
         fontFamily: fonts.roboto,
         fontSize: pixToRem(22),
         fontWeight: 400,

@@ -3,7 +3,7 @@ import {memo, useState} from "react";
 import StepBg from '../../assets/images/contact/step_bg.png'
 import FinalBg from '../../assets/images/contact/final_bg.png'
 import {colors, fonts, pixToRem} from "../../const/uivar";
-import {CircularProgressbar} from "react-circular-progressbar";
+import {CircularProgressbar, buildStyles} from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import validator from 'validator'
 import {toast, ToastContainer} from 'react-toastify'
@@ -107,6 +107,9 @@ const Main = memo(props => {
                             >
                                 <CircularProgressbar
                                     value={25 * (step + 1)}
+                                    styles={buildStyles({
+                                        pathColor: colors.red
+                                    })}
                                 />
                             </Box>
                             <Box

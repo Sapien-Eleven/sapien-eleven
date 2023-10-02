@@ -149,8 +149,9 @@ const styles = {
         flex: 1,
         display: 'flex',
         flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center'
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        backgroundColor: 'rgba(248, 248, 248, 1)'
     },
     contentImage: {
         width: '100%',
@@ -159,7 +160,7 @@ const styles = {
         backgroundSize: 'cover'
     },
     contentTitle: {
-        width: '50%',
+        width: '70%',
         fontFamily: fonts.roboto,
         fontSize: pixToRem(16),
         fontWeight: '700',

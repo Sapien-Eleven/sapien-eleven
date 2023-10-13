@@ -1,12 +1,12 @@
 import {Footer} from "../components/Footer";
 import Header from "../components/Header";
 import {memo, useCallback, useState} from "react";
-import IntroPanel from "../components/resources/IntroPanel";
-import ContentPanel from "../components/resources/ContentPanel";
-import JoinPanel from "../components/resources/JoinPanel";
+import IntroPanel from "../components/blog/IntroPanel";
+import ContentPanel from "../components/blog/ContentPanel";
+import JoinPanel from "../components/blog/JoinPanel";
 import Mindfulness_Wide from '../assets/images/blog/mindfulness_wide.png'
 import MindfulnessContentImage from '../assets/images/blog/mindfulness_content.png'
-import Detail from "../components/resources/Detail";
+import Detail from "../components/blog/Detail";
 import Health from "../assets/images/academy/mobility.png";
 import AI_ML from "../assets/images/blog/ai_ml.png";
 
@@ -32,7 +32,7 @@ const temp = {
         'Beyond meditation and mindfulness practices, technology is also being used to improve physical wellness and mobility. Wearable technology, such as fitness trackers and smart watches, can help users track their physical activity and monitor their progress towards fitness goals. Some devices even offer personalized workout recommendations based on a user\'s fitness level and goals.\n' +
         '\n' +
         'The use of technology in mindfulness practices and physical wellness is not without its challenges. Some experts worry that technology can be a distraction and prevent users from fully engaging in the present moment. Others caution that technology should be used in conjunction with, rather than as a replacement for, traditional mindfulness practices.\n' +
-        'Despite these concerns, it is clear that technology has the potential to enhance mindfulness practices and improve overall well-being. From meditation apps to wearable technology and VR experiences, technology is providing users with new tools and resources to support their mental, emotional, and physical health. As technology continues to evolve, it will be interesting to see how it continues to shape the way we approach mindfulness and wellness practices.'
+        'Despite these concerns, it is clear that technology has the potential to enhance mindfulness practices and improve overall well-being. From meditation apps to wearable technology and VR experiences, technology is providing users with new tools and blog to support their mental, emotional, and physical health. As technology continues to evolve, it will be interesting to see how it continues to shape the way we approach mindfulness and wellness practices.'
 }
 
 const recommededTemp = [
@@ -48,7 +48,7 @@ const recommededTemp = [
     },
 ]
 
-const Resources = memo(props => {
+const Blog = memo(props => {
     const [selectedContent, selectContent] = useState(false);
     const readContent = useCallback((category) => {
         // fetch the data with respect to the category and set content.
@@ -57,7 +57,7 @@ const Resources = memo(props => {
     const resetContent = useCallback(() => selectContent(false), []);
     return (
         <div className={'app'}>
-            <Header page={'resources'} />
+            <Header page={'blog'} />
             {
                 selectedContent === false ?
                     <Main readContent={readContent} />
@@ -74,7 +74,7 @@ const Resources = memo(props => {
     )
 })
 
-export default Resources
+export default Blog
 
 const Main = memo(props => {
     return (

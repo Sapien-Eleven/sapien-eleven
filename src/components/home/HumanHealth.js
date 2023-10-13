@@ -29,12 +29,12 @@ export function HumanHealth() {
                         component={'span'}
                         sx={styles.cardTitle}
                     >
-                        Western Medicine
+                        WESTERN MEDICINE
                     </Box>
                     <Box
                         component={'span'}
                         sx={styles.comment}
-                    >To identify and treat symptoms using drugs and<br/>surgery. Disease prevention and treating the<br/>underlying cause are neglected.</Box>
+                    >A health management system. To identify signs and symptoms, then manage those with pharmaceuticals. Instead of treating the true underlying cause.</Box>
                 </Box>
                 <Box
                     component='div'
@@ -44,12 +44,12 @@ export function HumanHealth() {
                         component={'span'}
                         sx={styles.cardTitle}
                     >
-                        Corporate Rules
+                        CORPORATE RULES
                     </Box>
                     <Box
                         component={'span'}
                         sx={styles.comment}
-                    >Doctors are often bound to protocols limiting their<br/>control and scope of practice. Leaving both<br/>patients and doctors frustrated.</Box>
+                    >A system driven by money. Doctors are often bound to protocols that limit their control and scope of practice. Leaving both the patient and doctor frustrated.</Box>
                 </Box>
                 <Box
                     component='div'
@@ -59,12 +59,12 @@ export function HumanHealth() {
                         component={'span'}
                         sx={styles.cardTitle}
                     >
-                        Big Pharma
+                        BIG PHARMA
                     </Box>
                     <Box
                         component={'span'}
                         sx={styles.comment}
-                    >"To identify and treat symptoms using drugs and<br/>surgery. Disease prevention and treating the<br/>underlying cause are neglected."</Box>
+                    >Prescribing meds is the first line of action. Pharmaceutical companies drive the curriculum taught in the education system, which persuades providers to practice in a "medication first" manner</Box>
                 </Box>
             </Container>
             <Container
@@ -80,12 +80,12 @@ export function HumanHealth() {
                         component={'span'}
                         sx={styles.cardTitle}
                     >
-                        Processed Diets
+                        PROCESSED DIETS
                     </Box>
                     <Box
                         component={'span'}
                         sx={styles.comment}
-                    >"To identify and treat symptoms using drugs and<br/>surgery. Disease prevention and treating the<br/>underlying cause are neglected."</Box>
+                    >What happened to going to the market for fresh food? Due to convenience, more and more people rely on nutrient void processed foods leading to illness and disease.</Box>
                 </Box>
                 <Box
                     component={'div'}
@@ -106,12 +106,12 @@ export function HumanHealth() {
                         component={'span'}
                         sx={styles.cardTitle}
                     >
-                        Depleted Soils
+                        DEPLETED SOIL
                     </Box>
                     <Box
                         component={'span'}
                         sx={styles.comment}
-                    >"To identify and treat symptoms using drugs and<br/>surgery. Disease prevention and treating the<br/>underlying cause are neglected."</Box>
+                    >Herbicides, pesticides and fertilizers are depleting the soil of necessary nutrients which impacts not only produce, but also the livestock that are fed the produce.</Box>
                 </Box>
             </Container>
         </Container>
@@ -172,6 +172,7 @@ const styles = {
         lineHeight: '40px'
     },
     comment: {
+        width: '90%',
         fontFamily: 'Roboto',
         fontSize: '16px',
         fontWeight: 400,

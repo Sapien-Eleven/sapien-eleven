@@ -25,3 +25,11 @@
     width: 201px;
     height: 80px;
 }
+
+.reactMarkdownTxt {
+    font-family: 'Roboto';
+    font-size: 18px;
+    font-weight: 400;
+    color: #999;
+    line-height: 30px;
+}

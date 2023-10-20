@@ -5,6 +5,7 @@ import Contact from "../pages/Contact";
 import Academy from "../pages/Academy";
 import Marketplace from "../pages/Marketplace";
 import Blog from "../pages/Blog";
+import Policy from "../components/resource/Policy";
 
 const Router = () => {
     return (
@@ -17,6 +18,7 @@ const Router = () => {
                     <Route path={'marketplace'} element={<Marketplace />} />
                     <Route path={'blog'} element={<Blog />} />
                     <Route path={'contact'} element={<Contact />} />
+                    <Route path={'resource'} element={<Policy/>} />
                 </Route>
             </Routes>
         </HashRouter>

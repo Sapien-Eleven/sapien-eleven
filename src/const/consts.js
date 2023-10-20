@@ -10,7 +10,7 @@ import Brenton from '../assets/images/about/brenton.png'
 import Svensei from '../assets/images/about/sv3nsei.jpg'
 export const pages = ['ACADEMY', 'ABOUT', 'MARKETPLACE', 'RESOURCES', 'CONTACT'];
 
-export const policies = ['PRIVACY POLICY', 'TERMS AND CONDITIONS', 'DISCLAMER', 'COOKIE POLICY'];
+export const policies = ['PRIVACY POLICY', 'TERMS AND CONDITIONS', 'DISCLAIMER', 'COOKIE POLICY', 'SHIPPING POLICY', 'RETURN POLICY'];
 
 export const wallets = {
     'metamask': {

@@ -48,7 +48,7 @@ const recommededTemp = [
     },
 ]
 
-const Blog = memo(props => {
+const Media = memo(props => {
     const [selectedContent, selectContent] = useState(false);
     const readContent = useCallback((category) => {
         // fetch the data with respect to the category and set content.
@@ -57,7 +57,7 @@ const Blog = memo(props => {
     const resetContent = useCallback(() => selectContent(false), []);
     return (
         <div className={'app'}>
-            <Header page={'blog'} />
+            <Header page={'media'} />
             {
                 selectedContent === false ?
                     <Main readContent={readContent} />
@@ -74,7 +74,7 @@ const Blog = memo(props => {
     )
 })
 
-export default Blog
+export default Media
 
 const Main = memo(props => {
     return (

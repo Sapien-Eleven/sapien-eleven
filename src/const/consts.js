@@ -8,7 +8,7 @@ import PhantomIcon from '../assets/images/icons/phantom.jpg'
 import {injected, walletconnect} from "./connectors";
 import Brenton from '../assets/images/about/brenton.png'
 import Svensei from '../assets/images/about/sv3nsei.jpg'
-export const pages = ['ACADEMY', 'ABOUT', 'MARKETPLACE', 'RESOURCES', 'CONTACT'];
+export const pages = ['ACADEMY', 'ABOUT', 'MARKETPLACE', 'MEDIA', 'CONTACT'];
 
 export const policies = ['PRIVACY POLICY', 'TERMS AND CONDITIONS', 'DISCLAIMER', 'COOKIE POLICY', 'SHIPPING POLICY', 'RETURN POLICY'];
 

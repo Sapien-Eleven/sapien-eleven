@@ -4,7 +4,7 @@ import About from "../pages/About";
 import Contact from "../pages/Contact";
 import Academy from "../pages/Academy";
 import Marketplace from "../pages/Marketplace";
-import Blog from "../pages/Blog";
+import Media from "../pages/Media";
 import Policy from "../components/resource/Policy";
 
 const Router = () => {
@@ -16,7 +16,7 @@ const Router = () => {
                     <Route path={'academy'} element={<Academy />} />
                     <Route path={'about'} element={<About />} />
                     <Route path={'marketplace'} element={<Marketplace />} />
-                    <Route path={'blog'} element={<Blog />} />
+                    <Route path={'media'} element={<Media />} />
                     <Route path={'contact'} element={<Contact />} />
                     <Route path={'resource'} element={<Policy/>} />
                 </Route>

@@ -67,8 +67,7 @@ const Header = memo((props) => {
 		}
 	};
 	const onNavigate = (page) => {
-		if (page.toLowerCase() === 'resources') navigate('/blog');
-		else navigate(`/${page.toLowerCase()}`)
+		navigate(`/${page.toLowerCase()}`);
 	}
 	return (
 		<AppBar className='TopBar' sx={[props.page !== 'home' ? {borderBottom: '1px solid #F2F2F2'} : null, {boxShadow: 'none'}]} position={'sticky'}>

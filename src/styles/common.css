@@ -33,3 +33,21 @@
     color: #999;
     line-height: 30px;
 }
+
+.blogContentTxt {
+    font-family: 'Roboto';
+    font-size: 18px;
+    font-weight: 400;
+    color: #999;
+    line-height: 30px;
+}
+
+.blogContentTxt em {
+    font-family: 'Roboto';
+    font-size: 18px;
+    font-weight: 400;
+    color: #999;
+    line-height: 30px;
+    padding-left: 20px;
+    border-left: 7px solid #CA3C3D;
+}

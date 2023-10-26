@@ -6,6 +6,7 @@ import Academy from "../pages/Academy";
 import Marketplace from "../pages/Marketplace";
 import Media from "../pages/Media";
 import Policy from "../components/resource/Policy";
+import MediaDetail from "../components/media/MediaDetail";
 
 const Router = () => {
     return (
@@ -17,6 +18,7 @@ const Router = () => {
                     <Route path={'about'} element={<About />} />
                     <Route path={'marketplace'} element={<Marketplace />} />
                     <Route path={'media'} element={<Media />} />
+                    <Route path={'media/detail'} element={<MediaDetail />} />
                     <Route path={'contact'} element={<Contact />} />
                     <Route path={'resource'} element={<Policy/>} />
                 </Route>

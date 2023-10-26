@@ -1,43 +1,44 @@
 import {Box, Button, Container, Stack} from "@mui/material";
-import {memo, useCallback, useState} from "react";
+import {memo, useCallback, useEffect, useState} from "react";
 import {colors, fonts, pixToRem} from "../../const/uivar";
-import AI_ML from '../../assets/images/blog/ai_ml.png';
+import AI_ML from '../../assets/images/media/ai_ml.png';
 import Fitness from '../../assets/images/academy/fitness.png'
 import Health from '../../assets/images/academy/mobility.png'
-import Mindfulness from '../../assets/images/blog/mindfulness.png'
+import Mindfulness from '../../assets/images/media/mindfulness.png'
 import {ChevronRight} from "@mui/icons-material";
-
-const contents = {
-    blog: [
-        {
-            id: 1,
-            image: Fitness,
-            title: 'Revolutionizing Fitness: How AI and VR are Transforming Your Workouts'
-        },
-        {
-            id: 2,
-            image: Health,
-            title: 'The Role of Blockchain in the Future of Healthcare and Wellness'
-        },
-        {
-            id: 3,
-            image: Mindfulness,
-            title: 'How Technology is Enhancing Mindfulness Practices'
-        },
-        {
-            id: 4,
-            image: AI_ML,
-            title: 'AI and Machine Learning are Personalizing Rehabilitation and Physical Therapy'
-        },
-    ],
-    updates: [],
-    news: [],
-    podcasts: []
-}
+import axios from "axios";
+import {StrapiBaseURL, StrapiToken, StrapiURL} from "../../const/consts";
 
 const ContentPanel = memo(props => {
     const [currentCategory, setCurrentCategory] = useState('blog');
-    const changeCategory = useCallback((category) => setCurrentCategory(category), []);
+    const [content, setContent] = useState([]);
+    useEffect(() => {
+        fetchContents(currentCategory).then();
+    }, [])
+    const changeCategory = useCallback(async (category) => {
+        setCurrentCategory(category);
+        props.changeCategory(category);
+        await fetchContents(category);
+    }, [currentCategory]);
+    const fetchContents = async (category) => {
+        const data = (await axios.get(`${StrapiURL}${category === 'blog' ? category + 's' : category}`, {
+            headers: {
+                'Authorization': `bearer ${StrapiToken}`
+            },
+            params: {
+                'populate': '*'
+            }
+        })).data;
+        setContent(data.data.reduce((acc, cur) => [...acc, {
+            id: cur.id,
+            title: cur.attributes.title,
+            thumbnail: `${StrapiBaseURL}${cur.attributes.thumbnail.data.attributes.url}`,
+            headerImage: `${StrapiBaseURL}${cur.attributes.headerImage.data.attributes.url}`,
+            readingTime: cur.attributes.readingTime,
+            content: cur.attributes.content,
+            updatedAt: cur.attributes.updatedAt
+        }], []));
+    }
     return (
         <Container
             maxWidth={false}
@@ -83,15 +84,14 @@ const ContentPanel = memo(props => {
                 spacing={3}
             >
                 {
-                    contents[currentCategory].map((item, index) => (
+                    content.map((item, index) => (
                         <Box
                             key={index}
                             sx={styles.contentItem}
-                            item={item}
                         >
                             <Box
                                 component={'img'}
-                                src={item.image}
+                                src={item.thumbnail}
                                 sx={styles.contentImage}
                             />
                             <Box
@@ -100,7 +100,7 @@ const ContentPanel = memo(props => {
                             >{item.title}</Box>
                             <Button
                                 sx={styles.contentButton}
-                                onClick={() => props.readContent(item)}
+                                onClick={() => props.goToDetail(item, content.filter(e => e.id !== item.id))}
                             >
                                 READ MORE
                                 <ChevronRight sx={{color: colors.red}} />

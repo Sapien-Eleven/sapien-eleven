@@ -1,27 +1,51 @@
 import {Box, Button, Stack} from "@mui/material";
-import {memo} from "react";
+import {memo, useEffect, useState} from "react";
 import {colors, fonts, pixToRem} from "../../const/uivar";
 import {AccessTime, ChevronLeft, ChevronRight} from "@mui/icons-material";
-import BiMessenger from "../../assets/images/blog/bi_messenger";
-import Twitter from '../../assets/images/blog/twitter'
-import Instagram from "../../assets/images/blog/instagram";
-import Whatsapp from "../../assets/images/blog/whatsapp";
-import Facebook from "../../assets/images/blog/facebook";
-import LinkedIn from '../../assets/images/blog/linkedin'
-import Tiktok from "../../assets/images/blog/tiktok";
+import BiMessenger from "../../assets/images/media/bi_messenger";
+import Twitter from '../../assets/images/media/twitter'
+import Instagram from "../../assets/images/media/instagram";
+import Whatsapp from "../../assets/images/media/whatsapp";
+import Facebook from "../../assets/images/media/facebook";
+import LinkedIn from '../../assets/images/media/linkedin'
+import Tiktok from "../../assets/images/media/tiktok";
+import {useLocation, useNavigate} from "react-router-dom";
+import Header from "../Header";
+import {Footer} from "../Footer";
+import ReactMarkdown from "react-markdown";
+import {StrapiBaseURL} from "../../const/consts";
 
-const Detail = memo(props => {
+const MediaDetail = memo(props => {
+    const {state} = useLocation();
+    const navigate = useNavigate();
+    return (
+        <div className={'app'}>
+            <Header page={'media'}/>
+            <Content
+                content={state.detail}
+                recommendItems={state.recommendItems}
+                goToDetail={(detail, recommendItems) => navigate('/media/detail', {state: {detail, recommendItems}})}
+            />
+            <Footer />
+        </div>
+    )
+})
+export default MediaDetail
+
+
+const Content = memo(props => {
+    const navigate = useNavigate();
     return (
         <div style={styles.container}>
             <Box
                 component={'div'}
-                sx={[styles.headerPanel, {backgroundImage: `url(${props.content.backgroundImage})`}]}
+                sx={[styles.headerPanel, {backgroundImage: `url(${props.content.headerImage})`}]}
             >
                 <Box
                     component={'span'}
                     sx={styles.redTitle}
                 >
-                    {props.content.createdAt} | {props.content.parentCategory} - {props.content.category}
+                    {props.content.updatedAt}
                 </Box>
                 <Box
                     component={'span'}
@@ -34,39 +58,24 @@ const Detail = memo(props => {
                     sx={styles.time}
                 >
                     <AccessTime sx={{color: 'rgba(255, 255, 255, 0.69)'}} />
-                    <Box component={'span'} sx={styles.timeTxt}>{`${props.content.time}m Read Time`}</Box>
+                    <Box component={'span'} sx={styles.timeTxt}>{`${props.content.readingTime}m Read Time`}</Box>
                 </Box>
                 <Button
                     sx={styles.goBackBtn}
                     startIcon={<ChevronLeft color={'white'} fontSize={'large'} />}
-                    onClick={props.goBack}
+                    onClick={() => navigate(-1)}
                 >Go back</Button>
             </Box>
             <Box
                 component={'div'}
                 sx={styles.contentPanel}
             >
-                {
-                    props.content.introduction.split('\n').map(item => (
-                        <Box component={'span'} sx={styles.comment}>{item}<br/></Box>
-                    ))
-                }
-                <Box
-                    component={'img'}
-                    src={props.content.contentImage}
-                    sx={styles.contentImage}
-                />
-                <Box
-                    component={'span'}
-                    sx={styles.specialComment}
+                <ReactMarkdown
+                    className={'blogContentTxt'}
+                    urlTransform={uri => `${StrapiBaseURL}${uri}`}
                 >
-                    {props.content.contentImageDescription}
-                </Box>
-                {
-                    props.content.description.split('\n').map(item => (
-                        <Box component={'span'} sx={styles.comment}>{item}<br/></Box>
-                    ))
-                }
+                    {props.content.content}
+                </ReactMarkdown>
                 <Box
                     component={'div'}
                     sx={styles.socialLinkPanel}
@@ -139,7 +148,7 @@ const Detail = memo(props => {
                     >You may also like...</Box>
                     <Stack sx={{width: '100%', marginTop: pixToRem(60)}} direction={'row'} spacing={2}>
                         {
-                            props.recommended.map((item, index) => (
+                            props.recommendItems.slice(0, 2).map((item, index) => (
                                 <Box
                                     key={index}
                                     sx={styles.recommendItem}
@@ -147,7 +156,7 @@ const Detail = memo(props => {
                                 >
                                     <Box
                                         component={'img'}
-                                        src={item.image}
+                                        src={item.thumbnail}
                                         sx={styles.recommendItemImage}
                                     />
                                     <Box
@@ -156,7 +165,7 @@ const Detail = memo(props => {
                                     >{item.title}</Box>
                                     <Button
                                         sx={styles.recommendItemButton}
-                                        onClick={() => props.readContent(item)}
+                                        onClick={() => props.goToDetail(item, props.recommendItems.filter(e => e.id !== item.id))}
                                     >
                                         READ MORE
                                         <ChevronRight sx={{color: colors.red}} />
@@ -170,7 +179,6 @@ const Detail = memo(props => {
         </div>
     )
 })
-export default Detail
 
 const styles = {
     container: {
@@ -183,7 +191,6 @@ const styles = {
     },
     headerPanel: {
         width: '100%',
-        height: pixToRem(430),
         backgroundRepeat: 'no-repeat',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
@@ -191,22 +198,24 @@ const styles = {
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        position: 'relative'
+        position: 'relative',
+        paddingTop: pixToRem(60),
+        paddingBottom: pixToRem(60)
     },
     redTitle: {
         fontFamily: fonts.roboto,
-        fontSize: pixToRem(30),
+        fontSize: pixToRem(25),
         fontWeight: '700',
         color: colors.red,
-        lineHeight: pixToRem(49)
+        lineHeight: pixToRem(45)
     },
     whiteTitle: {
-        width: '50%',
+        width: '60%',
         fontFamily: fonts.roboto,
-        fontSize: pixToRem(60),
+        fontSize: pixToRem(50),
         fontWeight: '700',
         color: 'white',
-        lineHeight: pixToRem(70),
+        lineHeight: pixToRem(60),
         textAlign: 'center',
         marginTop: pixToRem(10)
     },
@@ -243,31 +252,6 @@ const styles = {
         width: '40%',
         paddingTop: pixToRem(80),
         paddingBottom: pixToRem(80),
-    },
-    comment: {
-        fontFamily: fonts.roboto,
-        fontSize: pixToRem(18),
-        fontWeight: '400',
-        color: colors.comment,
-        lineHeight: pixToRem(30)
-    },
-    contentImage: {
-        width: '100%',
-        height: 'auto',
-        backgroundSize: 'cover',
-        marginTop: pixToRem(40),
-        marginBottom: pixToRem(40)
-    },
-    specialComment: {
-        paddingLeft: pixToRem(20),
-        borderLeft: '7px solid #CA3C3D',
-        fontFamily: fonts.roboto,
-        fontWeight: '400',
-        fontStyle: 'italic',
-        fontSize: pixToRem(18),
-        lineHeight: pixToRem(30),
-        color: colors.comment,
-        marginBottom: pixToRem(40),
     },
     socialLinkPanel: {
         width: '100%',

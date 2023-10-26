@@ -1,8 +1,8 @@
 import {Box, Button, Container} from "@mui/material";
 import {memo, useCallback, useState} from "react";
 import {colors, fonts, pixToRem} from "../../const/uivar";
-import Mail from '../../assets/images/blog/Mail'
-import MailIcon from "../../assets/images/blog/MailIcon";
+import Mail from '../../assets/images/media/Mail'
+import MailIcon from "../../assets/images/media/MailIcon";
 import JoinModal from "../JoinModal";
 
 const JoinPanel = memo(props => {

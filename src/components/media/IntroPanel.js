@@ -1,13 +1,12 @@
 import {memo} from "react";
 import {Box, Container} from "@mui/material";
-import IntroBg from '../../assets/images/blog/intro_bg.png';
 import {colors, fonts, pixToRem} from "../../const/uivar";
 
 const IntroPanel = memo(props => {
     return (
         <Container
             maxWidth={false}
-            sx={styles.container}
+            sx={[styles.container, {backgroundImage: `url(${props.content.backgroundImage})`,}]}
         >
             <Box
                 component={'span'}
@@ -17,13 +16,13 @@ const IntroPanel = memo(props => {
                 component={'span'}
                 sx={styles.whiteTitle}
             >
-                BLOG
+                {props.content.title.toUpperCase()}
             </Box>
             <Box
                 component={'span'}
                 sx={styles.comment}
             >
-                Welcome to our wellness blog! Our mission is to provide you with practical tips and resources to help you live a healthier and happier life.
+                {props.content.description}
             </Box>
         </Container>
     )
@@ -34,7 +33,6 @@ export default IntroPanel
 const styles = {
     container: {
         width: '100%',
-        backgroundImage: `url(${IntroBg})`,
         backgroundRepeat: 'no-repeat',
         backgroundSize: 'contain',
         backgroundPosition: 'right bottom',

@@ -3,7 +3,7 @@ import {memo} from "react";
 import {colors, fonts, pixToRem} from "../../const/uivar";
 import CEOPhoto from '../../assets/images/about/ceo_jeremy.png'
 import {teamMembers} from "../../const/consts";
-import Twitter from "../../assets/images/blog/twitter";
+import Twitter from "../../assets/images/media/twitter";
 
 const Team = memo(props => {
     return (

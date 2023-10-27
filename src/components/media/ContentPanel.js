@@ -53,6 +53,25 @@ const ContentPanel = memo(props => {
                     updatedAt: cur.attributes.updatedAt
                 }], []));
                 break;
+            case 'news':
+                const newsData = (await axios.get(`${StrapiURL}news`, {
+                    headers: {
+                        'Authorization': `bearer ${StrapiToken}`
+                    },
+                    params: {
+                        'populate': '*'
+                    }
+                })).data;
+                setContent(newsData.data.reduce((acc, cur) => [...acc, {
+                    id: cur.id,
+                    title: cur.attributes.title,
+                    thumbnail: `${StrapiBaseURL}${cur.attributes.thumbnail.data.attributes.url}`,
+                    headerImage: `${StrapiBaseURL}${cur.attributes.headerImage.data.attributes.url}`,
+                    readingTime: cur.attributes.readingTime,
+                    content: cur.attributes.content,
+                    updatedAt: cur.attributes.updatedAt
+                }], []));
+                break;
         }
     }
     return (
@@ -96,9 +115,9 @@ const ContentPanel = memo(props => {
             </Stack>
             {
                 currentCategory === 'blog' ?
-                    <Blog content={content} />
+                    <Blog content={content} goToDetail={props.goToDetail} />
                     : currentCategory === 'updates' ? <Updates content={content} />
-                        : currentCategory === 'news' ? <News content={content} />
+                        : currentCategory === 'news' ? <Blog content={content} goToDetail={props.goToDetail} />
                             : currentCategory === 'podcasts' ? <Podcasts content={content} /> : null
             }
         </Container>

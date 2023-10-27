@@ -1,13 +1,11 @@
 import {Box, Button, Container, Stack} from "@mui/material";
 import {memo, useCallback, useEffect, useState} from "react";
 import {colors, fonts, pixToRem} from "../../const/uivar";
-import AI_ML from '../../assets/images/media/ai_ml.png';
-import Fitness from '../../assets/images/academy/fitness.png'
-import Health from '../../assets/images/academy/mobility.png'
-import Mindfulness from '../../assets/images/media/mindfulness.png'
-import {ChevronRight} from "@mui/icons-material";
+import {ArrowDropDown, ArrowRight, Cached, ChevronRight} from "@mui/icons-material";
 import axios from "axios";
 import {StrapiBaseURL, StrapiToken, StrapiURL} from "../../const/consts";
+import {useCollapse} from "react-collapsed";
+import ReactMarkdown from "react-markdown";
 
 const ContentPanel = memo(props => {
     const [currentCategory, setCurrentCategory] = useState('blog');
@@ -17,27 +15,45 @@ const ContentPanel = memo(props => {
     }, [])
     const changeCategory = useCallback(async (category) => {
         setCurrentCategory(category);
+        setContent([]);
         props.changeCategory(category);
         await fetchContents(category);
     }, [currentCategory]);
     const fetchContents = async (category) => {
-        const data = (await axios.get(`${StrapiURL}${category === 'blog' ? category + 's' : category}`, {
-            headers: {
-                'Authorization': `bearer ${StrapiToken}`
-            },
-            params: {
-                'populate': '*'
-            }
-        })).data;
-        setContent(data.data.reduce((acc, cur) => [...acc, {
-            id: cur.id,
-            title: cur.attributes.title,
-            thumbnail: `${StrapiBaseURL}${cur.attributes.thumbnail.data.attributes.url}`,
-            headerImage: `${StrapiBaseURL}${cur.attributes.headerImage.data.attributes.url}`,
-            readingTime: cur.attributes.readingTime,
-            content: cur.attributes.content,
-            updatedAt: cur.attributes.updatedAt
-        }], []));
+        switch (category) {
+            case 'blog':
+                const data = (await axios.get(`${StrapiURL}blogs`, {
+                    headers: {
+                        'Authorization': `bearer ${StrapiToken}`
+                    },
+                    params: {
+                        'populate': '*'
+                    }
+                })).data;
+                setContent(data.data.reduce((acc, cur) => [...acc, {
+                    id: cur.id,
+                    title: cur.attributes.title,
+                    thumbnail: `${StrapiBaseURL}${cur.attributes.thumbnail.data.attributes.url}`,
+                    headerImage: `${StrapiBaseURL}${cur.attributes.headerImage.data.attributes.url}`,
+                    readingTime: cur.attributes.readingTime,
+                    content: cur.attributes.content,
+                    updatedAt: cur.attributes.updatedAt
+                }], []));
+                break;
+            case 'updates':
+                const updatesData = (await axios.get(`${StrapiURL}updates`, {
+                    headers: {
+                        'Authorization': `bearer ${StrapiToken}`
+                    }
+                })).data;
+                setContent(updatesData.data.reduce((acc, cur) => [...acc, {
+                    id: cur.id,
+                    title: cur.attributes.title,
+                    content: cur.attributes.content,
+                    updatedAt: cur.attributes.updatedAt
+                }], []));
+                break;
+        }
     }
     return (
         <Container
@@ -78,37 +94,13 @@ const ContentPanel = memo(props => {
                     Podcasts
                 </Box>
             </Stack>
-            <Stack
-                sx={{width: '95%', marginTop: pixToRem(50)}}
-                direction={'row'}
-                spacing={3}
-            >
-                {
-                    content.map((item, index) => (
-                        <Box
-                            key={index}
-                            sx={styles.contentItem}
-                        >
-                            <Box
-                                component={'img'}
-                                src={item.thumbnail}
-                                sx={styles.contentImage}
-                            />
-                            <Box
-                                component={'span'}
-                                sx={styles.contentTitle}
-                            >{item.title}</Box>
-                            <Button
-                                sx={styles.contentButton}
-                                onClick={() => props.goToDetail(item, content.filter(e => e.id !== item.id))}
-                            >
-                                READ MORE
-                                <ChevronRight sx={{color: colors.red}} />
-                            </Button>
-                        </Box>
-                    ))
-                }
-            </Stack>
+            {
+                currentCategory === 'blog' ?
+                    <Blog content={content} />
+                    : currentCategory === 'updates' ? <Updates content={content} />
+                        : currentCategory === 'news' ? <News content={content} />
+                            : currentCategory === 'podcasts' ? <Podcasts content={content} /> : null
+            }
         </Container>
     )
 })
@@ -180,5 +172,163 @@ const styles = {
         fontSize: pixToRem(13),
         fontWeight: '700',
         color: '#999',
+    },
+    updatesItem: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        paddingTop: pixToRem(20),
+        paddingBottom: pixToRem(20),
+        paddingLeft: pixToRem(40),
+        paddingRight: pixToRem(40)
+    },
+    updatesTitleGroup: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'flex-start',
+        alignItems: 'center'
+    },
+    updatesItemTitle: {
+        fontFamily: fonts.roboto,
+        fontSize: pixToRem(24),
+        fontWeight: '700',
+        lineHeight: pixToRem(30),
+        color: colors.black,
+        marginLeft: pixToRem(10)
+    },
+    updatesItemContent: {
+        paddingBottom: pixToRem(20),
+        paddingLeft: pixToRem(80),
+        paddingRight: pixToRem(40)
+    },
+    updatesDateTxt: {
+        fontFamily: fonts.roboto,
+        fontSize: pixToRem(18),
+        fontWeight: '400',
+        lineHeight: pixToRem(30),
+        color: '#999',
     }
 }
+
+const Blog = memo(props => {
+    return (
+        <Stack
+            sx={{width: '95%', marginTop: pixToRem(50)}}
+            direction={'row'}
+            spacing={3}
+        >
+            {
+                props.content.map((item, index) => (
+                    <Box
+                        key={index}
+                        sx={styles.contentItem}
+                    >
+                        <Box
+                            component={'img'}
+                            src={item.thumbnail}
+                            sx={styles.contentImage}
+                        />
+                        <Box
+                            component={'span'}
+                            sx={styles.contentTitle}
+                        >{item.title}</Box>
+                        <Button
+                            sx={styles.contentButton}
+                            onClick={() => props.goToDetail(item, props.content.filter(e => e.id !== item.id))}
+                        >
+                            READ MORE
+                            <ChevronRight sx={{color: colors.red}} />
+                        </Button>
+                    </Box>
+                ))
+            }
+        </Stack>
+    )
+})
+
+const Updates = memo(props => {
+    return (
+        <Stack
+            sx={{width: '95%', marginTop: pixToRem(50)}}
+            direction={'column'}
+            spacing={3}
+        >
+            {
+                props.content.map((item, index) => (
+                    <UpdateItem
+                        key={index}
+                        item={item}
+                    />
+                ))
+            }
+        </Stack>
+    )
+})
+
+const UpdateItem = memo(props => {
+    const {getCollapseProps, getToggleProps, isExpanded} = useCollapse({
+        duration: 1000,
+    });
+    const formatDate = (dateString) => {
+        const options = {year: 'numeric', month: 'long', day: 'numeric'};
+        const date = new Date(dateString);
+        return date.toLocaleDateString('en-US', options);
+    }
+    return (
+        <Box
+            component={'div'}
+            sx={{backgroundColor: colors.bgWhiteColor}}
+        >
+            <Box
+                component={'div'}
+                sx={styles.updatesItem}
+                {...getToggleProps()}
+            >
+                <Box
+                    component={'div'}
+                    sx={styles.updatesTitleGroup}
+                >
+                    <Cached sx={{color: 'rgba(153, 153, 153, 1)'}} />
+                    <Box
+                        component={'span'}
+                        sx={styles.updatesItemTitle}
+                    >
+                        {props.item.title}
+                    </Box>
+                </Box>
+                {
+                    isExpanded ?
+                        <ArrowDropDown sx={{color: colors.black}} /> : <ArrowRight sx={{color: colors.black}} />
+                }
+            </Box>
+            <Box
+                component={'div'}
+                sx={styles.updatesItemContent}
+                {...getCollapseProps()}
+            >
+                <Box
+                    component={'span'}
+                    sx={styles.updatesDateTxt}
+                >
+                    {formatDate(props.item.updatedAt)}
+                </Box>
+                <ReactMarkdown className={'updatesContentTxt'}>
+                    {props.item.content}
+                </ReactMarkdown>
+            </Box>
+        </Box>
+    )
+})
+
+const News = memo(props => {
+    return (
+        <Container></Container>
+    )
+})
+
+const Podcasts = memo(props => {
+    return (
+        <Container></Container>
+    )
+})

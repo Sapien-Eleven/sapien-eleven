@@ -1,5 +1,5 @@
 import {Box, Button, Stack} from "@mui/material";
-import {memo, useEffect, useState} from "react";
+import {memo} from "react";
 import {colors, fonts, pixToRem} from "../../const/uivar";
 import {AccessTime, ChevronLeft, ChevronRight} from "@mui/icons-material";
 import BiMessenger from "../../assets/images/media/bi_messenger";

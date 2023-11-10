@@ -1,10 +1,33 @@
-import {memo} from "react";
+import {memo, useEffect, useState} from "react";
 import {Box, Button, Container} from "@mui/material";
 import {colors, fonts, pixToRem} from "../../const/uivar";
 import Running from "../../assets/images/running.png";
 import Mark from '../../assets/mark.png'
+import axios from "axios";
+import {StrapiToken, StrapiURL} from "../../const/consts";
 
 const Membership = memo(props => {
+    const [content, setContent] = useState({})
+    useEffect(() => {
+        fetchContent().then();
+    }, []);
+
+    const fetchContent = async () => {
+        const data = (await axios.get(`${StrapiURL}academy-landings`, {
+            headers: {
+                'Authorization': `bearer ${StrapiToken}`
+            },
+            params: {
+                'populate': '*',
+                'filters[section][$eq]': 'section3'
+            }
+        })).data;
+        setContent({
+            title1: data.data[0].attributes.title1,
+            title2: data.data[0].attributes.title2,
+            description: data.data[0].attributes.description,
+        });
+    }
     return (
         <Container
             component={'div'}
@@ -19,19 +42,19 @@ const Membership = memo(props => {
                     component={'span'}
                     sx={styles.whiteTitle}
                 >
-                    EXCLUSIVE
+                    {content.title1}
                 </Box>
                 <Box
                     component={'span'}
                     sx={styles.redTitle}
                 >
-                    MEMBERSHIP
+                    {content.title2}
                 </Box>
                 <Box
                     component={'span'}
                     sx={styles.comment}
                 >
-                    For exclusive access to the Sapien Eleven Wellness Platform includig all content, experiences, and products join today.
+                    {content.description}
                 </Box>
                 <Button
                     sx={styles.joinBtn}

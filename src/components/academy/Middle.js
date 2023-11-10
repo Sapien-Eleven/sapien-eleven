@@ -1,9 +1,33 @@
 import {Box, Container} from "@mui/material";
-import {memo} from "react";
+import {memo, useEffect, useState} from "react";
 import {colors, fonts, pixToRem} from "../../const/uivar";
 import Mindfullness from '../../assets/images/academy/mindfulness_room.png'
+import axios from "axios";
+import {StrapiToken, StrapiURL} from "../../const/consts";
+import ReactMarkdown from "react-markdown";
 
 const Middle = memo(props => {
+    const [content, setContent] = useState({})
+    useEffect(() => {
+        fetchContent().then();
+    }, []);
+
+    const fetchContent = async () => {
+        const data = (await axios.get(`${StrapiURL}academy-landings`, {
+            headers: {
+                'Authorization': `bearer ${StrapiToken}`
+            },
+            params: {
+                'populate': '*',
+                'filters[section][$eq]': 'section2'
+            }
+        })).data;
+        setContent({
+            title1: data.data[0].attributes.title1,
+            title2: data.data[0].attributes.title2,
+            description: data.data[0].attributes.description,
+        });
+    }
     return (
         <Container
             maxWidth={false}
@@ -22,21 +46,14 @@ const Middle = memo(props => {
                 <Box
                     component={'span'}
                     sx={styles.redTitle}
-                >A SINGLE</Box>
+                >{content.title1}</Box>
                 <Box
                     component={'span'}
                     sx={styles.blackTitle}
-                >PLACE TO GO</Box>
-                <Box
-                    component={'span'}
-                    sx={styles.comment}
-                >
-                    For all mental health and physical health experiences, as well as nutritional information.
-                    <br/><br/>
-                    A place built to eliminate all the excuses that come with beginning a new wellness journey.
-                    <br/><br/>
-                    The place where boring web2 wellness meets exciting, AI-powered web3 wellness.
-                </Box>
+                >{content.title2}</Box>
+                <ReactMarkdown className={'academyPlaceTxt'}>
+                    {content.description}
+                </ReactMarkdown>
             </Box>
         </Container>
     )

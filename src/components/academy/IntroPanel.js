@@ -1,10 +1,33 @@
-import {memo} from "react";
+import {memo, useEffect, useState} from "react";
 import {Box, Container} from "@mui/material";
 import {colors, fonts, pixToRem} from "../../const/uivar";
 import Wellness from '../../assets/images/academy/wellness.png'
 import {connect} from "react-redux";
+import axios from "axios";
+import {StrapiToken, StrapiURL} from "../../const/consts";
 
 const IntroPanel = memo(props => {
+    const [content, setContent] = useState({})
+    useEffect(() => {
+        fetchContent().then();
+    }, []);
+
+    const fetchContent = async () => {
+        const data = (await axios.get(`${StrapiURL}academy-landings`, {
+            headers: {
+                'Authorization': `bearer ${StrapiToken}`
+            },
+            params: {
+                'populate': '*',
+                'filters[section][$eq]': 'section1'
+            }
+        })).data;
+        setContent({
+            title1: data.data[0].attributes.title1,
+            title2: data.data[0].attributes.title2,
+            description: data.data[0].attributes.description,
+        });
+    }
     return (
         <Container
             component={'div'}
@@ -15,19 +38,19 @@ const IntroPanel = memo(props => {
                 component={'span'}
                 sx={styles.redTitle}
             >
-                SAPIEN ELEVEN
+                {content.title1}
             </Box>
             <Box
                 component={'span'}
                 sx={styles.whiteTitle}
             >
-                WELLNESS ACADEMY
+                {content.title2}
             </Box>
             <Box
                 component={'span'}
                 sx={styles.comment}
             >
-                The idea of the Sapien Eleven Wellness Academy is what motivated us to create Sapien Eleven in the first place.
+                {content.description}
             </Box>
             <Box
                 component={'img'}
@@ -73,7 +96,7 @@ const styles = {
         marginBottom: pixToRem(15),
     },
     comment: {
-        width: '30%',
+        width: '40%',
         fontFamily: fonts.roboto,
         fontSize: pixToRem(20),
         fontWeight: 400,

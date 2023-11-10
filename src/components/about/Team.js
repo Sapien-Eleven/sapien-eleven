@@ -1,11 +1,82 @@
 import {Box, Container, Stack} from "@mui/material";
-import {memo} from "react";
+import {memo, useEffect, useState} from "react";
 import {colors, fonts, pixToRem} from "../../const/uivar";
 import CEOPhoto from '../../assets/images/about/ceo_jeremy.png'
-import {teamMembers} from "../../const/consts";
+import {StrapiBaseURL, StrapiToken, StrapiURL, teamMembers} from "../../const/consts";
 import Twitter from "../../assets/images/media/twitter";
+import axios from "axios";
 
 const Team = memo(props => {
+    const [content, setContent] = useState({})
+    const [ceoContent, setCEOContent] = useState({})
+    const [teams, setTeams] = useState([]);
+
+    useEffect(() => {
+        fetchContent().then();
+    }, []);
+
+    useEffect(() => {
+        fetchCEOContent().then();
+    }, []);
+
+    useEffect(() => {
+        fetchTeams().then();
+    }, []);
+
+    const fetchContent = async () => {
+        const data = (await axios.get(`${StrapiURL}abouts`, {
+            headers: {
+                'Authorization': `bearer ${StrapiToken}`
+            },
+            params: {
+                'populate': '*',
+                'filters[section][$eq]': 'section4'
+            }
+        })).data;
+        setContent({
+            title1: data.data[0].attributes.title1,
+            title2: data.data[0].attributes.title2,
+            description: data.data[0].attributes.description,
+        });
+    }
+
+    const fetchCEOContent = async () => {
+        const data = (await axios.get(`${StrapiURL}abouts`, {
+            headers: {
+                'Authorization': `bearer ${StrapiToken}`
+            },
+            params: {
+                'populate': '*',
+                'filters[section][$eq]': 'section5'
+            }
+        })).data;
+
+        setCEOContent({
+            title1: data.data[0].attributes.title1,
+            title2: data.data[0].attributes.title2,
+            description: data.data[0].attributes.description,
+            twitter: data.data[0].attributes.twitter,
+            image: `${StrapiBaseURL}${data.data[0].attributes.image.data.attributes.url}`
+        });
+    }
+
+    const fetchTeams = async () => {
+        const data = (await axios.get(`${StrapiURL}teams`, {
+            headers: {
+                'Authorization': `bearer ${StrapiToken}`
+            },
+            params: {
+                'populate': '*',
+            }
+        })).data;
+
+        setTeams(data.data.reduce((acc, cur) => [...acc, {
+            name: cur.attributes.name,
+            description: cur.attributes.description,
+            image: cur.attributes.image.data === null ? '' : `${StrapiBaseURL}${cur.attributes.image.data.attributes.url}`
+        }], []));
+    }
+
     return (
         <Container
             component={'div'}
@@ -16,19 +87,19 @@ const Team = memo(props => {
                 component={'span'}
                 sx={styles.redTitle}
             >
-                OUR
+                {content.title1}
             </Box>
             <Box
                 component={'span'}
                 sx={styles.blackTitle}
             >
-                TEAM
+                {content.title2}
             </Box>
             <Box
                 component={'span'}
                 sx={styles.comment}
             >
-                Meet our incredible team of dedicated professionals who bring a wealth of knowledge, experience and passion to everything they do.
+                {content.description}
             </Box>
             <Box
                 component={'div'}
@@ -41,22 +112,22 @@ const Team = memo(props => {
                     <Box
                         component={'span'}
                         sx={styles.redTitle}
-                    >Founder & CEO</Box>
+                    >{ceoContent.title1}</Box>
                     <Box
                         component={'span'}
                         sx={styles.blackTitle}
-                    >JEREMY</Box>
+                    >{ceoContent.title2}</Box>
                     <Box
                         component={'span'}
                         sx={styles.ceoComment}
                     >
-                        A licensed medical provider in the United States with a degree in Nutrition, Exercise, and Health Sciences. Having experienced the pros and, particularly, the cons of the healthcare system from both the provider and patient sides, I made it my mission to create change. To educate and empower individuals to take control of their own wellness to live healthier and happier.
+                        {ceoContent.description}
                     </Box>
                     <Twitter />
                 </Box>
                 <Box
                     component={'img'}
-                    src={CEOPhoto}
+                    src={ceoContent.image}
                     sx={styles.ceoPhoto}
                 />
             </Box>
@@ -68,7 +139,7 @@ const Team = memo(props => {
                 flexWrap={'wrap'}
             >
                 {
-                    teamMembers.map((member, index) => (
+                    teams.map((member, index) => (
                         <Box
                             component={'div'}
                             sx={styles.memberBox}
@@ -93,7 +164,7 @@ const Team = memo(props => {
                                     component={'span'}
                                     sx={styles.memberRole}
                                 >
-                                    {member.role}
+                                    {member.description}
                                 </Box>
                             </Box>
                         </Box>

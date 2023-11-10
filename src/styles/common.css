@@ -59,3 +59,14 @@
     color: #333;
     line-height: 30px;
 }
+
+.aboutWellnessTxt {
+    width: 85%;
+    font-family: 'Roboto';
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 30px;
+    color: #999;
+    margin-left: 70px;
+    margin-top: 15px;
+}

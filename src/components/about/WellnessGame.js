@@ -1,9 +1,33 @@
-import {memo} from "react";
+import {memo, useEffect, useState} from "react";
 import {Box, Container} from "@mui/material";
 import {colors, fonts, pixToRem} from "../../const/uivar";
 import FrameImg from '../../assets/images/about/wellness_game.jpg'
+import axios from "axios";
+import {StrapiToken, StrapiURL} from "../../const/consts";
+import ReactMarkdown from "react-markdown";
 
 const WellnessGame = memo(props => {
+    const [content, setContent] = useState({})
+    useEffect(() => {
+        fetchContent().then();
+    }, []);
+
+    const fetchContent = async () => {
+        const data = (await axios.get(`${StrapiURL}abouts`, {
+            headers: {
+                'Authorization': `bearer ${StrapiToken}`
+            },
+            params: {
+                'populate': '*',
+                'filters[section][$eq]': 'section2'
+            }
+        })).data;
+        setContent({
+            title1: data.data[0].attributes.title1,
+            title2: data.data[0].attributes.title2,
+            description: data.data[0].attributes.description,
+        });
+    }
     return (
         <Container
             maxWidth={false}
@@ -22,18 +46,15 @@ const WellnessGame = memo(props => {
                     component={'span'}
                     sx={styles.redTitle}
                 >
-                    ELEVATE YOUR
+                    {content.title1}
                 </Box>
                 <Box
                     component={'span'}
                     sx={styles.blackTitle}
-                >WELLNESS GAME</Box>
-                <Box
-                    component={'span'}
-                    sx={styles.comment}
-                >
-                    Sapien Eleven consists of two foundational pillars: Academy and Marketplace.<br /><br/>Within the Academy members will have access to incredible content. A healthy recipe book, yoga sessions, guided meditation, mindfulness practices, fitness movements, and much more.<br /><br/>The Marketplace will be the home of all Sapien Eleven products. Specifically designed premium athletic apparel and high quality supplements.
-                </Box>
+                >{content.title2}</Box>
+                <ReactMarkdown className={'aboutWellnessTxt'}>
+                    {content.description}
+                </ReactMarkdown>
             </Box>
         </Container>
     )

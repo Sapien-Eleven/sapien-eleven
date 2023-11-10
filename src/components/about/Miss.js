@@ -1,10 +1,33 @@
-import {memo} from "react";
+import {memo, useEffect, useState} from "react";
 import {Box, Button, Container} from "@mui/material";
 import {Twitter} from "@mui/icons-material";
 import {colors, fonts, pixToRem} from "../../const/uivar";
 import Running from "../../assets/images/running.png";
+import axios from "axios";
+import {StrapiToken, StrapiURL} from "../../const/consts";
 
 const Miss = memo(props => {
+    const [content, setContent] = useState({})
+    useEffect(() => {
+        fetchContent().then();
+    }, []);
+
+    const fetchContent = async () => {
+        const data = (await axios.get(`${StrapiURL}abouts`, {
+            headers: {
+                'Authorization': `bearer ${StrapiToken}`
+            },
+            params: {
+                'populate': '*',
+                'filters[section][$eq]': 'section6'
+            }
+        })).data;
+        setContent({
+            title1: data.data[0].attributes.title1,
+            title2: data.data[0].attributes.title2,
+            description: data.data[0].attributes.description,
+        });
+    }
     return (
         <Container
             component={'div'}
@@ -19,19 +42,19 @@ const Miss = memo(props => {
                     component={'span'}
                     sx={styles.whiteTitle}
                 >
-                    DON'T
+                    {content.title1}
                 </Box>
                 <Box
                     component={'span'}
                     sx={styles.redTitle}
                 >
-                    MISS OUT
+                    {content.title2}
                 </Box>
                 <Box
                     component={'span'}
                     sx={styles.comment}
                 >
-                    Make sure to stay connected and never miss out on new content and apparel drops.
+                    {content.description}
                 </Box>
                 <Button
                     sx={styles.twitterBtn}

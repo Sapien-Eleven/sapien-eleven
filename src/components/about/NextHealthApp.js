@@ -1,10 +1,33 @@
 import {Box, Button, Container} from "@mui/material";
-import {memo} from "react";
+import {memo, useEffect, useState} from "react";
 import {colors, fonts, pixToRem} from "../../const/uivar";
 import NextHealthBg from '../../assets/images/about/next_health_bg.png';
 import SapienMark from '../../assets/mark.png'
+import axios from "axios";
+import {StrapiToken, StrapiURL} from "../../const/consts";
 
 const NextHealthApp = memo(props => {
+    const [content, setContent] = useState({})
+    useEffect(() => {
+        fetchContent().then();
+    }, []);
+
+    const fetchContent = async () => {
+        const data = (await axios.get(`${StrapiURL}abouts`, {
+            headers: {
+                'Authorization': `bearer ${StrapiToken}`
+            },
+            params: {
+                'populate': '*',
+                'filters[section][$eq]': 'section3'
+            }
+        })).data;
+        setContent({
+            title1: data.data[0].attributes.title1,
+            title2: data.data[0].attributes.title2,
+            description: data.data[0].attributes.description,
+        });
+    }
     return (
         <Container
             component={'div'}
@@ -15,19 +38,19 @@ const NextHealthApp = memo(props => {
                 component={'span'}
                 sx={styles.whiteTitle}
             >
-                NOT JUST THE
+                {content.title1}
             </Box>
             <Box
                 component={'span'}
                 sx={styles.redTitle}
             >
-                NEXT HEALTH APP
+                {content.title2}
             </Box>
             <Box
                 component={'span'}
                 sx={styles.comment}
             >
-                Our mission is to improve the state of human health.
+                {content.description}
             </Box>
             <Button
                 sx={styles.joinBtn}

@@ -1,9 +1,32 @@
-import {memo} from "react";
+import {memo, useEffect, useState} from "react";
 import {Box, Button, Container} from "@mui/material";
 import {fonts, pixToRem} from "../../const/uivar";
 import PanelBg from '../../assets/images/about/bg.jpg'
+import axios from "axios";
+import {StrapiToken, StrapiURL} from "../../const/consts";
 
 const IntroPanel = memo(props => {
+    const [content, setContent] = useState({})
+    useEffect(() => {
+        fetchContent().then();
+    }, []);
+
+    const fetchContent = async () => {
+        const data = (await axios.get(`${StrapiURL}abouts`, {
+            headers: {
+                'Authorization': `bearer ${StrapiToken}`
+            },
+            params: {
+                'populate': '*',
+                'filters[section][$eq]': 'section1'
+            }
+        })).data;
+        setContent({
+            title1: data.data[0].attributes.title1,
+            title2: data.data[0].attributes.title2,
+            description: data.data[0].attributes.description,
+        });
+    }
     return (
         <Container
             maxWidth={false}
@@ -13,19 +36,19 @@ const IntroPanel = memo(props => {
                 component={'span'}
                 sx={styles.redTitle}
             >
-                ABOUT
+                {content.title1}
             </Box>
             <Box
                 component={'span'}
                 sx={styles.whiteTitle}
             >
-                SAPIEN ELEVEN
+                {content.title2}
             </Box>
             <Box
                 component={'span'}
                 sx={styles.comment}
             >
-                Sapien Eleven is an exclusive membership to an all inclusive Wellness Platform.
+                {content.description}
             </Box>
             <Button
                 sx={styles.button}

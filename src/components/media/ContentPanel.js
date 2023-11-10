@@ -1,11 +1,20 @@
 import {Box, Button, Container, Stack} from "@mui/material";
-import {memo, useCallback, useEffect, useState} from "react";
+import {memo, useCallback, useEffect, useRef, useState} from "react";
 import {colors, fonts, pixToRem} from "../../const/uivar";
-import {ArrowDropDown, ArrowRight, Cached, ChevronRight} from "@mui/icons-material";
+import {
+    ArrowDropDown,
+    ArrowRight,
+    Cached,
+    ChevronRight,
+    PauseCircleOutline, PlayCircleOutline,
+    SettingsVoice
+} from "@mui/icons-material";
 import axios from "axios";
 import {StrapiBaseURL, StrapiToken, StrapiURL} from "../../const/consts";
 import {useCollapse} from "react-collapsed";
 import ReactMarkdown from "react-markdown";
+import useAudio from "../hooks/useAudio";
+import WaveForm from "./WaveForm";
 
 const ContentPanel = memo(props => {
     const [currentCategory, setCurrentCategory] = useState('blog');
@@ -68,6 +77,23 @@ const ContentPanel = memo(props => {
                     thumbnail: `${StrapiBaseURL}${cur.attributes.thumbnail.data.attributes.url}`,
                     headerImage: `${StrapiBaseURL}${cur.attributes.headerImage.data.attributes.url}`,
                     readingTime: cur.attributes.readingTime,
+                    content: cur.attributes.content,
+                    updatedAt: cur.attributes.updatedAt
+                }], []));
+                break;
+            case 'podcasts':
+                const podcastsData = (await axios.get(`${StrapiURL}podcasts`, {
+                    headers: {
+                        'Authorization': `bearer ${StrapiToken}`
+                    },
+                    params: {
+                        'populate': '*'
+                    }
+                })).data;
+                setContent(podcastsData.data.reduce((acc, cur) => [...acc, {
+                    id: cur.id,
+                    title: cur.attributes.title,
+                    audio: `${StrapiBaseURL}${cur.attributes.audio.data.attributes.url}`,
                     content: cur.attributes.content,
                     updatedAt: cur.attributes.updatedAt
                 }], []));
@@ -227,6 +253,62 @@ const styles = {
         fontWeight: '400',
         lineHeight: pixToRem(30),
         color: '#999',
+    },
+    podcastsItem: {
+        backgroundColor: colors.bgWhiteColor,
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        paddingTop: pixToRem(20),
+        paddingLeft: pixToRem(30),
+        paddingRight: pixToRem(20),
+    },
+    podcastsItemContent: {
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'flex-start',
+        marginBottom: pixToRem(20)
+    },
+    podcastsItemTitlePanel: {
+        display: 'flex',
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'flex-start',
+        alignItems: 'flex-start',
+        marginRight: pixToRem(20)
+    },
+    podcastsItemTitleGroup: {
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'flex-start',
+        alignItems: 'flex-start',
+        marginLeft: pixToRem(10)
+    },
+    podcastsItemTitle: {
+        fontFamily: fonts.roboto,
+        fontSize: pixToRem(18),
+        fontWeight: '700',
+        lineHeight: pixToRem(30),
+        color: '#333'
+    },
+    podcastsItemDate: {
+        fontFamily: fonts.roboto,
+        fontSize: pixToRem(16),
+        fontWeight: '700',
+        lineHeight: pixToRem(30),
+        color: '#333',
+        marginLeft: pixToRem(5)
+    },
+    podcastsItemContentTxt: {
+        fontFamily: fonts.roboto,
+        fontSize: pixToRem(16),
+        fontWeight: '400',
+        lineHeight: pixToRem(30),
+        color: '#333',
+        marginTop: pixToRem(10)
     }
 }
 
@@ -340,14 +422,111 @@ const UpdateItem = memo(props => {
     )
 })
 
-const News = memo(props => {
+const Podcasts = memo(props => {
     return (
-        <Container></Container>
+        <Stack
+            sx={{width: '95%', marginTop: pixToRem(50)}}
+            direction={'column'}
+            spacing={3}
+        >
+            {
+                props.content.map((item, index) => (
+                    <PodcastsItem
+                        key={index}
+                        item={item}
+                    />
+                ))
+            }
+        </Stack>
     )
 })
 
-const Podcasts = memo(props => {
+const PodcastsItem = memo(props => {
+    const [analyzerData, setAnalyzerData] = useState(null);
+    const [audio, playing, toggle] = useAudio(props.item.audio);
+
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        return date.toLocaleDateString('en-US');
+    }
+
+    let source
+
+    useEffect(() => {
+        // audioAnalyzer();
+    }, []);
+
+    const audioAnalyzer = () => {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const analyzer = audioCtx.createAnalyser();
+        analyzer.fftSize = 2048;
+
+        const bufferLength = analyzer.frequencyBinCount;
+        const dataArray = new Uint8Array(bufferLength);
+        source = audioCtx.createMediaElementSource(audio);
+        source.connect(analyzer);
+        analyzer.connect(audioCtx.destination);
+        source.onended = () => {
+            source.disconnect();
+        };
+
+        setAnalyzerData({ analyzer, bufferLength, dataArray });
+    };
+
     return (
-        <Container></Container>
+        <Box
+            sx={styles.podcastsItem}
+            component={'div'}
+        >
+            <Box
+                component={'div'}
+                sx={styles.podcastsItemContent}
+            >
+                <Box
+                    component={'div'}
+                    sx={styles.podcastsItemTitlePanel}
+                >
+                    <SettingsVoice sx={{color: playing ? colors.red : 'rgba(102, 102, 102, 1)', fontSize: pixToRem(36)}} />
+                    <Box
+                        component={'div'}
+                        sx={styles.podcastsItemTitleGroup}
+                    >
+                        <Box
+                            component={'div'}
+                            sx={{display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'flex-end'}}
+                        >
+                            <Box
+                                component={'span'}
+                                sx={styles.podcastsItemTitle}
+                            >
+                                {props.item.title}
+                            </Box>
+                            <Box
+                                component={'span'}
+                                sx={styles.podcastsItemDate}
+                            >
+                                {`- ${formatDate(props.item.updatedAt)}`}
+                            </Box>
+                        </Box>
+                        <Box
+                            component={'span'}
+                            sx={styles.podcastsItemContentTxt}
+                        >
+                            {props.item.content}
+                        </Box>
+                    </Box>
+                </Box>
+                <Button
+                    onClick={toggle}
+                >
+                    {
+                        playing ?
+                            <PauseCircleOutline sx={{color: 'rgba(102, 102, 102, 1)', fontSize: pixToRem(36)}} />
+                            : <PlayCircleOutline sx={{color: colors.red, fontSize: pixToRem(36)}} />
+                    }
+                </Button>
+            </Box>
+            { analyzerData && <WaveForm analyzerData={analyzerData} width={'100%'} height={100} /> }
+        </Box>
     )
 })

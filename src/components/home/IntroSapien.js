@@ -1,8 +1,36 @@
 import { Box, Button, Container } from "@mui/material";
 import WellnessAcademy from '../../assets/images/wellness_academy.png'
 import MarketPlace from '../../assets/images/marketplace.png'
+import {useEffect, useState} from "react";
+import axios from "axios";
+import {StrapiToken, StrapiURL} from "../../const/consts";
 
 export function IntroSapien() {
+    const [content, setContent] = useState({});
+    useEffect(() => {
+        fetchContent().then();
+    }, []);
+
+    const fetchContent = async () => {
+        const data = (await axios.get(`${StrapiURL}landings`, {
+            headers: {
+                'Authorization': `bearer ${StrapiToken}`
+            },
+            params: {
+                'populate': '*',
+                'filters[section][$eq]': 'section2'
+            }
+        })).data;
+        setContent({
+            title1: data.data[0].attributes.title1,
+            title2: data.data[0].attributes.title2,
+            description: data.data[0].attributes.description,
+            subcontents: data.data.reduce((acc, cur) => [...acc, {
+                subtitle: cur.attributes.subtitle,
+                subdescription: cur.attributes.subdescription
+            }], [])
+        });
+    }
     return (
         <Container
             maxWidth={false}
@@ -12,16 +40,16 @@ export function IntroSapien() {
             <Box
                 component={'span'}
                 sx={styles.redTxt}
-            >WHAT IS</Box>
+            >{content.title1}</Box>
             <Box
                 component={'span'}
                 sx={styles.title}
-            >SAPIEN ELEVEN</Box>
+            >{content.title2}</Box>
             <Box
                 component={'span'}
                 sx={styles.comment}
-            >Meet our incredible team of dedicated professionals who bring a wealth of knowledge, experience, and passion to everything they do.</Box>
-            <Container
+            >{content.description}</Box>
+            {content.subcontents !== undefined && <Container
                 component={'div'}
                 maxWidth={false}
                 sx={styles.boxPanel}
@@ -37,11 +65,11 @@ export function IntroSapien() {
                     <Box
                         component={'span'}
                         sx={styles.boxTitle}
-                    >Wellness Academy</Box>
+                    >{content.subcontents[0].subtitle}</Box>
                     <Box
                         component='span'
                         sx={styles.comment}
-                    >An exclusive platform to educate community members on<br/>wellness and the body's chemistry as well as an all-in-one<br/>place for interactive and instructional experiences.</Box>
+                    >{content.subcontents[0].subdescription}</Box>
                     <Button
                         sx={styles.boxButton}
                     >LEARN MORE</Button>
@@ -57,16 +85,16 @@ export function IntroSapien() {
                     <Box
                         component={'span'}
                         sx={styles.boxTitle}
-                    >Marketplace</Box>
+                    >{content.subcontents[1].subtitle}</Box>
                     <Box
                         component='span'
                         sx={styles.comment}
-                    >An online storefront providing carefully designed and<br/>professionally formulated wellness product drops.</Box>
+                    >{content.subcontents[1].subdescription}</Box>
                     <Button
                         sx={styles.boxButton}
                     >EXPLORE</Button>
                 </Box>
-            </Container>
+            </Container>}
         </Container>
     )
 }

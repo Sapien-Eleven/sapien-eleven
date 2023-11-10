@@ -1,7 +1,35 @@
-import { Box, Container } from '@mui/material'
+import {Box, Container} from '@mui/material'
 import Humanhealth from '../../assets/images/human_health.png'
+import {useEffect, useState} from "react";
+import axios from "axios";
+import {StrapiToken, StrapiURL} from "../../const/consts";
 
 export function HumanHealth() {
+    const [content, setContent] = useState({})
+    useEffect(() => {
+        fetchContent().then();
+    }, []);
+
+    const fetchContent = async () => {
+        const data = (await axios.get(`${StrapiURL}landings`, {
+            headers: {
+                'Authorization': `bearer ${StrapiToken}`
+            },
+            params: {
+                'populate': '*',
+                'filters[section][$eq]': 'section3'
+            }
+        })).data;
+        setContent({
+            title1: data.data[0].attributes.title1,
+            title2: data.data[0].attributes.title2,
+            description: data.data[0].attributes.description,
+            subcontents: data.data.reduce((acc, cur) => [...acc, {
+                subtitle: cur.attributes.subtitle,
+                subdescription: cur.attributes.subdescription
+            }], [])
+        });
+    }
     return (
         <Container
             component={'div'}
@@ -11,12 +39,12 @@ export function HumanHealth() {
             <Box
                 component={'span'}
                 sx={styles.redTxt}
-            >STATE OF</Box>
+            >{content.title1}</Box>
             <Box
                 component={'span'}
                 sx={styles.title}
-            >HUMAN HEALTH</Box>
-            <Container
+            >{content.title2}</Box>
+            {content.subcontents !== undefined && <Container
                 component={'div'}
                 maxWidth={false}
                 sx={styles.cardPanel}
@@ -29,12 +57,12 @@ export function HumanHealth() {
                         component={'span'}
                         sx={styles.cardTitle}
                     >
-                        WESTERN MEDICINE
+                        {content.subcontents[0].subtitle}
                     </Box>
                     <Box
                         component={'span'}
                         sx={styles.comment}
-                    >A health management system. To identify signs and symptoms, then manage those with pharmaceuticals. Instead of treating the true underlying cause.</Box>
+                    >{content.subcontents[0].subdescription}</Box>
                 </Box>
                 <Box
                     component='div'
@@ -44,12 +72,12 @@ export function HumanHealth() {
                         component={'span'}
                         sx={styles.cardTitle}
                     >
-                        CORPORATE RULES
+                        {content.subcontents[1].subtitle}
                     </Box>
                     <Box
                         component={'span'}
                         sx={styles.comment}
-                    >A system driven by money. Doctors are often bound to protocols that limit their control and scope of practice. Leaving both the patient and doctor frustrated.</Box>
+                    >{content.subcontents[1].subdescription}</Box>
                 </Box>
                 <Box
                     component='div'
@@ -59,15 +87,15 @@ export function HumanHealth() {
                         component={'span'}
                         sx={styles.cardTitle}
                     >
-                        BIG PHARMA
+                        {content.subcontents[2].subtitle}
                     </Box>
                     <Box
                         component={'span'}
                         sx={styles.comment}
-                    >Prescribing meds is the first line of action. Pharmaceutical companies drive the curriculum taught in the education system, which persuades providers to practice in a "medication first" manner</Box>
+                    >{content.subcontents[2].subdescription}</Box>
                 </Box>
-            </Container>
-            <Container
+            </Container>}
+            {content.subcontents !== undefined && <Container
                 component={'div'}
                 maxWidth={false}
                 sx={styles.cardPanel2}
@@ -80,12 +108,12 @@ export function HumanHealth() {
                         component={'span'}
                         sx={styles.cardTitle}
                     >
-                        PROCESSED DIETS
+                        {content.subcontents[3].subtitle}
                     </Box>
                     <Box
                         component={'span'}
                         sx={styles.comment}
-                    >What happened to going to the market for fresh food? Due to convenience, more and more people rely on nutrient void processed foods leading to illness and disease.</Box>
+                    >{content.subcontents[3].subdescription}</Box>
                 </Box>
                 <Box
                     component={'div'}
@@ -106,14 +134,14 @@ export function HumanHealth() {
                         component={'span'}
                         sx={styles.cardTitle}
                     >
-                        DEPLETED SOIL
+                        {content.subcontents[4].subtitle}
                     </Box>
                     <Box
                         component={'span'}
                         sx={styles.comment}
-                    >Herbicides, pesticides and fertilizers are depleting the soil of necessary nutrients which impacts not only produce, but also the livestock that are fed the produce.</Box>
+                    >{content.subcontents[4].subdescription}</Box>
                 </Box>
-            </Container>
+            </Container>}
         </Container>
     )
 }

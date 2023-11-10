@@ -3,10 +3,11 @@ import MainBg from '../../assets/images/main_bg.png'
 import '@fontsource/roboto/400.css';
 import MetaMaskLogo from '../../assets/metamask_logo.png'
 import WalletModal from "../WalletModal";
-import {memo, useCallback, useState} from "react";
+import {memo, useCallback, useEffect, useState} from "react";
 import {connect} from "react-redux";
-import {wallets} from "../../const/consts";
+import {StrapiBaseURL, StrapiToken, StrapiURL, wallets} from "../../const/consts";
 import {pixToRem} from "../../const/uivar";
+import axios from "axios";
 
 const WalletButton = styled(Button)((props) => ({
 	boxSizing: 'border-box',
@@ -32,6 +33,28 @@ const WalletButton = styled(Button)((props) => ({
 
 const IntroPanel = memo((props) => {
     const [walletModalVisible, setWalletModalVisible] = useState(false);
+    const [content, setContent] = useState({});
+
+    useEffect(() => {
+        fetchContent().then();
+    }, []);
+
+    const fetchContent = async () => {
+        const data = (await axios.get(`${StrapiURL}landings`, {
+            headers: {
+                'Authorization': `bearer ${StrapiToken}`
+            },
+            params: {
+                'populate': '*',
+                'filters[section][$eq]': 'section1'
+            }
+        })).data;
+        setContent({
+            title1: data.data[0].attributes.title1,
+            title2: data.data[0].attributes.title2,
+            description: data.data[0].attributes.description,
+        });
+    }
 
     const onOpenWallet = useCallback(() => {
         if (props.connectedWallet !== '') return;
@@ -46,15 +69,15 @@ const IntroPanel = memo((props) => {
             <Box
                 component={'span'}
                 sx={styles.redTxt}
-            >WEB3 NFT</Box>
+            >{content.title1}</Box>
             <Box
                 component={'span'}
                 sx={styles.title}
-            >WELLNESS PLATFORM</Box>
+            >{content.title2}</Box>
             <Box
                 component={'span'}
                 sx={styles.comment}
-            >Increasing longevity and vigor through knowledge,<br/>accesibility, motivation and empowerment</Box>
+            >{content.description}</Box>
             <WalletButton
                 startIcon={<img src={props.connectedWallet === '' ? MetaMaskLogo : wallets[props.connectedWallet].remoteIcon} style={styles.metamaskLogo} alt='metamask' />}
                 onClick={onOpenWallet}
@@ -106,6 +129,7 @@ const styles = {
         marginLeft: '70px'
     },
     comment: {
+        width: '35%',
         fontFamily: 'Roboto',
         fontSize: '20px',
         fontWeight: 400,

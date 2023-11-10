@@ -2,8 +2,36 @@ import { Box, Container } from "@mui/material";
 import { colors, fonts, pixToRem } from "../../const/uivar";
 import Activity from '../../assets/images/activity.png'
 import Nutriution from '../../assets/images/nutriution.png'
+import {useEffect, useState} from "react";
+import axios from "axios";
+import {StrapiToken, StrapiURL} from "../../const/consts";
 
 export function About() {
+    const [content, setContent] = useState({})
+    useEffect(() => {
+        fetchContent().then();
+    }, []);
+
+    const fetchContent = async () => {
+        const data = (await axios.get(`${StrapiURL}landings`, {
+            headers: {
+                'Authorization': `bearer ${StrapiToken}`
+            },
+            params: {
+                'populate': '*',
+                'filters[section][$eq]': 'section6'
+            }
+        })).data;
+        setContent({
+            title1: data.data[0].attributes.title1,
+            title2: data.data[0].attributes.title2,
+            description: data.data[0].attributes.description,
+            subcontents: data.data.reduce((acc, cur) => [...acc, {
+                subtitle: cur.attributes.subtitle,
+                subdescription: cur.attributes.subdescription
+            }], [])
+        });
+    }
     return (
         <Container
             maxWidth={false}
@@ -18,22 +46,22 @@ export function About() {
                     component={'span'}
                     sx={styles.about}
                 >
-                    HAPPIER YOU
+                    {content.title1}
                 </Box>
                 <Box
                     component={'span'}
                     sx={styles.title}
                 >
-                    STARTS RIGHT NOW
+                    {content.title2}
                 </Box>
                 <Box
                     component={'span'}
                     sx={styles.comment}
                 >
-                    Understanding the importance of physical activity and nutrition is the first step to a healthier you.
+                    {content.description}
                 </Box>
             </Box>
-            <Box
+            { content.subcontents !== undefined && <Box
                 component={'div'}
                 sx={styles.boxPanel}
             >
@@ -51,13 +79,13 @@ export function About() {
                         component={'span'}
                         sx={styles.boxTitle}
                     >
-                        PHYSICAL ACTIVITY
+                        {content.subcontents[0].subtitle}
                     </Box>
                     <Box
                         component={'span'}
                         sx={styles.boxComment}
                     >
-                        Physical activity is essential for maintaining good health because it helps to improve cardiovascular and respiratory function, increase muscle strength and endurance, and reduce the risk of chronic diseases. Regular physical activity also promotes mental well-being by improving mood, cognitive function, and managing stress and anxiety.
+                        {content.subcontents[0].subdescription}
                     </Box>
                 </Box>
                 <Box
@@ -74,16 +102,16 @@ export function About() {
                         component={'span'}
                         sx={styles.boxTitle}
                     >
-                        NUTRIUTION AND SUPPLEMENTATION
+                        {content.subcontents[1].subtitle}
                     </Box>
                     <Box
                         component={'span'}
                         sx={styles.boxComment}
                     >
-                        A diet rich in nutrient dense foods is the best way to nourish the body with the nutrients necessary. When the foods we consume are void of necessary nutrients, imbalances in the body's chemistry can occur and illness ensues. Supplements ensure that the necessary nutrients are consumed.
+                        {content.subcontents[1].subdescription}
                     </Box>
                 </Box>
-            </Box>
+            </Box>}
         </Container>
     )
 }

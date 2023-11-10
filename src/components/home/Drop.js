@@ -3,10 +3,33 @@ import { colors, fonts, pixToRem } from "../../const/uivar";
 import Running from '../../assets/images/running.png'
 import SapienMark from '../../assets/mark.png'
 import {connect} from "react-redux";
-import {memo} from "react";
+import {memo, useEffect, useState} from "react";
 import {Twitter} from "@mui/icons-material";
+import axios from "axios";
+import {StrapiToken, StrapiURL} from "../../const/consts";
 
 const Drop = memo(props => {
+    const [content, setContent] = useState({})
+    useEffect(() => {
+        fetchContent().then();
+    }, []);
+
+    const fetchContent = async () => {
+        const data = (await axios.get(`${StrapiURL}landings`, {
+            headers: {
+                'Authorization': `bearer ${StrapiToken}`
+            },
+            params: {
+                'populate': '*',
+                'filters[section][$eq]': 'section7'
+            }
+        })).data;
+        setContent({
+            title1: data.data[0].attributes.title1,
+            title2: data.data[0].attributes.title2,
+            description: data.data[0].attributes.description,
+        });
+    }
     return (
         <Container
             component={'div'}
@@ -21,13 +44,13 @@ const Drop = memo(props => {
                     component={'span'}
                     sx={styles.whiteTitle}
                 >
-                    {props.connectedWallet === '' ? 'EXCLUSIVE' : 'FULL'}
+                    {props.connectedWallet === '' ? content.title1 : 'FULL'}
                 </Box>
                 <Box
                     component={'span'}
                     sx={styles.redTitle}
                 >
-                    {props.connectedWallet === '' ? 'MEMBERSHIP' : 'TRANSPARENCY'}
+                    {props.connectedWallet === '' ? content.title2 : 'TRANSPARENCY'}
                 </Box>
                 <Box
                     component={'span'}
@@ -35,7 +58,7 @@ const Drop = memo(props => {
                 >
                     {
                         props.connectedWallet === '' ?
-                            'For exclusive access to the Sapien Eleven Wellness Platform including all content, experiences, and products join today.'
+                            content.description
                             : 'It\'s no secret that transparency is necessary to gain full trust and support of the community. Stay up to date on what the Sapien Eleven team is striving to accomplish.'
                     }
                 </Box>

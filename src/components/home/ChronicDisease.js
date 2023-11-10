@@ -1,8 +1,32 @@
 import { Box, Container } from "@mui/material";
 import Chronic_Disease from '../../assets/images/chronic_disease.png'
 import {pixToRem} from "../../const/uivar";
+import {useEffect, useState} from "react";
+import axios from "axios";
+import {StrapiToken, StrapiURL} from "../../const/consts";
 
 export function ChronicDisease() {
+    const [content, setContent] = useState({})
+    useEffect(() => {
+        fetchContent().then();
+    }, []);
+
+    const fetchContent = async () => {
+        const data = (await axios.get(`${StrapiURL}landings`, {
+            headers: {
+                'Authorization': `bearer ${StrapiToken}`
+            },
+            params: {
+                'populate': '*',
+                'filters[section][$eq]': 'section5'
+            }
+        })).data;
+        setContent({
+            title1: data.data[0].attributes.title1,
+            title2: data.data[0].attributes.title2,
+            description: data.data[0].attributes.description,
+        });
+    }
     return (
         <Container
             component={'div'}
@@ -17,19 +41,19 @@ export function ChronicDisease() {
                     component={'span'}
                     sx={styles.whiteTxt}
                 >
-                    CHRONIC
+                    {content.title1}
                 </Box>
                 <Box
                     component={'span'}
                     sx={styles.redTxt}
                 >
-                    DISEASE TRENDS
+                    {content.title2}
                 </Box>
                 <Box
                     component={'span'}
                     sx={styles.comment}
                 >
-                    We live in the age of advanced technology. If medicine had truly advanced why aren't illness associated deaths steadily declining? Where's all the money going?
+                    {content.description}
                 </Box>
             </Box>
         </Container>

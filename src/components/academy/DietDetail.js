@@ -11,94 +11,10 @@ import NoFood from "../../assets/images/academy/NoFood";
 import IngredientGreen from "../../assets/images/academy/IngredientGreen";
 import axios from "axios";
 import {StrapiBaseURL, StrapiToken, StrapiURL} from "../../const/consts";
+import ReactMarkdown from "react-markdown";
 
 const DietDetail = memo(props => {
-    const [content, setContent] = useState({});
-    const [recommendedDiets, setRecommendedDiets] = useState([]);
-    useEffect(() => {
-        fetchDietDetail().then();
-        fetchRecommendDiets().then();
-    }, []);
-    const fetchDietDetail = useCallback(async () => {
-        const data = (await axios.get(`${StrapiURL}academy-diet-details`, {
-            headers: {
-                'Authorization': `bearer ${StrapiToken}`
-            },
-            params: {
-                'filters[diet][$eq]': props.diet,
-                'populate': '*'
-            }
-        })).data;
-        const pros = (await axios.get(`${StrapiURL}academy-diet-proses`, {
-            headers: {
-                'Authorization': `bearer ${StrapiToken}`
-            },
-            params: {
-                'filters[diet][$eq]': props.diet,
-                'populate': '*'
-            }
-        })).data;
-        const cons = (await axios.get(`${StrapiURL}academy-diet-conses`, {
-            headers: {
-                'Authorization': `bearer ${StrapiToken}`
-            },
-            params: {
-                'filters[diet][$eq]': props.diet,
-                'populate': '*'
-            }
-        })).data;
-        const foodsToEats = (await axios.get(`${StrapiURL}academy-diet-foodstoeats`, {
-            headers: {
-                'Authorization': `bearer ${StrapiToken}`
-            },
-            params: {
-                'filters[diet][$eq]': props.diet,
-                'populate': '*'
-            }
-        })).data;
-        const foodsToAvoids = (await axios.get(`${StrapiURL}academy-diet-foodstoavoids`, {
-            headers: {
-                'Authorization': `bearer ${StrapiToken}`
-            },
-            params: {
-                'filters[diet][$eq]': props.diet,
-                'populate': '*'
-            }
-        })).data;
-        setContent({
-            id: data.data[0].id,
-            diet: data.data[0].attributes.diet,
-            whatIsIt: data.data[0].attributes.whatIsIt,
-            howWhyWorks: data.data[0].attributes.howWhyWorks,
-            headerImage: `${StrapiBaseURL}${data.data[0].attributes.headerImage.data.attributes.url}`,
-            pros: pros.data.reduce((acc, cur) => [...acc, cur.attributes.description], []),
-            cons: cons.data.reduce((acc, cur) => [...acc, cur.attributes.description], []),
-            foodsToEats: foodsToEats.data.reduce((acc, cur) => [...acc, cur.attributes.food], []),
-            foodsToAvoids: foodsToAvoids.data.reduce((acc, cur) => [...acc, cur.attributes.food], []),
-        });
-    }, [props.diet]);
-    const fetchRecommendDiets = useCallback(async () => {
-        let diets = [];
-        const image = (await axios.get(`${StrapiURL}image-labels`, {
-            headers: {
-                'Authorization': `bearer ${StrapiToken}`
-            },
-            params: {
-                'filters[categoryID][$eq]': 10,
-                'filters[label][$ne]': props.diet,
-                'populate': '*'
-            }
-        })).data;
-        diets = image.data.reduce((acc, cur) => [...acc,
-            {
-                imageID: cur.id,
-                label: cur.attributes.label,
-                image: `${StrapiBaseURL}${cur.attributes.image.data.attributes.url}`
-            }],
-        []);
-        setRecommendedDiets(diets);
-    }, [props.diet]);
-    if (content.diet !== undefined) {
+    if (props.diet !== undefined) {
         return (
             <Box
                 component={'div'}
@@ -112,11 +28,11 @@ const DietDetail = memo(props => {
                         component={'div'}
                         sx={styles.headerContent}
                     >
-                        <Breadcrumb diet={content.diet} />
+                        <Breadcrumb diet={props.diet} goToMain={props.goToMain} />
                         <Box
                             component={'span'}
                             sx={styles.whiteTitle}
-                        >{content.diet}</Box>
+                        >{props.diet.thumbnailTitle}</Box>
                     </Box>
                 </Box>
                 <Box
@@ -147,7 +63,7 @@ const DietDetail = memo(props => {
                                         component={'div'}
                                         sx={styles.comment}
                                     >
-                                        {content.whatIsIt}
+                                        {props.diet.whatIsIt}
                                     </Box>
                                 </Stack>
                                 <Stack sx={{width: '100%'}} direction={'column'} spacing={3}>
@@ -165,7 +81,7 @@ const DietDetail = memo(props => {
                                         component={'div'}
                                         sx={styles.comment}
                                     >
-                                        {content.howWhyWorks}
+                                        {props.diet.howWhyWorks}
                                     </Box>
                                 </Stack>
                                 <Stack sx={{width: '100%'}} direction={'column'} spacing={3}>
@@ -179,19 +95,9 @@ const DietDetail = memo(props => {
                                             sx={styles.blackCommentTitle}
                                         >Pros</Box>
                                     </Box>
-                                    <Box
-                                        component={'ul'}
-                                        sx={[styles.comment, {paddingLeft: pixToRem(80), paddingRight: pixToRem(60)}]}
-                                    >
-                                        {
-                                            content.pros.map((item, index) => (
-                                                <Box
-                                                    key={index}
-                                                    component={'li'}
-                                                >{item}</Box>
-                                            ))
-                                        }
-                                    </Box>
+                                    <ReactMarkdown className={'instructionTxt'}>
+                                        {props.diet.pros}
+                                    </ReactMarkdown>
                                 </Stack>
                                 <Stack sx={{width: '100%'}} direction={'column'} spacing={3}>
                                     <Box
@@ -204,19 +110,9 @@ const DietDetail = memo(props => {
                                             sx={styles.blackCommentTitle}
                                         >Cons</Box>
                                     </Box>
-                                    <Box
-                                        component={'ul'}
-                                        sx={[styles.comment, {paddingLeft: pixToRem(80), paddingRight: pixToRem(60)}]}
-                                    >
-                                        {
-                                            content.cons.map((item, index) => (
-                                                <Box
-                                                    key={index}
-                                                    component={'li'}
-                                                >{item}</Box>
-                                            ))
-                                        }
-                                    </Box>
+                                    <ReactMarkdown className={'instructionTxt'}>
+                                        {props.diet.cons}
+                                    </ReactMarkdown>
                                 </Stack>
                             </Stack>
                         </Box>
@@ -236,19 +132,9 @@ const DietDetail = memo(props => {
                                             sx={[styles.blackCommentTitle, {color: colors.green}]}
                                         >Foods to eat!</Box>
                                     </Box>
-                                    <Box
-                                        component={'ul'}
-                                        sx={[styles.comment, {paddingLeft: pixToRem(80), paddingRight: pixToRem(60)}]}
-                                    >
-                                        {
-                                            content.foodsToEats.map((item, index) => (
-                                                <Box
-                                                    key={index}
-                                                    component={'li'}
-                                                >{item}</Box>
-                                            ))
-                                        }
-                                    </Box>
+                                    <ReactMarkdown className={'ingredientTxt'}>
+                                        {props.diet.foodsToEat}
+                                    </ReactMarkdown>
                                 </Stack>
                                 <Stack sx={{width: '100%'}} direction={'column'} spacing={3}>
                                     <Box
@@ -261,19 +147,9 @@ const DietDetail = memo(props => {
                                             sx={[styles.blackCommentTitle, {color: colors.red}]}
                                         >Foods to avoid!</Box>
                                     </Box>
-                                    <Box
-                                        component={'ul'}
-                                        sx={[styles.comment, {paddingLeft: pixToRem(80), paddingRight: pixToRem(60)}]}
-                                    >
-                                        {
-                                            content.foodsToAvoids.map((item, index) => (
-                                                <Box
-                                                    key={index}
-                                                    component={'li'}
-                                                >{item}</Box>
-                                            ))
-                                        }
-                                    </Box>
+                                    <ReactMarkdown className={'ingredientTxt'}>
+                                        {props.diet.foodsToAvoid}
+                                    </ReactMarkdown>
                                 </Stack>
                             </Stack>
                         </Box>
@@ -294,21 +170,22 @@ const DietDetail = memo(props => {
                         >Diets</Box>
                         <Stack sx={{width: '100%', marginTop: pixToRem(30)}} direction={'row'} spacing={3}>
                             {
-                                recommendedDiets.map((item, index) => (
+                                props.recommendedDiets.filter(e => e.thumbnailTitle !== props.diet.thumbnailTitle).map((item, index) => (
                                     <Box
                                         key={index}
                                         component={'div'}
                                         sx={styles.downImgItem}
+                                        onClick={() => props.changeDetail(item)}
                                     >
                                         <Box
                                             component={'img'}
-                                            src={item.image}
+                                            src={item.thumbnail}
                                             sx={styles.downImg}
                                         />
                                         <Box
                                             component={'span'}
                                             sx={styles.imgTitle}
-                                        >{item.label}</Box>
+                                        >{item.thumbnailTitle}</Box>
                                     </Box>
                                 ))
                             }
@@ -339,7 +216,7 @@ const styles = {
         alignItems: 'flex-start',
         paddingTop: pixToRem(80),
         paddingBottom: pixToRem(80),
-        marginLeft: pixToRem(170)
+        marginLeft: pixToRem(100)
     },
     header: {
         width: '100%',
@@ -459,8 +336,8 @@ const styles = {
         width: '60%',
         display: 'block',
         position: 'absolute',
-        bottom: pixToRem(50),
-        left: pixToRem(40),
+        bottom: pixToRem(15),
+        left: pixToRem(20),
         fontFamily: fonts.roboto,
         fontWeight: '700',
         fontSize: pixToRem(25),
@@ -475,11 +352,11 @@ const Breadcrumb = memo(props => {
             separator={<NavigateNextIcon sx={{color: colors.red}} fontSize="small" />}
             aria-label="breadcrumb"
         >
-            <Link underline="hover" key="1" sx={styles.breadcrumb} >
+            <Link underline="hover" key="1" sx={styles.breadcrumb} onClick={props.goToMain} >
                 Diets
             </Link>
             <Typography key="2" color={colors.red} sx={styles.breadcrumb}>
-                {props.diet}
+                {props.diet.thumbnailTitle}
             </Typography>
         </Breadcrumbs>
     )

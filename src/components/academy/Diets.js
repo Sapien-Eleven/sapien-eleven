@@ -1,11 +1,43 @@
 import {Box, Stack} from "@mui/material";
-import {memo, useCallback, useState} from "react";
+import {memo, useCallback, useEffect, useState} from "react";
 import {colors, fonts, pixToRem} from "../../const/uivar";
 import DietDetail from "./DietDetail";
+import axios from "axios";
+import {StrapiBaseURL, StrapiToken, StrapiURL} from "../../const/consts";
 
 const Diets = memo(props => {
+    const [content, setContent] = useState([])
     const [type, setType] = useState('main');
     const [diet, setDiet] = useState('');
+    useEffect(() => {
+        fetchContent().then()
+    }, []);
+    const fetchContent = async () => {
+        const data = (await axios.get(`${StrapiURL}diets`, {
+            headers: {
+                'Authorization': `bearer ${StrapiToken}`
+            },
+            params: {
+                'populate': '*'
+            }
+        })).data;
+
+        setContent(data.data.reduce((acc, cur) => [...acc, {
+            id: cur.id,
+            title1: cur.attributes.title1,
+            title2: cur.attributes.title2,
+            description: cur.attributes.description,
+            thumbnail: `${StrapiBaseURL}${cur.attributes.thumbnail.data.attributes.url}`,
+            thumbnailTitle: cur.attributes.thumbnailTitle,
+            headerImage: `${StrapiBaseURL}${cur.attributes.headerImage.data.attributes.url}`,
+            whatIsIt: cur.attributes.whatIsIt,
+            howWhyWorks: cur.attributes.howWhyWorks,
+            foodsToEat: cur.attributes.foodsToEat,
+            foodsToAvoid: cur.attributes.foodsToAvoid,
+            pros: cur.attributes.pros,
+            cons: cur.attributes.cons
+        }], []));
+    }
     const changeDetail = useCallback((next) => {
         setType('detail');
         setDiet(next);
@@ -13,10 +45,10 @@ const Diets = memo(props => {
     switch (type) {
         case 'main':
             return (
-                <Main setPage={changeDetail} content={props.content} />
+                <Main setPage={changeDetail} content={content}/>
             )
         case 'detail':
-            return <DietDetail diet={diet} />
+            return <DietDetail diet={diet} recommendedDiets={content} goToMain={() => setType('main')} changeDetail={changeDetail} />
         default:
             return null;
     }
@@ -33,24 +65,24 @@ const styles = {
         justifyContent: 'center',
         alignItems: 'flex-start',
         paddingTop: pixToRem(100),
-        paddingLeft: pixToRem(170),
+        paddingLeft: pixToRem(100),
         paddingRight: pixToRem(100),
         paddingBottom: pixToRem(80)
     },
     redTitle: {
         fontFamily: fonts.roboto,
-        fontSize: pixToRem(45),
+        fontSize: pixToRem(25),
         fontWeight: 700,
         fontStyle: 'normal',
         color: '#CA3C3D',
-        lineHeight: pixToRem(55),
+        lineHeight: pixToRem(45),
     },
     blackTitle: {
         fontFamily: fonts.besan,
-        fontSize: pixToRem(45),
-        fontWeight: 700,
+        fontSize: pixToRem(35),
+        fontWeight: 400,
         fontStyle: 'normal',
-        lineHeight: pixToRem(65),
+        lineHeight: pixToRem(45),
         color: colors.black,
         marginTop: pixToRem(5),
         marginBottom: pixToRem(15),
@@ -59,7 +91,7 @@ const styles = {
         fontFamily: fonts.roboto,
         fontStyle: 'normal',
         fontWeight: 400,
-        fontSize: pixToRem(20),
+        fontSize: pixToRem(18),
         lineHeight: pixToRem(26),
         color: colors.comment,
         marginTop: pixToRem(20),
@@ -71,7 +103,7 @@ const styles = {
         marginBottom: pixToRem(10)
     },
     imgItem: {
-        width: '49%',
+        width: '45%',
         display: 'inline-flex',
         position: 'relative',
         ':hover': {
@@ -129,54 +161,56 @@ const styles = {
 }
 
 const Main = memo(props => {
-    return (
-        <Box
-            component={'div'}
-            sx={styles.container}
-        >
+    if (props.content !== undefined && props.content.length > 0)
+        return (
             <Box
-                component={'span'}
-                sx={styles.redTitle}
+                component={'div'}
+                sx={styles.container}
             >
-                {props.content.category.toUpperCase()}
-            </Box>
-            <Box
-                component={'span'}
-                sx={styles.blackTitle}
-            >
-                {props.content.title}
-            </Box>
-            <Box
-                component={'span'}
-                sx={styles.comment}
-            >
-                {props.content.description}
-            </Box>
-            <Stack
-                sx={styles.imgPanel}
-                spacing={3}
-                direction={'row'}
-                useFlexGap
-                flexWrap={'wrap'}
-            >
-                {
-                    props.content.image.map((item, index) => (
-                        <Box
-                            key={index}
-                            component={'div'}
-                            sx={styles.imgItem}
-                            onClick={() => props.setPage(item.label)}
-                        >
+                <Box
+                    component={'span'}
+                    sx={styles.redTitle}
+                >
+                    {props.content[0].title1}
+                </Box>
+                <Box
+                    component={'span'}
+                    sx={styles.blackTitle}
+                >
+                    {props.content[0].title2}
+                </Box>
+                <Box
+                    component={'span'}
+                    sx={styles.comment}
+                >
+                    {props.content[0].description}
+                </Box>
+                <Stack
+                    sx={styles.imgPanel}
+                    spacing={3}
+                    direction={'row'}
+                    useFlexGap
+                    flexWrap={'wrap'}
+                >
+                    {
+                        props.content.map((item, index) => (
                             <Box
-                                component={'img'}
-                                sx={styles.img}
-                                src={item.image}
-                            />
-                            <Box component={'span'} sx={styles.imgTitle} >{item.label}</Box>
-                        </Box>
-                    ))
-                }
-            </Stack>
-        </Box>
-    )
+                                key={index}
+                                component={'div'}
+                                sx={styles.imgItem}
+                                onClick={() => props.setPage(item)}
+                            >
+                                <Box
+                                    component={'img'}
+                                    sx={styles.img}
+                                    src={item.thumbnail}
+                                />
+                                <Box component={'span'} sx={styles.imgTitle}>{item.thumbnailTitle}</Box>
+                            </Box>
+                        ))
+                    }
+                </Stack>
+            </Box>
+        )
+    else return <Box/>
 })

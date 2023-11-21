@@ -80,3 +80,23 @@
     color: #999;
     margin-top: 15px;
 }
+
+.instructionTxt {
+    padding: 20px 30px;
+    background-color: white;
+    font-family: 'Roboto';
+    font-size: 18px;
+    line-height: 34px;
+    font-weight: 500;
+    color: #1D1D1D;
+}
+
+.ingredientTxt {
+    padding: 20px 30px;
+    background-color: white;
+    font-family: 'Roboto';
+    font-size: 18px;
+    line-height: 38px;
+    font-weight: 500;
+    color: #666;
+}

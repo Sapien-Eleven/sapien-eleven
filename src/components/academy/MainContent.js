@@ -1,8 +1,37 @@
 import {Box} from "@mui/material";
-import {memo} from "react";
+import {memo, useEffect, useState} from "react";
 import {colors, fonts, pixToRem} from "../../const/uivar";
+import axios from "axios";
+import {StrapiBaseURL, StrapiToken, StrapiURL} from "../../const/consts";
 
 const MainContent = memo(props => {
+    const [content, setContent] = useState([]);
+    useEffect(() => {
+        fetchContent().then();
+    }, [props.category]);
+    const fetchContent = async () => {
+        let collection = '';
+        if (props.category.parent_id === 1) collection = 'mentals';
+        else if (props.category.parent_id === 2) collection = 'physicals';
+        const data = (await axios.get(`${StrapiURL}${collection}`, {
+            headers: {
+                'Authorization': `bearer ${StrapiToken}`
+            },
+            params: {
+                'filters[category][$eq]': props.category.name,
+                'populate': '*'
+            }
+        })).data;
+
+        setContent({
+            id: data.data[0].id,
+            category: data.data[0].attributes.category,
+            title1: data.data[0].attributes.title1,
+            title2: data.data[0].attributes.title2,
+            description: data.data[0].attributes.description,
+            thumbnail: `${StrapiBaseURL}${data.data[0].attributes.thumbnail.data.attributes.url}`,
+        });
+    }
     return (
         <Box
             component={'div'}
@@ -12,24 +41,24 @@ const MainContent = memo(props => {
                 component={'span'}
                 sx={styles.redTitle}
             >
-                {props.content.category.toUpperCase()}
+                {content.title1}
             </Box>
             <Box
                 component={'span'}
                 sx={styles.blackTitle}
             >
-                {props.content.title}
+                {content.title2}
             </Box>
             <Box
                 component={'span'}
                 sx={styles.comment}
             >
-                {props.content.description}
+                {content.description}
             </Box>
             <Box
                 component={'img'}
                 sx={styles.img}
-                src={props.content.image}
+                src={content.thumbnail}
             />
         </Box>
     )

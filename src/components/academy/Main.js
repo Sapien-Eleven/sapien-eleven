@@ -1,14 +1,17 @@
-import {Container} from "@mui/material";
+import {Box, Container} from "@mui/material";
 import {memo, useCallback, useEffect, useState} from "react";
 import Category from "./Category";
-import Content from "./Content";
 import {StrapiBaseURL, StrapiToken, StrapiURL} from "../../const/consts";
 import axios from "axios";
+import MainContent from "./MainContent";
+import Recipes from "./Recipes";
+import Diets from "./Diets";
+import EatToHeal from "./EatToHeal";
+import {colors, pixToRem} from "../../const/uivar";
 
 const Main = memo(props => {
     const [categories, setCategories] = useState([]);
     const [selectedCategory, selectCategory] = useState({})
-    const [content, setContent] = useState({});
     useEffect(() => {
         fetchCategories().then()
     }, []);
@@ -35,56 +38,12 @@ const Main = memo(props => {
         );
         setCategories(result);
         selectCategory(result.find(c => c.parent_id !== 0));
-        await fetchContent(result.find(c => c.parent_id !== 0));
     }
-    const onChangeCategory = useCallback(async (value) => {
-        await selectCategory(value);
-        await fetchContent(value);
+    const onChangeCategory = useCallback((value) => {
+        selectCategory(value);
     }, []);
 
-    const fetchContent = async (category) => {
-        let images = [];
-        const data = (await axios.get(`${StrapiURL}academy-main-contents`, {
-            headers: {
-                'Authorization': `bearer ${StrapiToken}`
-            },
-            params: {
-                'filters[categoryID][$eq]': category.id,
-                'populate': '*'
-            }
-        })).data;
-        if (category.id >= 9 && category.id <= 11) {
-            const image = (await axios.get(`${StrapiURL}image-labels`, {
-                headers: {
-                    'Authorization': `bearer ${StrapiToken}`
-                },
-                params: {
-                    'filters[categoryID][$eq]': category.id,
-                    'populate': '*'
-                }
-            })).data;
-            images = image.data.reduce((acc, cur) => [...acc,
-                {
-                    imageID: cur.id,
-                    categoryID: cur.attributes.categoryID,
-                    label: cur.attributes.label,
-                    position: cur.attributes.position,
-                    image: `${StrapiBaseURL}${cur.attributes.image.data.attributes.url}`
-                }],
-            []);
-            console.log(images);
-        } else {
-            images = data.data[0].attributes.image.data.reduce((acc, cur) => [...acc, `${StrapiBaseURL}${cur.attributes.url}`], [])
-        }
-        setContent({
-            id: data.data[0].id,
-            categoryID: data.data[0].attributes.categoryID,
-            category: data.data[0].attributes.category,
-            title: data.data[0].attributes.title,
-            description: data.data[0].attributes.description,
-            image: images
-        });
-    }
+
     return (
         <Container
             maxWidth={false}
@@ -92,8 +51,25 @@ const Main = memo(props => {
         >
             <Category categories={categories} selectedCategory={selectedCategory} setCategory={onChangeCategory} />
             {
-                content.category !== undefined &&
-                <Content selectedCategory={selectedCategory} content={content} />
+                selectedCategory.parent_id <= 2 ?
+                    <Box
+                        component={'div'}
+                        sx={styles.contentPanel}
+                    >
+                        <MainContent category={selectedCategory} />
+                    </Box>
+                    : selectedCategory.name === 'Recipes' ?
+                        <Box
+                            component={'div'}
+                            sx={styles.contentPanel}
+                        >
+                            <Recipes category={selectedCategory} />
+                        </Box>
+                        : selectedCategory.name === 'Diets' ?
+                            <Diets category={selectedCategory} />
+                            : selectedCategory.name === 'Eat to Heal' ?
+                                <EatToHeal category={selectedCategory} />
+                                : null
             }
         </Container>
     )
@@ -111,5 +87,15 @@ const styles = {
         justifyContent: 'space-between',
         alignItems: 'flex-start',
         padding: '0px!important'
+    },
+    contentPanel: {
+        flex: 1,
+        backgroundColor: colors.bgWhiteColor,
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'flex-start',
+        paddingTop: pixToRem(100),
+        paddingLeft: pixToRem(100),
     }
 }

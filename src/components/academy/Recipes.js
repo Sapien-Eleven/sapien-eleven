@@ -6,9 +6,51 @@ import axios from "axios";
 import {StrapiBaseURL, StrapiToken, StrapiURL} from "../../const/consts";
 
 const Recipes = memo(props => {
+    const [header, setHeader] = useState({});
+    const [recipes, setRecipes] = useState([]);
     const [type, setType] = useState('main');
     const [recipe, setRecipe] = useState('');
     const [food, setFood] = useState('');
+
+    useEffect(() => {
+        fetchHeader().then();
+        fetchRecipes().then();
+    }, []);
+    const fetchHeader = async () => {
+        const data = (await axios.get(`${StrapiURL}recipes-headers`, {
+            headers: {
+                'Authorization': `bearer ${StrapiToken}`
+            },
+            params: {
+                'populate': '*'
+            }
+        })).data;
+
+        setHeader({
+            title1: data.data[0].attributes.title1,
+            title2: data.data[0].attributes.title2,
+            description: data.data[0].attributes.description,
+        });
+    }
+    const fetchRecipes = async () => {
+        const data = (await axios.get(`${StrapiURL}recipes`, {
+            headers: {
+                'Authorization': `bearer ${StrapiToken}`
+            },
+            params: {
+                'populate': '*'
+            }
+        })).data;
+
+        setRecipes(data.data.reduce((acc, cur) => [...acc, {
+            id: cur.id,
+            category: cur.attributes.category,
+            title1: cur.attributes.title1,
+            title2: cur.attributes.title2,
+            description: cur.attributes.description,
+            thumbnail: `${StrapiBaseURL}${cur.attributes.thumbnail.data.attributes.url}`,
+        }], []));
+    }
     const setSubContent = useCallback((next) => {
         setType('sub');
         setRecipe(next);
@@ -19,11 +61,11 @@ const Recipes = memo(props => {
     }, [])
     switch (type) {
         case 'main':
-            return <Main setPage={setSubContent} content={props.content} />
+            return <Main setPage={setSubContent} header={header} recipes={recipes} />
         case 'sub':
             return <SubContent setPage={setSubDetail} recipe={recipe} />
         case 'detail':
-            return <FoodDetail food={food} recipe={recipe} />
+            return <FoodDetail food={food} recipe={recipe} goToMain={() => setType('main')} goToSub={() => setType('sub')} />
         default:
             break;
     }
@@ -40,19 +82,19 @@ const Main = memo(props => {
                 component={'span'}
                 sx={styles.redTitle}
             >
-                {props.content.category.toUpperCase()}
+                {props.header.title1}
             </Box>
             <Box
                 component={'span'}
                 sx={styles.blackTitle}
             >
-                {props.content.title}
+                {props.header.title2}
             </Box>
             <Box
                 component={'span'}
                 sx={styles.comment}
             >
-                {props.content.description}
+                {props.header.description}
             </Box>
             <Stack
                 sx={styles.upImgPanel}
@@ -60,19 +102,19 @@ const Main = memo(props => {
                 direction={'row'}
             >
                 {
-                    props.content.image.filter(i => i.position === 'up').map((item, index) => (
+                    props.recipes.filter(i => i.title1 === 'BREAKFAST' || i.title1 === 'LUNCH' || i.title1 === 'DINNER').map((item, index) => (
                         <Box
                             key={index}
                             component={'div'}
                             sx={styles.upImgItem}
-                            onClick={() => props.setPage(item.label.toLowerCase())}
+                            onClick={() => props.setPage(item)}
                         >
                             <Box
                                 component={'img'}
                                 sx={styles.upImg}
-                                src={item.image}
+                                src={item.thumbnail}
                             />
-                            <Box component={'span'} sx={styles.imgTitle} >{item.label}</Box>
+                            <Box component={'span'} sx={styles.imgTitle} >{item.title1}</Box>
                         </Box>
                     ))
                 }
@@ -83,18 +125,19 @@ const Main = memo(props => {
                 direction={'row'}
             >
                 {
-                    props.content.image.filter(i => i.position === 'down').map((item, index) => (
+                    props.recipes.filter(i => i.title1 === 'SNACKS' || i.title1 === 'SIDES').map((item, index) => (
                         <Box
                             key={index}
                             component={'div'}
                             sx={styles.downImgItem}
+                            onClick={() => props.setPage(item)}
                         >
                             <Box
                                 component={'img'}
                                 sx={styles.downImg}
-                                src={item.image}
+                                src={item.thumbnail}
                             />
-                            <Box component={'span'} sx={styles.imgTitle}>{item.label}</Box>
+                            <Box component={'span'} sx={styles.imgTitle}>{item.title1}</Box>
                         </Box>
                     ))
                 }
@@ -111,23 +154,22 @@ const styles = {
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'flex-start',
-        paddingLeft: pixToRem(70),
         paddingBottom: pixToRem(30)
     },
     redTitle: {
         fontFamily: fonts.roboto,
-        fontSize: pixToRem(45),
+        fontSize: pixToRem(25),
         fontWeight: 700,
         fontStyle: 'normal',
         color: '#CA3C3D',
-        lineHeight: pixToRem(55),
+        lineHeight: pixToRem(45),
     },
     blackTitle: {
         fontFamily: fonts.besan,
-        fontSize: pixToRem(45),
-        fontWeight: 700,
+        fontSize: pixToRem(30),
+        fontWeight: 400,
         fontStyle: 'normal',
-        lineHeight: pixToRem(65),
+        lineHeight: pixToRem(45),
         color: colors.black,
         marginTop: pixToRem(5),
         marginBottom: pixToRem(15),
@@ -136,8 +178,8 @@ const styles = {
         fontFamily: fonts.roboto,
         fontStyle: 'normal',
         fontWeight: 400,
-        fontSize: pixToRem(20),
-        lineHeight: pixToRem(36),
+        fontSize: pixToRem(18),
+        lineHeight: pixToRem(30),
         color: colors.comment,
         marginTop: pixToRem(20),
         marginBottom: pixToRem(30),
@@ -176,61 +218,68 @@ const styles = {
         height: 'auto',
     },
     imgTitle: {
-        width: '60%',
+        width: '80%',
         display: 'block',
         position: 'absolute',
-        bottom: pixToRem(50),
-        left: pixToRem(40),
+        bottom: pixToRem(30),
+        left: pixToRem(35),
         fontFamily: fonts.roboto,
         fontWeight: '700',
         fontSize: pixToRem(25),
-        lineHeight: pixToRem(35),
+        lineHeight: pixToRem(30),
         color: 'white'
     }
 }
 
 const SubContent = memo(props => {
-    const [content, setContent] = useState({});
+    const [content, setContent] = useState([]);
     useEffect(() => {
-        const fetchContent = async () => {
-            let images = [];
-            const data = (await axios.get(`${StrapiURL}academy-recipes-contents`, {
-                headers: {
-                    'Authorization': `bearer ${StrapiToken}`
-                },
-                params: {
-                    'filters[recipe][$eq]': props.recipe,
-                    'populate': '*'
-                }
-            })).data;
-            const image = (await axios.get(`${StrapiURL}academy-recipes-image-labels`, {
-                headers: {
-                    'Authorization': `bearer ${StrapiToken}`
-                },
-                params: {
-                    'filters[recipe][$eq]': props.recipe,
-                    'populate': '*'
-                }
-            })).data;
-            images = image.data.reduce((acc, cur) => [...acc,
-                    {
-                        imageID: cur.id,
-                        recipe: cur.attributes.recipe,
-                        label: cur.attributes.label,
-                        image: `${StrapiBaseURL}${cur.attributes.image.data.attributes.url}`
-                    }],
-                []);
-            setContent({
-                id: data.data[0].id,
-                recipe: data.data[0].attributes.recipe,
-                title: data.data[0].attributes.title,
-                description: data.data[0].attributes.description,
-                image: images
-            });
-        }
         fetchContent().then();
-    }, [props.recipe]);
-    if (content.recipe !== undefined) {
+    }, []);
+    const fetchContent = async () => {
+        let collection = '';
+        switch (props.recipe.title1.toLowerCase()) {
+            case 'breakfast':
+                collection = 'breakfasts';
+                break;
+            case 'lunch':
+                collection = 'lunches';
+                break;
+            case 'dinner':
+                collection = 'dinners';
+                break;
+            case 'sides':
+                collection = 'sides';
+                break;
+            case 'snacks':
+                collection = 'snacks';
+                break;
+            default:
+                break;
+        }
+        const data = (await axios.get(`${StrapiURL}${collection}`, {
+            headers: {
+                'Authorization': `bearer ${StrapiToken}`
+            },
+            params: {
+                'populate': '*'
+            }
+        })).data;
+
+        setContent(data.data.reduce((acc, cur) => [...acc, {
+            id: cur.id,
+            title: cur.attributes.title,
+            thumbnail: `${StrapiBaseURL}${cur.attributes.thumbnail.data.attributes.url}`,
+            portionSize: cur.attributes.portionSize,
+            cookTime: cur.attributes.cookTime,
+            prepareTime: cur.attributes.prepareTime,
+            video: `${StrapiBaseURL}${cur.attributes.video.data === null ? '' : cur.attributes.video.data.attributes.url}`,
+            images: `${StrapiBaseURL}${cur.attributes.images.data === null ? '' : cur.attributes.images.data.attributes.url}`,
+            ingredients: cur.attributes.ingredients,
+            instructions: cur.attributes.instructions
+        }], []));
+    }
+    if (props.recipe !== undefined) {
         return (
             <Box
                 component={'div'}
@@ -240,19 +289,19 @@ const SubContent = memo(props => {
                     component={'span'}
                     sx={styles.redTitle}
                 >
-                    {content.recipe.toUpperCase()}
+                    {props.recipe.title1}
                 </Box>
                 <Box
                     component={'span'}
                     sx={styles.blackTitle}
                 >
-                    {content.title.toUpperCase()}
+                    {props.recipe.title2}
                 </Box>
                 <Box
                     component={'span'}
                     sx={styles.comment}
                 >
-                    {content.description}
+                    {props.recipe.description}
                 </Box>
                 <Stack
                     sx={styles.upImgPanel}
@@ -260,19 +309,19 @@ const SubContent = memo(props => {
                     spacing={3}
                 >
                     {
-                        content.image.map((item, index) => (
+                        content.map((item, index) => (
                             <Box
                                 key={index}
                                 component={'div'}
                                 sx={styles.upImgItem}
-                                onClick={() => props.setPage(item.label)}
+                                onClick={() => props.setPage(item)}
                             >
                                 <Box
                                     component={'img'}
                                     sx={styles.upImg}
-                                    src={item.image}
+                                    src={item.thumbnail}
                                 />
-                                <Box component={'span'} sx={styles.imgTitle} >{item.label}</Box>
+                                <Box component={'span'} sx={styles.imgTitle} >{item.title}</Box>
                             </Box>
                         ))
                     }

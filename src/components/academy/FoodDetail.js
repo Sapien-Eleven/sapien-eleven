@@ -19,6 +19,47 @@ const FoodDetail = memo(props => {
         fetchRecommendFoods().then();
     }, []);
     const fetchRecommendFoods = async () => {
+        let collection = '';
+        switch (props.recipe.title1.toLowerCase()) {
+            case 'breakfast':
+                collection = 'breakfasts';
+                break;
+            case 'lunch':
+                collection = 'lunches';
+                break;
+            case 'dinner':
+                collection = 'dinners';
+                break;
+            case 'sides':
+                collection = 'sides';
+                break;
+            case 'snacks':
+                collection = 'snacks';
+                break;
+            default:
+                break;
+        }
+        const data = (await axios.get(`${StrapiURL}${collection}`, {
+            headers: {
+                'Authorization': `bearer ${StrapiToken}`
+            },
+            params: {
+                'populate': '*'
+            }
+        })).data;
+
+        setRecommendedFoods(data.data.reduce((acc, cur) => [...acc, {
+            id: cur.id,
+            title: cur.attributes.title,
+            thumbnail: `${StrapiBaseURL}${cur.attributes.thumbnail.data.attributes.url}`,
+            portionSize: cur.attributes.portionSize,
+            cookTime: cur.attributes.cookTime,
+            prepareTime: cur.attributes.prepareTime,
+            video: `${StrapiBaseURL}${cur.attributes.video.data === null ? '' : cur.attributes.video.data.attributes.url}`,
+            images: `${StrapiBaseURL}${cur.attributes.images.data === null ? '' : cur.attributes.images.data.attributes.url}`,
+            ingredients: cur.attributes.ingredients,
+            instructions: cur.attributes.instructions
+        }], []));
     }
 
     if (props.food !== undefined) {
@@ -209,13 +250,14 @@ const FoodDetail = memo(props => {
                                     key={index}
                                     component={'div'}
                                     sx={styles.upImgItem}
+                                    onClick={() => props.setPage(item)}
                                 >
                                     <Box
                                         component={'img'}
                                         sx={styles.upImg}
-                                        src={item.image}
+                                        src={item.thumbnail}
                                     />
-                                    <Box component={'span'} sx={styles.imgTitle} >{item.label}</Box>
+                                    <Box component={'span'} sx={styles.imgTitle} >{item.title}</Box>
                                 </Box>
                             ))
                         }
@@ -432,11 +474,11 @@ const styles = {
         height: 'auto',
     },
     imgTitle: {
-        width: '60%',
+        width: '80%',
         display: 'block',
         position: 'absolute',
-        bottom: pixToRem(50),
-        left: pixToRem(40),
+        bottom: pixToRem(30),
+        left: pixToRem(35),
         fontFamily: fonts.roboto,
         fontWeight: '700',
         fontSize: pixToRem(25),

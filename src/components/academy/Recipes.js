@@ -9,8 +9,8 @@ const Recipes = memo(props => {
     const [header, setHeader] = useState({});
     const [recipes, setRecipes] = useState([]);
     const [type, setType] = useState('main');
-    const [recipe, setRecipe] = useState('');
-    const [food, setFood] = useState('');
+    const [recipe, setRecipe] = useState({});
+    const [food, setFood] = useState({});
 
     useEffect(() => {
         fetchHeader().then();
@@ -61,11 +61,12 @@ const Recipes = memo(props => {
     }, [])
     switch (type) {
         case 'main':
-            return <Main setPage={setSubContent} header={header} recipes={recipes} />
+            return <Main setPage={setSubContent} header={header} recipes={recipes}/>
         case 'sub':
-            return <SubContent setPage={setSubDetail} recipe={recipe} />
+            return <SubContent setPage={setSubDetail} recipe={recipe}/>
         case 'detail':
-            return <FoodDetail food={food} recipe={recipe} goToMain={() => setType('main')} goToSub={() => setType('sub')} />
+            return <FoodDetail food={food} recipe={recipe} goToMain={() => setType('main')}
+                               goToSub={() => setType('sub')} setPage={setSubDetail}/>
         default:
             break;
     }
@@ -114,7 +115,7 @@ const Main = memo(props => {
                                 sx={styles.upImg}
                                 src={item.thumbnail}
                             />
-                            <Box component={'span'} sx={styles.imgTitle} >{item.title1}</Box>
+                            <Box component={'span'} sx={styles.imgTitle}>{item.title1}</Box>
                         </Box>
                     ))
                 }
@@ -321,12 +322,12 @@ const SubContent = memo(props => {
                                     sx={styles.upImg}
                                     src={item.thumbnail}
                                 />
-                                <Box component={'span'} sx={styles.imgTitle} >{item.title}</Box>
+                                <Box component={'span'} sx={styles.imgTitle}>{item.title}</Box>
                             </Box>
                         ))
                     }
                 </Stack>
-                <Box sx={{height: pixToRem(200)}} />
+                <Box sx={{height: pixToRem(200)}}/>
             </Box>
         )
     } else return <Box/>

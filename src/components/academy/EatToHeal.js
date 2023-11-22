@@ -1,19 +1,64 @@
 import {Box, Stack} from "@mui/material";
-import {memo, useCallback, useState} from "react";
+import {memo, useCallback, useEffect, useState} from "react";
 import {colors, fonts, pixToRem} from "../../const/uivar";
 import EatToHealItem from "./EatToHealItem";
+import axios from "axios";
+import {StrapiBaseURL, StrapiToken, StrapiURL} from "../../const/consts";
+import ReactMarkdown from "react-markdown";
 
 const EatToHeal = memo(props => {
+    const [header, setHeader] = useState({});
+    const [heals, setHeals] = useState([]);
     const [page, setPage] = useState('main');
-    const [category, setCategory] = useState('');
+    const [heal, setHeal] = useState({});
+
+    useEffect(() => {
+        fetchHeader().then();
+        fetchHeals().then();
+    }, [])
+    const fetchHeader = async () => {
+        const data = (await axios.get(`${StrapiURL}eattoheal-headers`, {
+            headers: {
+                'Authorization': `bearer ${StrapiToken}`
+            },
+            params: {
+                'populate': '*'
+            }
+        })).data;
+
+        setHeader({
+            title1: data.data[0].attributes.title1,
+            title2: data.data[0].attributes.title2,
+            description: data.data[0].attributes.description,
+            howItWorks: data.data[0].attributes.howItWorks,
+        });
+    }
+    const fetchHeals = async () => {
+        const data = (await axios.get(`${StrapiURL}eattoheals`, {
+            headers: {
+                'Authorization': `bearer ${StrapiToken}`
+            },
+            params: {
+                'populate': '*'
+            }
+        })).data;
+
+        setHeals(data.data.reduce((acc, cur) => [...acc, {
+            id: cur.id,
+            title: cur.attributes.title,
+            thumbnail: `${StrapiBaseURL}${cur.attributes.thumbnail.data.attributes.url}`,
+            headerImage: `${StrapiBaseURL}${cur.attributes.headerImage.data.attributes.url}`,
+            learnMore: cur.attributes.learnMore
+        }], []));
+    }
     const goToDetail = useCallback((next) => {
         setPage('detail');
-        setCategory(next);
+        setHeal(next);
     }, []);
     const goToMain = useCallback(() => setPage('main'), []);
     if (page === 'main')
-        return <Main goToDetail={goToDetail} content={props.content} />
-    else return <EatToHealItem category={category} goToMain={goToMain} />
+        return <Main goToDetail={goToDetail} header={header} heals={heals} />
+    else return <EatToHealItem heal={heal} goToMain={goToMain} />
 })
 
 export default EatToHeal
@@ -29,31 +74,31 @@ const styles = {
         width: '80%',
         paddingTop: pixToRem(80),
         paddingBottom: pixToRem(80),
-        paddingLeft: pixToRem(170),
+        paddingLeft: pixToRem(100),
         paddingRight: pixToRem(80),
     },
     redTitle: {
         fontFamily: fonts.roboto,
-        fontSize: pixToRem(45),
+        fontSize: pixToRem(25),
         fontWeight: 700,
         fontStyle: 'normal',
         color: '#CA3C3D',
-        lineHeight: pixToRem(55),
+        lineHeight: pixToRem(45),
     },
     blackTitle: {
         fontFamily: fonts.besan,
-        fontSize: pixToRem(45),
+        fontSize: pixToRem(35),
         fontWeight: 700,
         fontStyle: 'normal',
-        lineHeight: pixToRem(65),
+        lineHeight: pixToRem(45),
         color: colors.black,
         marginTop: pixToRem(5),
         marginBottom: pixToRem(15),
     },
     smallBlackTitle: {
         fontFamily: fonts.roboto,
-        fontSize: pixToRem(30),
-        fontWeight: 400,
+        fontSize: pixToRem(24),
+        fontWeight: 700,
         fontStyle: 'normal',
         lineHeight: pixToRem(40),
         color: colors.black,
@@ -61,18 +106,18 @@ const styles = {
         marginBottom: pixToRem(15),
     },
     comment: {
-        maxWidth: '70%',
+        maxWidth: '90%',
         fontFamily: fonts.roboto,
         fontStyle: 'normal',
         fontWeight: 400,
-        fontSize: pixToRem(20),
+        fontSize: pixToRem(18),
         lineHeight: pixToRem(30),
         color: colors.comment,
         marginTop: pixToRem(20),
         marginBottom: pixToRem(30),
     },
     imgItem: {
-        width: '35%',
+        width: '31%',
         display: 'inline-flex',
         position: 'relative',
         ':hover': {
@@ -85,8 +130,8 @@ const styles = {
     },
     imgTitle: {
         position: 'absolute',
-        bottom: pixToRem(50),
-        left: pixToRem(40),
+        bottom: pixToRem(35),
+        left: pixToRem(30),
         zIndex: 300,
         fontFamily: fonts.roboto,
         fontWeight: '700',
@@ -139,19 +184,19 @@ const Main = memo(props => {
                 component={'span'}
                 sx={styles.redTitle}
             >
-                {props.content.category.toUpperCase()}
+                {props.header.title1}
             </Box>
             <Box
                 component={'span'}
                 sx={styles.blackTitle}
             >
-                {props.content.title}
+                {props.header.title2}
             </Box>
             <Box
                 component={'span'}
                 sx={styles.comment}
             >
-                {props.content.description}
+                {props.header.description}
             </Box>
             <Box
                 component={'span'}
@@ -159,22 +204,9 @@ const Main = memo(props => {
             >
                 Here's how it works:
             </Box>
-            <Box
-                component={'span'}
-                sx={styles.comment}
-            >
-                Nutrient Supply: Consuming a diverse range of nutrient-rich foods provides the body with essential vitamins, minerals, and other compounds needed for optimal function and repair.
-                <br/><br/>
-                Immune Support: A healthy diet boosts our immune system enhancing our body's ability to fight off infections and illnesses.
-                <br/><br/>
-                Disease Prevention: Foods rich in antioxidants and anti-inflammatory compounds, such as fruits, and vegetables, can help prevent chronic diseases like heart diseases, diabetes, and cancer by neutralizing harmful free radicals and reducing inflammation.
-                <br/><br/>
-                Gut Health: Fiber-rich foods nourish our gut microbiota, playing a vital role in degestion, nutrient absorption, and overall health, including immune and mental health.
-                <br/><br/>
-                Weight Management: Nutrient-dense foods are typically lower in calories but keep us satiated longer, helping maintain a healthy weight and preventing obesity-related disease.
-                <br/><br/>
-                In essence, "eat to heal" is about using food as medicine to naturally enhance the body's healing capabilities and promote long-term health and wellness.
-            </Box>
+            <ReactMarkdown className={'howItWorksTxt'}>
+                {props.header.howItWorks}
+            </ReactMarkdown>
             <Stack
                 sx={{width: '100%', marginTop: pixToRem(20), marginBottom: pixToRem(50)}}
                 direction={'column'}
@@ -184,44 +216,23 @@ const Main = memo(props => {
                     sx={{width: '100%'}}
                     spacing={3}
                     direction={'row'}
+                    useFlexGap
+                    flexWrap={'wrap'}
                 >
                     {
-                        props.content.image.filter(i => i.position === 'up').map((item, index) => (
+                        props.heals.map((item, index) => (
                             <Box
                                 key={index}
                                 component={'div'}
                                 sx={styles.imgItem}
-                                onClick={() => props.goToDetail(item.label)}
+                                onClick={() => props.goToDetail(item)}
                             >
                                 <Box
                                     component={'img'}
                                     sx={styles.img}
-                                    src={item.image}
+                                    src={item.thumbnail}
                                 />
-                                <Box component={'span'} sx={styles.imgTitle} >{item.label}</Box>
-                            </Box>
-                        ))
-                    }
-                </Stack>
-                <Stack
-                    sx={{width: '100%'}}
-                    spacing={3}
-                    direction={'row'}
-                >
-                    {
-                        props.content.image.filter(i => i.position === 'down').map((item, index) => (
-                            <Box
-                                key={index}
-                                component={'div'}
-                                sx={styles.imgItem}
-                                onClick={() => props.goToDetail(item.label)}
-                            >
-                                <Box
-                                    component={'img'}
-                                    sx={styles.img}
-                                    src={item.image}
-                                />
-                                <Box component={'span'} sx={styles.imgTitle} >{item.label}</Box>
+                                <Box component={'span'} sx={styles.imgTitle} >{item.title}</Box>
                             </Box>
                         ))
                     }

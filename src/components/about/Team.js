@@ -1,8 +1,7 @@
 import {Box, Container, Stack} from "@mui/material";
 import {memo, useEffect, useState} from "react";
 import {colors, fonts, pixToRem} from "../../const/uivar";
-import CEOPhoto from '../../assets/images/about/ceo_jeremy.png'
-import {StrapiBaseURL, StrapiToken, StrapiURL, teamMembers} from "../../const/consts";
+import {StrapiBaseURL, StrapiToken, StrapiURL} from "../../const/consts";
 import Twitter from "../../assets/images/media/twitter";
 import axios from "axios";
 

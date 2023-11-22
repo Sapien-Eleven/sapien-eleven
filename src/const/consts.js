@@ -6,8 +6,6 @@ import CoinbaseIcon from '../assets/images/icons/coinbase.png';
 import WalletConnectIcon from '../assets/images/icons/walletconnect.png';
 import PhantomIcon from '../assets/images/icons/phantom.jpg'
 import {injected, walletconnect} from "./connectors";
-import Brenton from '../assets/images/about/brenton.png'
-import Svensei from '../assets/images/about/sv3nsei.jpg'
 export const pages = ['ACADEMY', 'ABOUT', 'MARKETPLACE', 'MEDIA', 'CONTACT'];
 
 export const policies = ['PRIVACY POLICY', 'TERMS AND CONDITIONS', 'DISCLAIMER', 'COOKIE POLICY', 'SHIPPING POLICY', 'RETURN POLICY'];
@@ -52,69 +50,6 @@ export const wallets = {
         url: 'https://phantom.app/download'
     }
 }
-
-export const teamMembers = [
-    {
-        name: 'BRENTON',
-        role: 'Lead Content Creator',
-        image: Brenton
-    },
-    {
-        name: 'BRETT',
-        role: 'Brand Strategy and Development',
-        image: ''
-    },
-    {
-        name: 'SVENSEI',
-        role: 'UI/UX Designer',
-        image: Svensei
-    },
-    {
-        name: 'AMRA',
-        role: 'Illustrator & Graphic Designer',
-        image: ''
-    },
-    {
-        name: 'WANG',
-        role: 'Full Stack Developer',
-        image: ''
-    },
-    {
-        name: 'JIN',
-        role: 'Full Stack Developer',
-        image: ''
-    },
-    {
-        name: 'KEVIN',
-        role: 'Senior Financial Analyst',
-        image: ''
-    },
-    {
-        name: 'STE',
-        role: 'Life and Mental Health Coach',
-        image: ''
-    },
-    {
-        name: 'KIERSTON',
-        role: 'Chef',
-        image: ''
-    },
-    {
-        name: 'KAT',
-        role: 'Fitness Coach',
-        image: ''
-    },
-    {
-        name: 'EMILIE',
-        role: 'Yogini',
-        image: ''
-    },
-    {
-        name: 'HYGEIA',
-        role: 'Wellness AI',
-        image: ''
-    }
-]
 
 export const StrapiURL = 'http://162.247.131.12:3000/api/'
 export const StrapiBaseURL = 'http://162.247.131.12:3000'

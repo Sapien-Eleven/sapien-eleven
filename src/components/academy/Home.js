@@ -16,8 +16,8 @@ const Home = memo(props => {
         } else {
             setWalletModalVisible(true)
         }
-    }, []);
-    if (isEntered && props.connectedWallet !== '') return <Main/>
+    }, [isEntered, props.connectedWallet]);
+    if (isEntered && (props.connectedWallet !== '')) return <Main/>
     else return (
         <div>
             <IntroPanel onPress={onEnter} />

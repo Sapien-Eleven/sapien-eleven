@@ -1,5 +1,5 @@
 import {memo, useEffect, useState} from "react";
-import {Box, Container} from "@mui/material";
+import {Box, Button, Container} from "@mui/material";
 import {colors, fonts, pixToRem} from "../../const/uivar";
 import Wellness from '../../assets/images/academy/wellness.png'
 import {connect} from "react-redux";
@@ -52,6 +52,12 @@ const IntroPanel = memo(props => {
             >
                 {content.description}
             </Box>
+            <Button
+                sx={styles.enterButton}
+                onClick={props.onPress}
+            >
+                {props.connectedWallet !== '' ? `Enter` : `CONNECT WALLET`}
+            </Button>
             <Box
                 component={'img'}
                 src={Wellness}
@@ -133,5 +139,22 @@ const styles = {
         width: pixToRem(300),
         height: 'auto',
         marginTop: pixToRem(20)
+    },
+    enterButton: {
+        height: pixToRem(60),
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingLeft: 11,
+        paddingRight: 11,
+        fontFamily: fonts.roboto,
+        fontSize: pixToRem(20),
+        fontWeight: 500,
+        fontStyle: 'normal',
+        lineHeight: 16,
+        border: '1px solid #CA3C3D',
+        borderRadius: 0,
+        marginBottom: pixToRem(30),
     }
 }

@@ -175,7 +175,10 @@ const DietDetail = memo(props => {
                                         key={index}
                                         component={'div'}
                                         sx={styles.downImgItem}
-                                        onClick={() => props.changeDetail(item)}
+                                        onClick={() => {
+                                            window.scrollTo(0, 0);
+                                            props.changeDetail(item);
+                                        }}
                                     >
                                         <Box
                                             component={'img'}

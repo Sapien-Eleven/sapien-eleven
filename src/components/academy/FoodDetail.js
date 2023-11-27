@@ -250,7 +250,10 @@ const FoodDetail = memo(props => {
                                     key={index}
                                     component={'div'}
                                     sx={styles.upImgItem}
-                                    onClick={() => props.setPage(item)}
+                                    onClick={() => {
+                                        window.scrollTo(0, 0);
+                                        props.setPage(item);
+                                    }}
                                 >
                                     <Box
                                         component={'img'}

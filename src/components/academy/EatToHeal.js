@@ -5,6 +5,8 @@ import EatToHealItem from "./EatToHealItem";
 import axios from "axios";
 import {StrapiBaseURL, StrapiToken, StrapiURL} from "../../const/consts";
 import ReactMarkdown from "react-markdown";
+import {useCollapse} from "react-collapsed";
+import {ArrowDropDown, ArrowRight} from "@mui/icons-material";
 
 const EatToHeal = memo(props => {
     const [header, setHeader] = useState({});
@@ -116,6 +118,21 @@ const styles = {
         marginTop: pixToRem(20),
         marginBottom: pixToRem(30),
     },
+    howItWorksPanel: {
+        width: '80%',
+        backgroundColor: 'white',
+        paddingTop: pixToRem(20),
+        paddingBottom: pixToRem(20),
+        paddingLeft: pixToRem(40),
+        paddingRight: pixToRem(40)
+    },
+    howItWorksHeader: {
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+    },
     imgItem: {
         width: '31%',
         display: 'inline-flex',
@@ -175,6 +192,9 @@ const styles = {
 }
 
 const Main = memo(props => {
+    const {getCollapseProps, getToggleProps, isExpanded} = useCollapse({
+        duration: 1000,
+    });
     return (
         <Box
             component={'div'}
@@ -199,14 +219,36 @@ const Main = memo(props => {
                 {props.header.description}
             </Box>
             <Box
-                component={'span'}
-                sx={styles.smallBlackTitle}
+                component={'div'}
+                sx={styles.howItWorksPanel}
             >
-                Here's how it works:
+                <Box
+                    component={'div'}
+                    sx={styles.howItWorksHeader}
+                    {...getToggleProps()}
+                >
+                    <Box
+                        component={'span'}
+                        sx={styles.smallBlackTitle}
+                    >
+                        Here's how it works:
+                    </Box>
+                    {
+                        isExpanded ?
+                            <ArrowDropDown sx={{marginLeft: pixToRem(10)}} />
+                            :
+                            <ArrowRight sx={{marginLeft: pixToRem(10)}} />
+                    }
+                </Box>
+                <Box
+                    component={'div'}
+                    {...getCollapseProps()}
+                >
+                    <ReactMarkdown className={'howItWorksTxt'}>
+                        {props.header.howItWorks}
+                    </ReactMarkdown>
+                </Box>
             </Box>
-            <ReactMarkdown className={'howItWorksTxt'}>
-                {props.header.howItWorks}
-            </ReactMarkdown>
             <Stack
                 sx={{width: '100%', marginTop: pixToRem(20), marginBottom: pixToRem(50)}}
                 direction={'column'}

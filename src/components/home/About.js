@@ -1,7 +1,8 @@
-import { Box, Container } from "@mui/material";
-import { colors, fonts, pixToRem } from "../../const/uivar";
+import {Box, Container, Stack} from "@mui/material";
+import {colors, fonts, pixToRem} from "../../const/uivar";
 import Activity from '../../assets/images/activity.png'
 import Nutriution from '../../assets/images/nutriution.png'
+import Coaching from '../../assets/images/coaching.png'
 import {useEffect, useState} from "react";
 import axios from "axios";
 import {StrapiToken, StrapiURL} from "../../const/consts";
@@ -61,57 +62,81 @@ export function About() {
                     {content.description}
                 </Box>
             </Box>
-            { content.subcontents !== undefined && <Box
-                component={'div'}
-                sx={styles.boxPanel}
-            >
-                <Box
-                    component={'div'}
-                    sx={styles.box}
+            {content.subcontents !== undefined &&
+                <Stack
+                    direction={'row'}
+                    spacing={3}
+                    sx={styles.boxPanel}
                 >
                     <Box
-                        component={'img'}
-                        sx={styles.img}
-                        src={Activity}
-                        alt="Physical Activity"
-                    />
-                    <Box
-                        component={'span'}
-                        sx={styles.boxTitle}
+                        component={'div'}
+                        sx={styles.box}
                     >
-                        {content.subcontents[0].subtitle}
+                        <Box
+                            component={'img'}
+                            sx={styles.img}
+                            src={Activity}
+                            alt="Physical Activity"
+                        />
+                        <Box
+                            component={'span'}
+                            sx={styles.boxTitle}
+                        >
+                            {content.subcontents[0].subtitle}
+                        </Box>
+                        <Box
+                            component={'span'}
+                            sx={styles.boxComment}
+                        >
+                            {content.subcontents[0].subdescription}
+                        </Box>
                     </Box>
                     <Box
-                        component={'span'}
-                        sx={styles.boxComment}
+                        component={'div'}
+                        sx={styles.box}
                     >
-                        {content.subcontents[0].subdescription}
+                        <Box
+                            component={'img'}
+                            sx={styles.img}
+                            src={Nutriution}
+                            alt="Nutriution and Supplementation"
+                        />
+                        <Box
+                            component={'span'}
+                            sx={styles.boxTitle}
+                        >
+                            {content.subcontents[1].subtitle}
+                        </Box>
+                        <Box
+                            component={'span'}
+                            sx={styles.boxComment}
+                        >
+                            {content.subcontents[1].subdescription}
+                        </Box>
                     </Box>
-                </Box>
-                <Box
-                    component={'div'}
-                    sx={styles.box}
-                >
                     <Box
-                        component={'img'}
-                        sx={styles.img}
-                        src={Nutriution}
-                        alt="Nutriution and Supplementation"
-                    />
-                    <Box
-                        component={'span'}
-                        sx={styles.boxTitle}
+                        component={'div'}
+                        sx={styles.box}
                     >
-                        {content.subcontents[1].subtitle}
+                        <Box
+                            component={'img'}
+                            sx={styles.img}
+                            src={Coaching}
+                        />
+                        <Box
+                            component={'span'}
+                            sx={styles.boxTitle}
+                        >
+                            {content.subcontents[2].subtitle}
+                        </Box>
+                        <Box
+                            component={'span'}
+                            sx={styles.boxComment}
+                        >
+                            {content.subcontents[2].subdescription}
+                        </Box>
                     </Box>
-                    <Box
-                        component={'span'}
-                        sx={styles.boxComment}
-                    >
-                        {content.subcontents[1].subdescription}
-                    </Box>
-                </Box>
-            </Box>}
+                </Stack>}
         </Container>
     )
 }
@@ -158,10 +183,6 @@ const styles = {
         marginTop: '2em'
     },
     boxPanel: {
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
         width: '100%',
         marginBottom: '6em'
     },
@@ -171,15 +192,15 @@ const styles = {
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        width: '45%',
-        marginLeft: '1em',
-        marginRight: '1em'
+        width: '35%',
     },
     img: {
         marginTop: '-2.5em',
         height: pixToRem(214)
     },
     boxTitle: {
+        width: '90%',
+        textAlign: 'center',
         marginTop: '2em',
         fontFamily: fonts.roboto,
         fontSize: pixToRem(26),

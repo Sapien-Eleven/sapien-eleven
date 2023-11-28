@@ -1,4 +1,4 @@
-import {memo, useCallback, useEffect, useState} from "react";
+import {memo} from "react";
 import {Box, Breadcrumbs, Link, Stack, Typography} from "@mui/material";
 import MeditarraneanWide from "../../assets/images/academy/meditarranean_wide.png";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
@@ -9,8 +9,6 @@ import Plus from "../../assets/images/academy/Plus";
 import Minus from "../../assets/images/academy/Minus";
 import NoFood from "../../assets/images/academy/NoFood";
 import IngredientGreen from "../../assets/images/academy/IngredientGreen";
-import axios from "axios";
-import {StrapiBaseURL, StrapiToken, StrapiURL} from "../../const/consts";
 import ReactMarkdown from "react-markdown";
 
 const DietDetail = memo(props => {
@@ -22,7 +20,7 @@ const DietDetail = memo(props => {
             >
                 <Box
                     component={'div'}
-                    sx={styles.header}
+                    sx={[styles.header, {backgroundImage: `url(${props.diet.headerImage})`}]}
                 >
                     <Box
                         component={'div'}
@@ -228,7 +226,6 @@ const styles = {
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'flex-start',
-        backgroundImage: `url(${MeditarraneanWide})`,
         backgroundRepeat: 'no-repeat',
         backgroundSize: 'cover',
     },

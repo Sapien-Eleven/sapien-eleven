@@ -319,9 +319,12 @@ const Breadcrumb = memo(props => {
 })
 
 const ContentItem = memo(props => {
-    const {getCollapseProps, getToggleProps, isExpanded} = useCollapse({
+    const {getCollapseProps, getToggleProps, isExpanded, setExpanded} = useCollapse({
         duration: 1000,
     });
+    useEffect(() => {
+        setExpanded(false);
+    }, [props.borderColor]);
     return (
         <Box
             component={'div'}

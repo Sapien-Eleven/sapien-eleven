@@ -1,12 +1,23 @@
-import { Box, Container } from "@mui/material";
-import Chronic_Disease from '../../assets/images/chronic_disease.png'
-import {pixToRem} from "../../const/uivar";
+import {Box, Container, Tab, Tabs, Typography, useMediaQuery, useTheme} from "@mui/material";
+import Chronic_Disease from '../../assets/images/chronic_disease.jpg'
+import {pixToRem, colors} from "../../const/uivar";
 import {useEffect, useState} from "react";
 import axios from "axios";
-import {StrapiToken, StrapiURL} from "../../const/consts";
+import {dataCancerArr, dataDeathArr, StrapiToken, StrapiURL} from "../../const/consts";
+import {ComposedChart, Area, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,} from 'recharts';
 
-export function ChronicDisease() {
+export const ChronicDisease = (props) => {
+    const theme = useTheme();
+    const md = useMediaQuery(theme.breakpoints.down('md'));
+    const sm = useMediaQuery(theme.breakpoints.down('sm'));
+
     const [content, setContent] = useState({})
+    const [value, setValue] = useState(0);
+
+    const handleChange = (event, newValue) => {
+        setValue(newValue);
+    };
+
     useEffect(() => {
         fetchContent().then();
     }, []);
@@ -27,6 +38,10 @@ export function ChronicDisease() {
             description: data.data[0].attributes.description,
         });
     }
+    const currencyFormatter = new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD"
+    });
     return (
         <Container
             component={'div'}
@@ -55,6 +70,118 @@ export function ChronicDisease() {
                 >
                     {content.description}
                 </Box>
+                <Box
+                    component={'div'}
+                    sx={styles.chartPanel}
+                >
+                    <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                        <Tabs value={value} onChange={handleChange} aria-label="Disease chart" orientation={sm? 'vertical':'horizontal'}>
+                            <Tab label="CANCERS" {...a11yProps(0)} style={value === 0 ? styles.activeTab : styles.defaultTab} />
+                            <Tab label="DIABETES" {...a11yProps(1)} style={value === 1 ? styles.activeTab : styles.defaultTab} />
+                            <Tab label="HYPERTENSION" {...a11yProps(2)} style={value === 2 ? styles.activeTab : styles.defaultTab} />
+                            <Tab label="OBESITY" {...a11yProps(3)} style={value === 3 ? styles.activeTab : styles.defaultTab} />
+                        </Tabs>
+                    </Box>
+                    <TabPanel value={value} index={0}>
+                        <ResponsiveContainer width="100%" minHeight={430}>
+                            <ComposedChart
+                                // height={500}
+                                data={dataCancerArr}
+                                margin={{
+                                    top: 20,
+                                    left: 0,
+                                    right: 0,
+                                    bottom: 20,
+                                }}
+                            >
+                                <CartesianGrid stroke="#f5f5f5" vertical={false} />
+                                <XAxis dataKey="name" scale="band" />
+                                <YAxis yAxisId="left" dataKey="uv" orientation='left'/>
+                                <YAxis yAxisId="right" dataKey="pv" orientation='right' tickFormatter={value => currencyFormatter.format(value).slice(0, -3)} />
+
+                                {/* <YAxis yAxisId="right" orientation="right" /> */}
+                                <Tooltip contentStyle={{marginLeft:-50,backgroundColor: '#333',color:colors.red}} />
+                                {/* <Tooltip content={<CustomTooltip />} /> */}
+                                <Legend />
+                                <Bar yAxisId="left" name="Cancer New Cases (Millions)" dataKey="uv" barSize={5} stroke='#333' fill='#f7f8f8' />
+                                <Area yAxisId="right" name="Cancer Funding in USD (billions)" isAnimationActive={false} type="monotone" dataKey="pv" fill={colors.red} stroke={colors.red} />
+                                {/* <Line type="monotone" dataKey="uv" stroke="#ff7300" /> */}
+                            </ComposedChart>
+                        </ResponsiveContainer>
+                    </TabPanel>
+                    <TabPanel value={value} index={1}>
+                        <ResponsiveContainer width="100%" minHeight={430}>
+                            <ComposedChart
+                                // height={500}
+                                data={dataDeathArr}
+                                margin={{
+                                    top: 20,
+                                    bottom: 20,
+                                }}
+                            >
+                                <CartesianGrid stroke="#f5f5f5" vertical={false} />
+                                <XAxis dataKey="name" scale="band" />
+                                <YAxis yAxisId="left" dataKey="dv" unit={'k'} orientation='left'/>
+                                <YAxis yAxisId="right" dataKey="uv" orientation='right' tickFormatter={value => currencyFormatter.format(value).slice(0, -3)} />
+
+                                {/* <YAxis yAxisId="right" orientation="right" /> */}
+                                <Tooltip content={<CustomTooltip />} />
+                                <Legend />
+                                <Bar yAxisId="left" name="Total Diabetes Deaths" dataKey="dv" barSize={5} stroke='#333' fill='#f7f8f8' />
+                                <Area yAxisId="right" name="US Healthcare Spending in USD (Billions)" isAnimationActive={false} type="linear" dataKey="uv" fill={colors.red} stroke={colors.red} />
+                                {/* <Line type="monotone" dataKey="uv" stroke="#ff7300" /> */}
+                            </ComposedChart>
+                        </ResponsiveContainer>
+                    </TabPanel>
+                    <TabPanel value={value} index={2}>
+                        <ResponsiveContainer width="100%" minHeight={430}>
+                            <ComposedChart
+                                // height={500}
+                                data={dataDeathArr}
+                                margin={{
+                                    top: 20,
+                                    bottom: 20,
+                                }}
+                            >
+                                <CartesianGrid stroke="#f5f5f5" vertical={false} />
+                                <XAxis dataKey="name" scale="band" />
+                                <YAxis yAxisId="left" dataKey="hv" unit={'k'} orientation='left'/>
+                                <YAxis yAxisId="right" dataKey="uv" orientation='right' tickFormatter={value => currencyFormatter.format(value).slice(0, -3)} />
+
+                                {/* <YAxis yAxisId="right" orientation="right" /> */}
+                                <Tooltip content={<CustomTooltip />} />
+                                <Legend />
+                                <Bar yAxisId="left" name="Total Hypertension Deaths" dataKey="hv" barSize={5} stroke='#333' fill='#f7f8f8' />
+                                <Area yAxisId="right" name="US Healthcare Spending in USD (Billions)" type="linear" dataKey="uv" isAnimationActive={false} fill={colors.red} stroke={colors.red} />
+                                {/* <Line type="monotone" dataKey="uv" stroke="#ff7300" /> */}
+                            </ComposedChart>
+                        </ResponsiveContainer>
+                    </TabPanel>
+                    <TabPanel value={value} index={3}>
+                        <ResponsiveContainer width="100%" minHeight={430}>
+                            <ComposedChart
+                                // height={500}
+                                data={dataDeathArr}
+                                margin={{
+                                    top: 20,
+                                    bottom: 20,
+                                }}
+                            >
+                                <CartesianGrid stroke="#f5f5f5" vertical={false} />
+                                <XAxis dataKey="name" scale="band" />
+                                <YAxis yAxisId="left" dataKey="ov" unit={'k'} orientation='left'/>
+                                <YAxis yAxisId="right" dataKey="uv" orientation='right' tickFormatter={value => currencyFormatter.format(value).slice(0, -3)} />
+
+                                {/* <YAxis yAxisId="right" orientation="right" /> */}
+                                <Tooltip content={<CustomTooltip />} />
+                                <Legend />
+                                <Bar yAxisId="left" name="Total Obesity Deaths" dataKey="ov" barSize={5} stroke='#333' fill='#f7f8f8' />
+                                <Area yAxisId="right" name="US Healthcare Spending in USD (Billions)" type="linear" dataKey="uv" isAnimationActive={false} fill={colors.red} stroke={colors.red} />
+                                {/* <Line type="monotone" dataKey="uv" stroke="#ff7300" /> */}
+                            </ComposedChart>
+                        </ResponsiveContainer>
+                    </TabPanel>
+                </Box>
             </Box>
         </Container>
     )
@@ -70,7 +197,7 @@ const styles = {
         backgroundPosition: 'start',
         backgroundSize: 'cover',
         paddingTop: pixToRem(90),
-        paddingBottom: pixToRem(600)
+        paddingBottom: pixToRem(50)
     },
     explaination: {
         marginLeft: '5rem',
@@ -104,5 +231,58 @@ const styles = {
         color: '#999999',
         marginTop: pixToRem(10),
         width: '50%'
+    },
+    chartPanel: {
+        marginTop: pixToRem(50),
+        backgroundColor: 'rgba(29,29,29,0.25)',
+        width: '67%'
+    },
+    defaultTab: {
+        color: '#999'
+    },
+    activeTab: {
+        color: 'white'
     }
 }
+
+const a11yProps = (index) => {
+    return {
+        id: `simple-tab-${index}`,
+        'aria-controls': `simple-tabpanel-${index}`,
+    };
+}
+
+const TabPanel = (props) => {
+    const { children, value, index, ...other } = props;
+
+    return (
+        <div
+            role="tabpanel"
+            hidden={value !== index}
+            id={`simple-tabpanel-${index}`}
+            aria-labelledby={`simple-tab-${index}`}
+            {...other}
+        >
+            {value === index && (
+                <Box sx={{ pt: 3, pb:3 }}>
+                    <Typography>{children}</Typography>
+                </Box>
+            )}
+        </div>
+    );
+}
+
+const CustomTooltip = ({ active, payload, label }) => {
+
+    if (active && payload && payload.length) {
+        return (
+            <Box className="custom-tooltip" sx={{border:'1px solid white',marginLeft:'-40px', padding: '10px',backgroundColor: '#333',color:'#f5f4f5', width:'100%'}}>
+                <Typography className="label" sx={{color: payload[1].color}}>{`${label}`}</Typography>
+                <Typography className="label" sx={{color: payload[0].color}}>{`${payload[0].name} : ${payload[0].value*1000}`}</Typography>
+                <Typography className="label"  sx={{color: payload[1].color}}>{`${payload[1].name} : ${payload[1].value}`}</Typography>
+            </Box>
+        );
+    }
+
+    return null;
+};

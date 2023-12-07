@@ -229,6 +229,14 @@ const styles = {
         fontSize: pixToRem(25),
         lineHeight: pixToRem(30),
         color: 'white'
+    },
+    imgItem: {
+        display: 'inline-flex',
+        position: 'relative',
+        width: '31%',
+        ':hover': {
+            cursor: 'pointer'
+        }
     }
 }
 
@@ -270,7 +278,7 @@ const SubContent = memo(props => {
         setContent(data.data.reduce((acc, cur) => [...acc, {
             id: cur.id,
             title: cur.attributes.title,
-            thumbnail: `${StrapiBaseURL}${cur.attributes.thumbnail.data.attributes.url}`,
+            thumbnail: cur.attributes.thumbnail.data === null ? '' : `${StrapiBaseURL}${cur.attributes.thumbnail.data.attributes.url}`,
             portionSize: cur.attributes.portionSize,
             cookTime: cur.attributes.cookTime,
             prepareTime: cur.attributes.prepareTime,
@@ -308,20 +316,26 @@ const SubContent = memo(props => {
                     sx={styles.upImgPanel}
                     direction={'row'}
                     spacing={3}
+                    useFlexGap
+                    flexWrap={'wrap'}
+                    justifyContent={'space-between'}
                 >
                     {
                         content.map((item, index) => (
                             <Box
                                 key={index}
                                 component={'div'}
-                                sx={styles.upImgItem}
+                                sx={[styles.imgItem, {height: item.thumbnail === '' ? pixToRem(240) : 'auto', backgroundColor: colors.bgBlackColor}]}
                                 onClick={() => props.setPage(item)}
                             >
-                                <Box
-                                    component={'img'}
-                                    sx={styles.upImg}
-                                    src={item.thumbnail}
-                                />
+                                {
+                                    item.thumbnail !== '' &&
+                                        <Box
+                                            component={'img'}
+                                            sx={styles.upImg}
+                                            src={item.thumbnail}
+                                        />
+                                }
                                 <Box component={'span'} sx={styles.imgTitle}>{item.title}</Box>
                             </Box>
                         ))

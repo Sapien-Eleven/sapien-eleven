@@ -51,7 +51,7 @@ const FoodDetail = memo(props => {
         setRecommendedFoods(data.data.reduce((acc, cur) => [...acc, {
             id: cur.id,
             title: cur.attributes.title,
-            thumbnail: `${StrapiBaseURL}${cur.attributes.thumbnail.data.attributes.url}`,
+            thumbnail: cur.attributes.thumbnail.data === null ? '' : `${StrapiBaseURL}${cur.attributes.thumbnail.data.attributes.url}`,
             portionSize: cur.attributes.portionSize,
             cookTime: cur.attributes.cookTime,
             prepareTime: cur.attributes.prepareTime,
@@ -154,7 +154,7 @@ const FoodDetail = memo(props => {
                         >
                             <Box
                                 component={'img'}
-                                sx={styles.detailImg}
+                                sx={[styles.detailImg, {height: props.food.thumbnail === '' ? pixToRem(400) : 'auto'}]}
                                 src={props.food.thumbnail}
                             />
                             <Box

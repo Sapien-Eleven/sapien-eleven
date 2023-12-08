@@ -1,20 +1,29 @@
-import {Box, Breadcrumbs, Link, Stack, Typography} from "@mui/material";
-import {memo, useEffect, useState} from "react";
+import {Box, Breadcrumbs, Button, Link, Stack, Typography} from "@mui/material";
+import {memo, useCallback, useEffect, useRef, useState} from "react";
 import {colors, fonts, pixToRem} from "../../const/uivar";
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import Portion from "../../assets/images/academy/portion";
 import Meal from "../../assets/images/academy/meal";
 import Cooking from "../../assets/images/academy/cooking";
-import MealDetailImg from '../../assets/images/academy/meal_detail_img.png'
 import PlayIcon from "../../assets/images/academy/PlayIcon";
 import ManualBook from "../../assets/images/academy/ManualBook";
 import Ingredient from "../../assets/images/academy/Ingredient";
 import axios from "axios";
 import {StrapiBaseURL, StrapiToken, StrapiURL} from "../../const/consts";
 import ReactMarkdown from "react-markdown";
+import ReactPlayer from "react-player";
 
 const FoodDetail = memo(props => {
     const [recommendedFoods, setRecommendedFoods] = useState([]);
+    const [videoState, setVideoState] = useState({
+        playing: true,
+        muted: false,
+        volume: 0.5,
+        played: 0,
+        seeking: false,
+        Buffer : true
+    });
+    const videoPlayer = useRef(null);
     useEffect(() => {
         fetchRecommendFoods().then();
     }, []);
@@ -56,11 +65,18 @@ const FoodDetail = memo(props => {
             cookTime: cur.attributes.cookTime,
             prepareTime: cur.attributes.prepareTime,
             video: `${StrapiBaseURL}${cur.attributes.video.data === null ? '' : cur.attributes.video.data.attributes.url}`,
-            images: `${StrapiBaseURL}${cur.attributes.images.data === null ? '' : cur.attributes.images.data.attributes.url}`,
+            images: cur.attributes.images.data === null ? [] : cur.attributes.images.data.reduce((a, c) => [...a, `${StrapiBaseURL}${c.attributes.url}`], []),
             ingredients: cur.attributes.ingredients,
             instructions: cur.attributes.instructions
         }], []));
     }
+    const handleVieo = useCallback(() => {
+        if (videoState.played === 1 && !videoState.playing) {
+            videoPlayer.current.seekTo(0);
+            setVideoState({...videoState, played: 0, playing: true});
+        }
+        setVideoState({...videoState, playing: !videoState.playing});
+    }, [videoState]);
 
     if (props.food !== undefined) {
         return (
@@ -152,39 +168,39 @@ const FoodDetail = memo(props => {
                             component={'div'}
                             sx={styles.detailImgGroup}
                         >
-                            <Box
-                                component={'img'}
-                                sx={[styles.detailImg, {height: props.food.thumbnail === '' ? pixToRem(400) : 'auto'}]}
-                                src={props.food.thumbnail}
+                            <ReactPlayer
+                                ref={videoPlayer}
+                                url={props.food.video}
+                                width={'100%'}
+                                height={pixToRem(500)}
+                                playing={videoState.playing}
+                                muted={videoState.muted}
+                                onEnded={() => setVideoState({...videoState, played: 1, playing: false})}
                             />
-                            <Box
+                            <Button
                                 component={'div'}
                                 sx={styles.playIcon}
+                                onClick={handleVieo}
                             >
-                                <PlayIcon />
-                            </Box>
+                                <PlayIcon/>
+                            </Button>
                         </Box>
                         <Stack sx={styles.detailImgStack} spacing={2} direction={'row'}>
-                            <Box
-                                sx={styles.detailImgItem}
-                                component={'div'}
-                            >
-                            </Box>
-                            <Box
-                                sx={styles.detailImgItem}
-                                component={'div'}
-                            >
-                            </Box>
-                            <Box
-                                sx={styles.detailImgItem}
-                                component={'div'}
-                            >
-                            </Box>
-                            <Box
-                                sx={styles.detailImgItem}
-                                component={'div'}
-                            >
-                            </Box>
+                            {
+                                props.food.images.map((item, index) => (
+                                    <Box
+                                        key={index}
+                                        sx={styles.detailImgItem}
+                                        component={'div'}
+                                    >
+                                        <Box
+                                            component={'img'}
+                                            src={item}
+                                            sx={{width: '100%', height: 'auto', backgroundSize: 'cover'}}
+                                        />
+                                    </Box>
+                                ))
+                            }
                         </Stack>
                         <Stack direction={'column'} spacing={2} sx={{width: '100%'}}>
                             <Box
@@ -245,7 +261,7 @@ const FoodDetail = memo(props => {
                     </Box>
                     <Stack direction={'row'} spacing={3} sx={{width: '100%', marginTop: pixToRem(30)}}>
                         {
-                            recommendedFoods.map((item, index) => (
+                            recommendedFoods.slice(0, 3).map((item, index) => (
                                 <Box
                                     key={index}
                                     component={'div'}
@@ -392,12 +408,13 @@ const styles = {
     },
     detailImgStack: {
         width: '100%',
-        marginTop: pixToRem(15)
+        marginTop: pixToRem(15),
+        // overflowX: 'auto',
     },
     detailImgItem: {
-        flex: 1,
+        display: 'inline-flex',
+        width: '24%',
         backgroundColor: '#D9D9D9',
-        height: pixToRem(84)
     },
     instructionHeader: {
         padding: pixToRem(10),

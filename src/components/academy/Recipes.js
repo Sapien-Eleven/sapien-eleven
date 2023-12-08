@@ -236,7 +236,13 @@ const styles = {
         width: '31%',
         ':hover': {
             cursor: 'pointer'
-        }
+        },
+    },
+    imgBack: {
+        position: 'absolute',
+        width: '100%',
+        height: '100%',
+        background: 'linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.9) 100%)'
     }
 }
 
@@ -283,7 +289,7 @@ const SubContent = memo(props => {
             cookTime: cur.attributes.cookTime,
             prepareTime: cur.attributes.prepareTime,
             video: `${StrapiBaseURL}${cur.attributes.video.data === null ? '' : cur.attributes.video.data.attributes.url}`,
-            images: `${StrapiBaseURL}${cur.attributes.images.data === null ? '' : cur.attributes.images.data.attributes.url}`,
+            images: cur.attributes.images.data === null ? [] : cur.attributes.images.data.reduce((a, c) => [...a, `${StrapiBaseURL}${c.attributes.url}`], []),
             ingredients: cur.attributes.ingredients,
             instructions: cur.attributes.instructions
         }], []));
@@ -325,7 +331,7 @@ const SubContent = memo(props => {
                             <Box
                                 key={index}
                                 component={'div'}
-                                sx={[styles.imgItem, {height: item.thumbnail === '' ? pixToRem(240) : 'auto', backgroundColor: colors.bgBlackColor}]}
+                                sx={[styles.imgItem, {height: item.thumbnail === '' ? pixToRem(240) : 'auto'}]}
                                 onClick={() => props.setPage(item)}
                             >
                                 {
@@ -336,7 +342,12 @@ const SubContent = memo(props => {
                                             src={item.thumbnail}
                                         />
                                 }
-                                <Box component={'span'} sx={styles.imgTitle}>{item.title}</Box>
+                                <Box
+                                    component={'div'}
+                                    sx={styles.imgBack}
+                                >
+                                    <Box component={'span'} sx={styles.imgTitle}>{item.title}</Box>
+                                </Box>
                             </Box>
                         ))
                     }

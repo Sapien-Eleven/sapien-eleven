@@ -125,6 +125,7 @@ const styles = {
         marginBottom: '15px',
     },
     comment: {
+        width: '75%',
         fontFamily: 'Roboto',
         fontSize: '18px',
         fontWeight: 400,

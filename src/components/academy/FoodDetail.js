@@ -171,19 +171,20 @@ const FoodDetail = memo(props => {
                             <ReactPlayer
                                 ref={videoPlayer}
                                 url={props.food.video}
+                                controls={true}
                                 width={'100%'}
                                 height={pixToRem(500)}
-                                playing={videoState.playing}
-                                muted={videoState.muted}
+                                playing={true}
+                                muted={false}
                                 onEnded={() => setVideoState({...videoState, played: 1, playing: false})}
                             />
-                            <Button
-                                component={'div'}
-                                sx={styles.playIcon}
-                                onClick={handleVieo}
-                            >
-                                <PlayIcon/>
-                            </Button>
+                            {/*<Button*/}
+                            {/*    component={'div'}*/}
+                            {/*    sx={styles.playIcon}*/}
+                            {/*    onClick={handleVieo}*/}
+                            {/*>*/}
+                            {/*    <PlayIcon/>*/}
+                            {/*</Button>*/}
                         </Box>
                         <Stack sx={styles.detailImgStack} spacing={2} direction={'row'}>
                             {

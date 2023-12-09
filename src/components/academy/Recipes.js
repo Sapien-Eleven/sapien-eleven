@@ -277,7 +277,10 @@ const SubContent = memo(props => {
                 'Authorization': `bearer ${StrapiToken}`
             },
             params: {
-                'populate': '*'
+                'populate': '*',
+                'pagination[start]': 0,
+                'pagination[limit]': 100,
+                'pagination[withCount]': true
             }
         })).data;
 

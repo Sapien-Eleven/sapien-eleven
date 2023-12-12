@@ -294,7 +294,10 @@ const SubContent = memo(props => {
             video: `${StrapiBaseURL}${cur.attributes.video.data === null ? '' : cur.attributes.video.data.attributes.url}`,
             images: cur.attributes.images.data === null ? [] : cur.attributes.images.data.reduce((a, c) => [...a, `${StrapiBaseURL}${c.attributes.url}`], []),
             ingredients: cur.attributes.ingredients,
-            instructions: cur.attributes.instructions
+            instructions: cur.attributes.instructions,
+            dairyFree: cur.attributes.dairyFree,
+            glutenFree: cur.attributes.glutenFree,
+            vegan: cur.attributes.vegan
         }], []));
     }
     if (props.recipe !== undefined) {

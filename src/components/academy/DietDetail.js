@@ -1,6 +1,5 @@
 import {memo} from "react";
 import {Box, Breadcrumbs, Link, Stack, Typography} from "@mui/material";
-import MeditarraneanWide from "../../assets/images/academy/meditarranean_wide.png";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import {colors, fonts, pixToRem} from "../../const/uivar";
 import ManualBookGrey from "../../assets/images/academy/ManualBookGrey";

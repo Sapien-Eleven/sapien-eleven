@@ -2,7 +2,6 @@ import {memo, useCallback, useEffect, useState} from "react";
 import {Box, Breadcrumbs, Button, Link, Stack, Typography} from "@mui/material";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import {colors, fonts, pixToRem} from "../../const/uivar";
-import ColorsWide from '../../assets/images/academy/colors_wide.png'
 import {ArrowDropDown, ArrowRight} from "@mui/icons-material";
 import {useCollapse} from "react-collapsed";
 import axios from "axios";
@@ -185,7 +184,6 @@ const styles = {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        backgroundImage: `url(${ColorsWide})`,
         backgroundRepeat: 'no-repeat',
         backgroundSize: 'cover',
     },

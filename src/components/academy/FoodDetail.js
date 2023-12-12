@@ -5,13 +5,15 @@ import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import Portion from "../../assets/images/academy/portion";
 import Meal from "../../assets/images/academy/meal";
 import Cooking from "../../assets/images/academy/cooking";
-import PlayIcon from "../../assets/images/academy/PlayIcon";
 import ManualBook from "../../assets/images/academy/ManualBook";
 import Ingredient from "../../assets/images/academy/Ingredient";
 import axios from "axios";
 import {StrapiBaseURL, StrapiToken, StrapiURL} from "../../const/consts";
 import ReactMarkdown from "react-markdown";
 import ReactPlayer from "react-player";
+import DairyFreeImg from '../../assets/images/academy/dairy.jpg'
+import GlutenFreeImg from '../../assets/images/academy/gluten.jpg'
+import VeganImg from '../../assets/images/academy/vegan.jpg'
 
 const FoodDetail = memo(props => {
     const [recommendedFoods, setRecommendedFoods] = useState([]);
@@ -94,10 +96,47 @@ const FoodDetail = memo(props => {
                     >
                         <Breadcrumb recipe={props.recipe} food={props.food} goToMain={props.goToMain} goToSub={props.goToSub} />
                         <Box
-                            component={'span'}
-                            sx={styles.blackTitle}
+                            component={'div'}
+                            sx={styles.titlePanel}
                         >
-                            {props.food.title}
+                            <Box
+                                component={'span'}
+                                sx={styles.blackTitle}
+                            >
+                                {props.food.title}
+                            </Box>
+                            <Stack
+                                direction={'row'}
+                                justifyContent={'space-around'}
+                                spacing={1}
+                                useFlexGap
+                                flexWrap={'wrap'}
+                            >
+                                {
+                                    props.food.dairyFree &&
+                                    <Box
+                                        component={'img'}
+                                        src={DairyFreeImg}
+                                        sx={styles.statusImg}
+                                    />
+                                }
+                                {
+                                    props.food.glutenFree &&
+                                    <Box
+                                        component={'img'}
+                                        src={GlutenFreeImg}
+                                        sx={styles.statusImg}
+                                    />
+                                }
+                                {
+                                    props.food.vegan &&
+                                    <Box
+                                        component={'img'}
+                                        src={VeganImg}
+                                        sx={styles.statusImg}
+                                    />
+                                }
+                            </Stack>
                         </Box>
                         <Stack sx={styles.explainStack} direction={'row'} spacing={1}>
                             <Box
@@ -178,13 +217,6 @@ const FoodDetail = memo(props => {
                                 muted={false}
                                 onEnded={() => setVideoState({...videoState, played: 1, playing: false})}
                             />
-                            {/*<Button*/}
-                            {/*    component={'div'}*/}
-                            {/*    sx={styles.playIcon}*/}
-                            {/*    onClick={handleVieo}*/}
-                            {/*>*/}
-                            {/*    <PlayIcon/>*/}
-                            {/*</Button>*/}
                         </Box>
                         <Stack sx={styles.detailImgStack} spacing={2} direction={'row'}>
                             {
@@ -307,8 +339,14 @@ const styles = {
         color: '#CA3C3D',
         lineHeight: pixToRem(45),
     },
+    titlePanel: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between'
+    },
     blackTitle: {
-        width: '90%',
+        width: '70%',
         fontFamily: fonts.roboto,
         fontSize: pixToRem(40),
         fontWeight: 700,
@@ -317,6 +355,10 @@ const styles = {
         color: colors.black,
         marginTop: pixToRem(5),
         marginBottom: pixToRem(15),
+    },
+    statusImg: {
+        width: pixToRem(40),
+        height: pixToRem(40)
     },
     comment: {
         fontFamily: fonts.roboto,

@@ -27,6 +27,7 @@ const FoodDetail = memo(props => {
     });
     const videoPlayer = useRef(null);
     useEffect(() => {
+        window.scrollTo(0,0);
         fetchRecommendFoods().then();
     }, []);
     const fetchRecommendFoods = async () => {

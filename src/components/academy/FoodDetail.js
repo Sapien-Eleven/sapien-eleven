@@ -1,4 +1,4 @@
-import {Box, Breadcrumbs, Button, Link, Stack, Typography} from "@mui/material";
+import {Box, Breadcrumbs, Link, Stack, Typography} from "@mui/material";
 import {memo, useCallback, useEffect, useRef, useState} from "react";
 import {colors, fonts, pixToRem} from "../../const/uivar";
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
@@ -73,13 +73,6 @@ const FoodDetail = memo(props => {
             instructions: cur.attributes.instructions
         }], []));
     }
-    const handleVieo = useCallback(() => {
-        if (videoState.played === 1 && !videoState.playing) {
-            videoPlayer.current.seekTo(0);
-            setVideoState({...videoState, played: 0, playing: true});
-        }
-        setVideoState({...videoState, playing: !videoState.playing});
-    }, [videoState]);
 
     if (props.food !== undefined) {
         return (
@@ -341,6 +334,7 @@ const styles = {
         lineHeight: pixToRem(45),
     },
     titlePanel: {
+        width: '100%',
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'center',

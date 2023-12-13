@@ -1,5 +1,5 @@
 import {Box, Button, TextField} from "@mui/material";
-import {memo, useState} from "react";
+import {memo, useEffect, useState} from "react";
 import StepBg from '../../assets/images/contact/step_bg.png'
 import FinalBg from '../../assets/images/contact/final_bg.png'
 import {colors, fonts, pixToRem} from "../../const/uivar";
@@ -8,6 +8,8 @@ import "react-circular-progressbar/dist/styles.css";
 import validator from 'validator'
 import {toast, ToastContainer} from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
+import emailjs from '@emailjs/browser'
+import {EmailJSPublicKey, EmailJSServiceID, EmailJSTemplateID} from "../../const/consts";
 
 const Main = memo(props => {
     const [step, setStep] = useState(0);
@@ -18,13 +20,17 @@ const Main = memo(props => {
     const [qc, setQC] = useState('')
     const [stepForwardBtnDisabled, setStepForwardBtnDisabled] = useState(true)
 
+    useEffect(() => {
+        emailjs.init(EmailJSPublicKey)
+    }, [])
+
     const stepBack = () => {
         if (step > 0) {
             setStep(step - 1);
             setStepForwardBtnDisabled(false)
         }
     }
-    const stepForward = () => {
+    const stepForward = async () => {
         if (step === 0) {
            if (firstName === '' || lastName === '') return;
         }
@@ -50,6 +56,15 @@ const Main = memo(props => {
             else if (step === 1 && phoneNumber !== '') setStepForwardBtnDisabled(false)
             else if (step === 2 && qc !== '') setStepForwardBtnDisabled(false)
             else setStepForwardBtnDisabled(true)
+        }
+        if (step === 3) {
+            await emailjs.send(EmailJSServiceID, EmailJSTemplateID, {
+                first_name: firstName,
+                last_name: lastName,
+                phone_number: phoneNumber,
+                email: email,
+                qc: qc
+            });
         }
     }
 

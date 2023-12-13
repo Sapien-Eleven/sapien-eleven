@@ -4,9 +4,9 @@ import {colors, fonts, pixToRem} from "../../const/uivar";
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import Portion from "../../assets/images/academy/portion";
 import Meal from "../../assets/images/academy/meal";
-import Cooking from "../../assets/images/academy/cooking";
+import Cooking from "../../assets/images/academy/cooking.png";
 import ManualBook from "../../assets/images/academy/ManualBook";
-import Ingredient from "../../assets/images/academy/Ingredient";
+import Ingredient from "../../assets/images/academy/ingredient.png";
 import axios from "axios";
 import {StrapiBaseURL, StrapiToken, StrapiURL} from "../../const/consts";
 import ReactMarkdown from "react-markdown";
@@ -30,6 +30,14 @@ const FoodDetail = memo(props => {
         window.scrollTo(0,0);
         fetchRecommendFoods().then();
     }, []);
+    useEffect(() => {
+        window.addEventListener("popstate", handleBackEvent);
+        return () => window.removeEventListener("popstate", handleBackEvent);
+    });
+    const handleBackEvent = () => {
+        alert('back');
+        props.goToSub();
+    }
     const fetchRecommendFoods = async () => {
         let collection = '';
         switch (props.recipe.title1.toLowerCase()) {
@@ -102,7 +110,7 @@ const FoodDetail = memo(props => {
                             <Stack
                                 direction={'row'}
                                 justifyContent={'space-around'}
-                                spacing={1}
+                                spacing={2}
                                 useFlexGap
                                 flexWrap={'wrap'}
                             >
@@ -179,7 +187,11 @@ const FoodDetail = memo(props => {
                                 sx={styles.explainItem}
                                 component={'div'}
                             >
-                                <Cooking />
+                                <Box
+                                    component={'img'}
+                                    sx={{width: 28, height: 28}}
+                                    src={Cooking}
+                                />
                                 <Box
                                     component={'div'}
                                     sx={styles.explainGroup}
@@ -256,7 +268,11 @@ const FoodDetail = memo(props => {
                                 component={'div'}
                                 sx={styles.ingredientHeader}
                             >
-                                <Ingredient />
+                                <Box
+                                    component={'img'}
+                                    sx={{width: 44, height: 44}}
+                                    src={Ingredient}
+                                />
                                 <Box
                                     component={'span'}
                                     sx={styles.ingredientTitle}
@@ -352,8 +368,8 @@ const styles = {
         marginBottom: pixToRem(15),
     },
     statusImg: {
-        width: pixToRem(40),
-        height: pixToRem(40)
+        width: pixToRem(55),
+        height: pixToRem(55)
     },
     comment: {
         fontFamily: fonts.roboto,

@@ -26,18 +26,12 @@ const FoodDetail = memo(props => {
         Buffer : true
     });
     const videoPlayer = useRef(null);
+
     useEffect(() => {
         window.scrollTo(0,0);
         fetchRecommendFoods().then();
     }, []);
-    useEffect(() => {
-        window.addEventListener("popstate", handleBackEvent);
-        return () => window.removeEventListener("popstate", handleBackEvent);
-    });
-    const handleBackEvent = () => {
-        alert('back');
-        props.goToSub();
-    }
+
     const fetchRecommendFoods = async () => {
         let collection = '';
         switch (props.recipe.title1.toLowerCase()) {
@@ -109,8 +103,7 @@ const FoodDetail = memo(props => {
                             </Box>
                             <Stack
                                 direction={'row'}
-                                justifyContent={'space-around'}
-                                spacing={2}
+                                spacing={1}
                                 useFlexGap
                                 flexWrap={'wrap'}
                             >
@@ -368,8 +361,8 @@ const styles = {
         marginBottom: pixToRem(15),
     },
     statusImg: {
-        width: pixToRem(55),
-        height: pixToRem(55)
+        width: pixToRem(40),
+        height: pixToRem(40)
     },
     comment: {
         fontFamily: fonts.roboto,
@@ -412,7 +405,10 @@ const styles = {
         fontSize: pixToRem(14),
         fontWeight: '700',
         color: colors.red,
-        textTransform: 'capitalize'
+        textTransform: 'capitalize',
+        ':hover': {
+            cursor: 'pointer'
+        },
     },
     explainStack: {
         width: '100%'

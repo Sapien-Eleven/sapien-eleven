@@ -1,9 +1,10 @@
-import {Box, Stack} from "@mui/material";
+import {Box, Breadcrumbs, Link, Stack, Typography} from "@mui/material";
 import {memo, useCallback, useEffect, useState} from "react";
 import {colors, fonts, pixToRem} from "../../const/uivar";
 import FoodDetail from "./FoodDetail";
 import axios from "axios";
 import {StrapiBaseURL, StrapiToken, StrapiURL} from "../../const/consts";
+import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 
 const Recipes = memo(props => {
     const [header, setHeader] = useState({});
@@ -63,7 +64,7 @@ const Recipes = memo(props => {
         case 'main':
             return <Main setPage={setSubContent} header={header} recipes={recipes}/>
         case 'sub':
-            return <SubContent setPage={setSubDetail} recipe={recipe}/>
+            return <SubContent goToMain={() => setType('main')} setPage={setSubDetail} recipe={recipe}/>
         case 'detail':
             return <FoodDetail food={food} recipe={recipe} goToMain={() => setType('main')}
                                goToSub={() => setType('sub')} setPage={setSubDetail}/>
@@ -243,7 +244,19 @@ const styles = {
         width: '100%',
         height: '100%',
         background: 'linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.9) 100%)'
-    }
+    },
+    breadcrumb: {
+        fontFamily: fonts.roboto,
+        fontSize: pixToRem(25),
+        fontWeight: 700,
+        fontStyle: 'normal',
+        color: colors.red,
+        lineHeight: pixToRem(45),
+        textTransform: 'capitalize',
+        ':hover': {
+            cursor: 'pointer'
+        },
+    },
 }
 
 const SubContent = memo(props => {
@@ -306,12 +319,7 @@ const SubContent = memo(props => {
                 component={'div'}
                 sx={styles.panel}
             >
-                <Box
-                    component={'span'}
-                    sx={styles.redTitle}
-                >
-                    {props.recipe.title1}
-                </Box>
+                <Breadcrumb title={props.recipe.title1} goToMain={props.goToMain}/>
                 <Box
                     component={'span'}
                     sx={styles.blackTitle}
@@ -362,4 +370,25 @@ const SubContent = memo(props => {
             </Box>
         )
     } else return <Box/>
+})
+
+const Breadcrumb = memo(props => {
+    return (
+        <Breadcrumbs
+            separator={<NavigateNextIcon sx={{color: colors.red}} fontSize="small" />}
+            aria-label="breadcrumb"
+        >
+            <Link
+                underline="hover"
+                key="1"
+                sx={styles.breadcrumb}
+                onClick={props.goToMain}
+            >
+                Recipes
+            </Link>,
+            <Typography key="3" color={colors.red} sx={styles.breadcrumb}>
+                {props.title}
+            </Typography>,
+        </Breadcrumbs>
+    )
 })

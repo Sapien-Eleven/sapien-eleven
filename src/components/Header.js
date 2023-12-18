@@ -79,9 +79,8 @@ const Header = memo((props) => {
 					>
 						<Box
 							component={'img'}
-							sx={styles.logo}
-							alt='Sapien Eleven'
 							src={SapienLogo}
+							sx={styles.logo}
 						/>
 					</Button>
 					<Stack
@@ -151,7 +150,7 @@ const styles = {
 		alignItems: 'center'
 	},
 	logoBtn: {
-		padding: '0px 0px'
+		padding: '0px 0px',
 	},
 	logo: {
 		width: pixToRem(201),

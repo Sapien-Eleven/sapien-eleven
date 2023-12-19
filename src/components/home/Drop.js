@@ -1,7 +1,7 @@
 import { Box, Button, Container } from "@mui/material";
 import { colors, fonts, pixToRem } from "../../const/uivar";
 import Running from '../../assets/images/running.png'
-import SapienMark from '../../assets/mark.png'
+import SapienMark from '../../assets/sapien.svg'
 import {connect} from "react-redux";
 import {memo, useEffect, useState} from "react";
 import {Twitter} from "@mui/icons-material";

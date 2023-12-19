@@ -2,7 +2,7 @@ import {Box, Button, Container} from "@mui/material";
 import {memo, useEffect, useState} from "react";
 import {colors, fonts, pixToRem} from "../../const/uivar";
 import NextHealthBg from '../../assets/images/about/next_health_bg.png';
-import SapienMark from '../../assets/mark.png'
+import SapienMark from '../../assets/sapien.svg'
 import axios from "axios";
 import {StrapiToken, StrapiURL} from "../../const/consts";
 

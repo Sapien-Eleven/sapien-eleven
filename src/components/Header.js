@@ -1,7 +1,7 @@
 import {AppBar, Box, Button, Container, Toolbar, styled, Stack} from '@mui/material'
 import '../styles/common.css'
 import '@fontsource/roboto/700.css';
-import SapienLogo from '../assets/logo.png'
+import SapienLogo from '../assets/logo.svg'
 import MetaMaskLogo from '../assets/metamask_logo.png'
 import {pages, wallets} from '../const/consts'
 import WalletModal from "./WalletModal";
@@ -80,7 +80,7 @@ const Header = memo((props) => {
 						<Box
 							component={'img'}
 							src={SapienLogo}
-							sx={styles.logo}
+							// sx={styles.logo}
 						/>
 					</Button>
 					<Stack

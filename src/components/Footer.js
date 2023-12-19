@@ -1,6 +1,6 @@
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/700.css';
-import SapienLogo from '../assets/logo.jsx'
+import SapienLogo from '../assets/logo.svg'
 import {StrapiToken, StrapiURL} from '../const/consts'
 import {Box, Button, Container, Grid, Stack} from '@mui/material'
 import { fonts, pixToRem } from '../const/uivar';
@@ -35,7 +35,11 @@ export function Footer() {
             <Container maxWidth={false}>
                 <Grid container direction="row" alignItems="center" justifyContent={'space-between'}>
                     <Grid item md={2.5}>
-                        <SapienLogo />
+                        <Box
+                            component={'img'}
+                            src={SapienLogo}
+                            sx={styles.logo}
+                        />
                     </Grid>
                     <Stack
                         direction={'row'}

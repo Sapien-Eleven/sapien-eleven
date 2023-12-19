@@ -2,7 +2,7 @@ import {memo, useEffect, useState} from "react";
 import {Box, Button, Container} from "@mui/material";
 import {colors, fonts, pixToRem} from "../../const/uivar";
 import Running from "../../assets/images/running.png";
-import Mark from '../../assets/mark.png'
+import Mark from '../../assets/sapien.svg'
 import axios from "axios";
 import {StrapiToken, StrapiURL} from "../../const/consts";
 

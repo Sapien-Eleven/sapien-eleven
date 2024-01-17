@@ -1,0 +1,68 @@
+# /etc/hosts.allow: list of hosts that are allowed to access the system.
+#                   See the manual pages hosts_access(5) and hosts_options(5).
+#
+# Example:    ALL: LOCAL @some_netgroup
+#             ALL: .foobar.edu EXCEPT terminalserver.foobar.edu
+#
+# If you're going to protect the portmapper use the name "rpcbind" for the
+# daemon name. See rpcbind(8) and rpc.mountd(8) for further information.
+#
+
+# Allow All
+ALL : 204.132.86.192/255.255.255.240 : allow
+
+# Beeline IPs
+sshd : 204.132.86.194 : allow
+sshd : 204.132.86.196 : allow
+sshd : 204.132.86.199 : allow
+# MHDC IPs
+sshd : 173.29.224.4 : allow
+# IB IPs
+sshd : 199.115.205.171 : allow
+sshd : 199.115.205.230 : allow
+sshd : ALL : deny
+
+#
+# Deny to throttle attacks
+# Deny for bad behaviour...
+#
+#Russia
+#
+ALL : 212.83.0.0/255.255.224.0 : deny
+ALL : 45.0.0.0.0/255.0.0.0 : deny
+ALL : 195.0.0.0/255.0.0.0 : deny
+ALL : 5.136.0.0/13 : deny
+ALL : 95.24.0.0/13 : deny
+ALL : 176.208.0.0/13 : deny
+ALL : 178.64.0.0/13 : deny
+ALL : 37.9.64.0/18 : deny
+ALL : 175.45.176.0/22 : deny
+#
+# North Korea
+#
+ALL : 175.45.176.0/255.255.252.0 : deny
+#
+# RIPE Nasty Networks Including Russia
+#
+ALL : 37.0.0.0/255.0.0.0 : deny
+ALL : 46.0.0.0/255.0.0.0 : deny
+ALL : 177.0.0.0/255.0.0.0 : deny
+ALL : 179.0.0.0/255.0.0.0 : deny
+ALL : 181.0.0.0/255.0.0.0 : deny
+ALL : 186.0.0.0/255.0.0.0 : deny
+ALL : 187.0.0.0/255.0.0.0 : deny
+ALL : 189.0.0.0/255.0.0.0 : deny
+ALL : 190.0.0.0/255.0.0.0 : deny
+ALL : 191.0.0.0/255.0.0.0 : deny
+ALL : 193.0.0.0/255.0.0.0 : deny
+ALL : 200.0.0.0/255.0.0.0 : deny
+ALL : 201.0.0.0/255.0.0.0 : deny
+#
+# Latvia Bulgaria Estonia Ukraine
+#
+ALL : 141.0.0.0/255.0.0.0 : deny
+ALL : 87.0.0.0/255.0.0.0 : deny
+ALL : 212.0.0.0/255.0.0.0 : deny
+ALL : 5.0.0.0/255.0.0.0 : deny
+ALL : 185.0.0.0/255.0.0.0 : deny
+ALL : 197.0.0.0/255.0.0.0 : deny

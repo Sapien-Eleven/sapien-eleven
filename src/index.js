@@ -11,6 +11,7 @@ import {Provider} from 'react-redux'
 import {createStore} from "redux";
 import reducer from './store/reducers/index'
 import { Buffer } from 'buffer';
+import { SnackbarProvider } from 'notistack';
 
 window.Buffer = window.Buffer || Buffer;
 
@@ -33,7 +34,12 @@ root.render(
         <ThemeProvider theme={theme}>
             <Provider store={store}>
                 <Web3ReactProvider getLibrary={getLibrary}>
-                    <App/>
+                    <SnackbarProvider
+                        anchorOrigin={{horizontal: 'center', vertical: 'top'}}
+                        autoHideDuration={3500}
+                    >
+                        <App/>
+                    </SnackbarProvider>
                 </Web3ReactProvider>
             </Provider>
         </ThemeProvider>

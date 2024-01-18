@@ -7,6 +7,7 @@ import Triangles from '../assets/images/triangles.svg'
 import SapienMark from '../assets/sapien.svg';
 import {SERVER_URL} from "../const/consts";
 import axios from "axios";
+import {useSnackbar} from 'notistack';
 
 const Fade = React.forwardRef(function Fade(props, ref) {
     const {
@@ -53,6 +54,7 @@ const SigninModal = memo(props => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [enableBtn, setEnableBtn] = useState(false);
+    const { enqueueSnackbar } = useSnackbar();
     const handleInputChange = (event, input) => {
         if (input === 'email') setEmail(event.target.value);
         else setPassword(event.target.value);
@@ -63,8 +65,13 @@ const SigninModal = memo(props => {
     }, [email, password]);
     const onSend = async () => {
         if (!enableBtn) return;
-        const data = await axios.post(`${SERVER_URL}login`, {email, password});
-        console.log(data);
+        const data = (await axios.post(`${SERVER_URL}login`, {email, password})).data;
+        if (data.status === 'success') {
+            props.onClose();
+            enqueueSnackbar('Successfully signed in', {variant: 'success'});
+        } else {
+            enqueueSnackbar(data.comment, {variant: 'error'});
+        }
     }
 
     return(

@@ -11,6 +11,7 @@ import {setConnectedWallet, setWalletAddress} from "../store/actions/auth";
 import {connect} from "react-redux";
 import {useWeb3React} from "@web3-react/core";
 import {useNavigate} from "react-router-dom";
+import SigninModal from "./SigninModal";
 
 const NavButton = styled(Button)((props) => ({
 	height: 81,
@@ -49,6 +50,7 @@ const Header = memo((props) => {
 	const {account, active, deactivate} = useWeb3React();
 	const [walletModalVisible, setWalletModalVisible] = useState(false);
 	const closeWalletModal = useCallback(() => setWalletModalVisible(false), [])
+	const [showSigninModal, setShowSigninModal] = useState(false);
 	const navigate = useNavigate()
 	useEffect(() => {
 		if (active) {
@@ -121,6 +123,11 @@ const Header = memo((props) => {
 			<WalletModal
 				visible={walletModalVisible}
 				closeModal={closeWalletModal}
+				showSigninModal={() => setShowSigninModal(true)}
+			/>
+			<SigninModal
+				visible={showSigninModal}
+				onClose={() => setShowSigninModal(false)}
 			/>
 		</AppBar>
 	)

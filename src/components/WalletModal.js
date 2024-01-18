@@ -14,6 +14,7 @@ import {QRCode} from "react-qrcode-logo";
 import {connect} from "react-redux";
 import {setConnectedWallet, setWalletAddress} from "../store/actions/auth";
 import {injected} from "../const/connectors";
+import EmailIcon from '../assets/images/email.png';
 
 const Fade = forwardRef((props, ref) => {
     const {
@@ -58,7 +59,7 @@ Fade.propTypes = {
 const WalletModal = memo((props) => {
     const {connector, account, activate, active} = useWeb3React();
     const [recentWallets] = useState(['metamask']);
-    const [popularWallets] = useState(['rainbow', 'coinbase', 'walletconnect', 'phantom']);
+    const [popularWallets] = useState(['metamask', 'rainbow', 'coinbase', 'walletconnect', 'phantom']);
     const [actionStep, setActionStep] = useState(-1);
     // step0: AboutWallet
     // step1: Scan with WalletName
@@ -155,6 +156,10 @@ const WalletModal = memo((props) => {
         setActionStep(-1);
         setCanBack(false);
     };
+    const openSigninModal = () => {
+        onCloseModal();
+        props.showSigninModal();
+    }
     return (
         <Modal
             aria-labelledby={"spring-modal-title"}
@@ -185,32 +190,40 @@ const WalletModal = memo((props) => {
                         >
                             Connect a Wallet
                         </Box>
-                        <Box
-                            component={'div'}
-                            sx={WalletModalStyles.recentWallet}
-                        >
-                            <Box component={'div'} sx={WalletModalStyles.category}>Recent</Box>
-                            {
-                                recentWallets.map((wallet, index) => {
-                                    return (
-                                        <Button
-                                            key={index}
-                                            startIcon={<img src={wallets[wallet].icon} style={WalletModalStyles.walletIcon} alt='metamask' />}
-                                            sx={WalletModalStyles.walletItem}
-                                            onClick={() => onSelectWallet(wallet)}
-                                        >{wallets[wallet].name}</Button>
-                                    )
-                                })
-                            }
-                        </Box>
+                        {/*<Box*/}
+                        {/*    component={'div'}*/}
+                        {/*    sx={WalletModalStyles.recentWallet}*/}
+                        {/*>*/}
+                        {/*    <Box component={'div'} sx={WalletModalStyles.category}>Recent</Box>*/}
+                        {/*    {*/}
+                        {/*        recentWallets.map((wallet, index) => {*/}
+                        {/*            return (*/}
+                        {/*                <Button*/}
+                        {/*                    key={index}*/}
+                        {/*                    startIcon={<img src={wallets[wallet].icon} style={WalletModalStyles.walletIcon} alt='metamask' />}*/}
+                        {/*                    sx={WalletModalStyles.walletItem}*/}
+                        {/*                    onClick={() => onSelectWallet(wallet)}*/}
+                        {/*                >{wallets[wallet].name}</Button>*/}
+                        {/*            )*/}
+                        {/*        })*/}
+                        {/*    }*/}
+                        {/*</Box>*/}
                         <Box
                             component={'div'}
                             sx={WalletModalStyles.popularWallet}
                         >
-                            <Box
-                                component={'div'}
-                                sx={WalletModalStyles.category}
-                            >Popular</Box>
+                            {/*<Box*/}
+                            {/*    component={'div'}*/}
+                            {/*    sx={WalletModalStyles.category}*/}
+                            {/*>Popular</Box>*/}
+                            <Button
+                                key={-1}
+                                startIcon={<img src={EmailIcon} style={WalletModalStyles.walletIcon} alt='email' />}
+                                sx={WalletModalStyles.walletItem}
+                                onClick={openSigninModal}
+                            >
+                                Email / Username
+                            </Button>
                             {
                                 popularWallets.map((wallet, index) => {
                                     return (

@@ -5,11 +5,13 @@ import Membership from "./Membership";
 import Main from "./Main";
 import {connect} from "react-redux";
 import WalletModal from "../WalletModal";
+import SigninModal from "../SigninModal";
 
 const Home = memo(props => {
     const [isEntered, setEntered] = useState(false);
     const [walletModalVisible, setWalletModalVisible] = useState(false);
     const closeWalletModal = useCallback(() => setWalletModalVisible(false), [])
+    const [showSigninModal, setShowSigninModal] = useState(false);
     const onEnter = useCallback(() => {
         if (props.connectedWallet !== '') {
             setEntered(true);
@@ -26,6 +28,11 @@ const Home = memo(props => {
             <WalletModal
                 visible={walletModalVisible}
                 closeModal={closeWalletModal}
+                showSigninModal={() => setShowSigninModal(true)}
+            />
+            <SigninModal
+                visible={showSigninModal}
+                onClose={() => setShowSigninModal(false)}
             />
         </div>
     )

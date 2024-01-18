@@ -8,6 +8,7 @@ import {connect} from "react-redux";
 import {StrapiBaseURL, StrapiToken, StrapiURL, wallets} from "../../const/consts";
 import {pixToRem} from "../../const/uivar";
 import axios from "axios";
+import SigninModal from "../SigninModal";
 
 const WalletButton = styled(Button)((props) => ({
 	boxSizing: 'border-box',
@@ -33,6 +34,7 @@ const WalletButton = styled(Button)((props) => ({
 
 const IntroPanel = memo((props) => {
     const [walletModalVisible, setWalletModalVisible] = useState(false);
+    const [showSigninModal, setShowSigninModal] = useState(false);
     const [content, setContent] = useState({});
 
     useEffect(() => {
@@ -60,6 +62,7 @@ const IntroPanel = memo((props) => {
         if (props.connectedWallet !== '') return;
         setWalletModalVisible(true);
     }, [props.connectedWallet]);
+
     return (
         <Container
             component={'div'}
@@ -85,6 +88,11 @@ const IntroPanel = memo((props) => {
             <WalletModal
                 visible={walletModalVisible}
                 closeModal={() => setWalletModalVisible(false)}
+                showSigninModal={() => setShowSigninModal(true)}
+            />
+            <SigninModal
+                visible={showSigninModal}
+                onClose={() => setShowSigninModal(false)}
             />
         </Container>
     )

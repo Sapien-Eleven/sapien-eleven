@@ -13,7 +13,7 @@ const Home = memo(props => {
     const closeWalletModal = useCallback(() => setWalletModalVisible(false), [])
     const [showSigninModal, setShowSigninModal] = useState(false);
     const onEnter = useCallback(() => {
-        if (props.connectedWallet !== '') {
+        if (props.connectedWallet !== '' || props.isAuthenticated) {
             setEntered(true);
         } else {
             setWalletModalVisible(true)
@@ -40,6 +40,7 @@ const Home = memo(props => {
 
 export default connect(
     state => ({
-        connectedWallet: state.authReducer.connectedWallet
+        connectedWallet: state.authReducer.connectedWallet,
+        isAuthenticated: state.authReducer.isAuthenticated
     })
 )(Home)

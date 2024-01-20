@@ -1,4 +1,6 @@
 const initialState = {
+    isAuthenticated: false,
+    user: {},
     walletAddress: '',
     walletBalance: '',
     connectedWallet: ''
@@ -15,6 +17,12 @@ const authReducer = (state = initialState, action) => {
             return {
                 ...state,
                 connectedWallet: action.connectedWallet
+            }
+        case 'SIGN_IN':
+            return {
+                ...state,
+                isAuthenticated: true,
+                user: action.user
             }
         default:
             return state;

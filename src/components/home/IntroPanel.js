@@ -84,7 +84,7 @@ const IntroPanel = memo((props) => {
             <WalletButton
                 startIcon={<img src={props.connectedWallet === '' ? MetaMaskLogo : wallets[props.connectedWallet].remoteIcon} style={styles.metamaskLogo} alt='metamask' />}
                 onClick={onOpenWallet}
-            >{props.connectedWallet !== ''? `FULL ACCESS` : `CONNECT WALLET`}</WalletButton>
+            >{(props.connectedWallet !== '' || props.isAuthenticated) ? `FULL ACCESS` : `CONNECT WALLET`}</WalletButton>
             <WalletModal
                 visible={walletModalVisible}
                 closeModal={() => setWalletModalVisible(false)}
@@ -100,7 +100,8 @@ const IntroPanel = memo((props) => {
 
 export default connect(
     state => ({
-        connectedWallet: state.authReducer.connectedWallet
+        connectedWallet: state.authReducer.connectedWallet,
+        isAuthenticated: state.authReducer.isAuthenticated
     })
 )(IntroPanel)
 

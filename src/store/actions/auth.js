@@ -11,3 +11,10 @@ export const setConnectedWallet = (wallet) => {
         connectedWallet: wallet
     }
 }
+
+export const signIn = (user) => {
+    return {
+        type: 'SIGN_IN',
+        user: user
+    }
+}

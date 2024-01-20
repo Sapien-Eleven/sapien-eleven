@@ -116,7 +116,7 @@ const Header = memo((props) => {
 						onClick={connectWallet}
 					>
 						{/*{active? `${account.substring(0, 4)}...${account.substring(account.length - 4)}` : 'CONNECT WALLET'}*/}
-						{props.walletAddress !== '' ? `${props.walletAddress.substring(0, 4)}...${props.walletAddress.substring(props.walletAddress.length - 4)}` : 'CONNECT WALLET'}
+						{(props.walletAddress !== '' || props.isAuthenticated) ? props.walletAddress !== '' ? `${props.walletAddress.substring(0, 4)}...${props.walletAddress.substring(props.walletAddress.length - 4)}` : 'CONNECTED' : 'CONNECT WALLET'}
 					</WalletButton>
 				</Toolbar>
 			</Container>
@@ -135,7 +135,8 @@ const Header = memo((props) => {
 export default connect(
 	state => ({
 		walletAddress: state.authReducer.walletAddress,
-		connectedWallet: state.authReducer.connectedWallet
+		connectedWallet: state.authReducer.connectedWallet,
+		isAuthenticated: state.authReducer.isAuthenticated
 	}),
 	dispatch => ({
 		setWalletAddress: (address) => dispatch(setWalletAddress(address)),

@@ -8,6 +8,8 @@ import SapienMark from '../assets/sapien.svg';
 import {SERVER_URL} from "../const/consts";
 import axios from "axios";
 import {useSnackbar} from 'notistack';
+import {useDispatch} from "react-redux";
+import {signIn} from "../store/actions/auth";
 
 const Fade = React.forwardRef(function Fade(props, ref) {
     const {
@@ -55,6 +57,7 @@ const SigninModal = memo(props => {
     const [password, setPassword] = useState('');
     const [enableBtn, setEnableBtn] = useState(false);
     const { enqueueSnackbar } = useSnackbar();
+    const dispatch = useDispatch();
     const handleInputChange = (event, input) => {
         if (input === 'email') setEmail(event.target.value);
         else setPassword(event.target.value);
@@ -68,6 +71,7 @@ const SigninModal = memo(props => {
         const data = (await axios.post(`${SERVER_URL}login`, {email, password})).data;
         if (data.status === 'success') {
             props.onClose();
+            dispatch(signIn(data.user));
             enqueueSnackbar('Successfully signed in', {variant: 'success'});
         } else {
             enqueueSnackbar(data.comment, {variant: 'error'});

@@ -56,7 +56,7 @@ const IntroPanel = memo(props => {
                 sx={styles.enterButton}
                 onClick={props.onPress}
             >
-                {props.connectedWallet !== '' ? `Enter` : `CONNECT WALLET`}
+                {(props.connectedWallet !== '' || props.isAuthenticated) ? `Enter` : `CONNECT WALLET`}
             </Button>
             <Box
                 component={'img'}
@@ -69,7 +69,8 @@ const IntroPanel = memo(props => {
 
 export default connect(
     state => ({
-        connectedWallet: state.authReducer.connectedWallet
+        connectedWallet: state.authReducer.connectedWallet,
+        isAuthenticated: state.authReducer.isAuthenticated
     })
 )(IntroPanel)
 

@@ -1,7 +1,9 @@
-import {AppBar, Box, Button, Container, Toolbar, styled, Stack} from '@mui/material'
+import {AppBar, Box, Button, Container, Toolbar, styled, Stack, useMediaQuery} from '@mui/material'
+import {useTheme} from '@mui/material/styles'
 import '../styles/common.css'
 import '@fontsource/roboto/700.css';
 import SapienLogo from '../assets/logo.svg'
+import SapienIcon from '../assets/sapien.svg'
 import MetaMaskLogo from '../assets/metamask_logo.png'
 import {pages, wallets} from '../const/consts'
 import WalletModal from "./WalletModal";
@@ -52,6 +54,9 @@ const Header = memo((props) => {
 	const closeWalletModal = useCallback(() => setWalletModalVisible(false), [])
 	const [showSigninModal, setShowSigninModal] = useState(false);
 	const navigate = useNavigate()
+	const theme = useTheme();
+	const isMobile = useMediaQuery(theme.breakpoints.up('xs'))
+
 	useEffect(() => {
 		if (active) {
 			props.setWalletAddress(account)
@@ -63,8 +68,6 @@ const Header = memo((props) => {
 			props.setConnectedWallet('');
 			props.setWalletAddress('');
 		} else {
-			console.log(account);
-			console.log(active)
 			setWalletModalVisible(true);
 		}
 	};
@@ -81,7 +84,7 @@ const Header = memo((props) => {
 					>
 						<Box
 							component={'img'}
-							src={SapienLogo}
+							src={!isMobile ? SapienIcon : SapienLogo}
 							// sx={styles.logo}
 						/>
 					</Button>

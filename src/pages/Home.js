@@ -18,13 +18,13 @@ export default function Home() {
             className="app"
         >
             <Header page={'home'} />
-            {/*<IntroPanel />*/}
-            {/*<IntroSapien />*/}
-            {/*<HumanHealth />*/}
-            {/*<DiseaseReport />*/}
-            {/*<ChronicDisease />*/}
-            {/*<About />*/}
-            {/*<Drop />*/}
+            <IntroPanel />
+            <IntroSapien />
+            <HumanHealth />
+            <DiseaseReport />
+            <ChronicDisease />
+            <About />
+            <Drop />
             {!sm && <Footer/>}
         </div>
     )

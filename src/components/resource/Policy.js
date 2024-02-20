@@ -13,8 +13,9 @@ const Policy = memo(props => {
     const {state} = useLocation();
     const [content, setContent] = useState({});
     useEffect(() => {
+        window.scrollTo(0, 0);
         fetchContent().then();
-    }, [])
+    }, [state.policy])
     const fetchContent = async () => {
         const data = (await axios.get(`${StrapiURL}resources`, {
             headers: {

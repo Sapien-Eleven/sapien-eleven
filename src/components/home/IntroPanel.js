@@ -1,7 +1,7 @@
 import { Box, Button, Container, styled } from "@mui/material";
 import MainBg from '../../assets/images/main_bg.png'
 import '@fontsource/roboto/400.css';
-import MetaMaskLogo from '../../assets/metamask_logo.png'
+import MetaMaskLogo from '../../assets/metamask.svg'
 import WalletModal from "../WalletModal";
 import {memo, useCallback, useEffect, useState} from "react";
 import {connect} from "react-redux";

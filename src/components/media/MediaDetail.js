@@ -1,4 +1,4 @@
-import {Box, Button, Stack} from "@mui/material";
+import {Box, Button, Stack, useMediaQuery, useTheme} from "@mui/material";
 import {memo} from "react";
 import {colors, fonts, pixToRem} from "../../const/uivar";
 import {AccessTime, ChevronLeft, ChevronRight} from "@mui/icons-material";
@@ -18,6 +18,8 @@ import {StrapiBaseURL} from "../../const/consts";
 const MediaDetail = memo(props => {
     const {state} = useLocation();
     const navigate = useNavigate();
+    const theme = useTheme();
+    const sm = useMediaQuery(theme.breakpoints.down('sm'));
     return (
         <div className={'app'}>
             <Header page={'media'}/>
@@ -26,7 +28,7 @@ const MediaDetail = memo(props => {
                 recommendItems={state.recommendItems}
                 goToDetail={(detail, recommendItems) => navigate('/media/detail', {state: {detail, recommendItems}})}
             />
-            <Footer />
+            {!sm && <Footer/>}
         </div>
     )
 })

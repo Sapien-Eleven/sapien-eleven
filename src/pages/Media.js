@@ -9,6 +9,7 @@ import UpdatesBg from '../assets/images/media/updates_bg.png'
 import NewsBg from '../assets/images/media/news_bg.png'
 import PodcastsBg from '../assets/images/media/podcasts_bg.png'
 import {useNavigate} from "react-router-dom";
+import {useMediaQuery, useTheme} from "@mui/material";
 
 const intros = [
     {
@@ -37,6 +38,8 @@ const intros = [
 const Media = memo(props => {
     const [category, setCategory] = useState('blog');
     const navigate = useNavigate();
+    const theme = useTheme();
+    const sm = useMediaQuery(theme.breakpoints.down('sm'));
     return (
         <div className={'app'}>
             <Header page={'media'} />
@@ -46,7 +49,7 @@ const Media = memo(props => {
                 goToDetail={(detail, recommendItems) => navigate('/media/detail', {state: {detail, recommendItems}})}
             />
             <JoinPanel />
-            <Footer />
+            {!sm && <Footer/>}
         </div>
     )
 })

@@ -6,8 +6,11 @@ import Team from "../components/about/Team";
 import Miss from "../components/about/Miss";
 import {Footer} from "../components/Footer";
 import NextHealthApp from "../components/about/NextHealthApp";
+import {useMediaQuery, useTheme} from "@mui/material";
 
 const About = memo(props => {
+    const theme = useTheme();
+    const sm = useMediaQuery(theme.breakpoints.down('sm'));
     return (
         <div className={'app'}>
             <Header page={'about'} />
@@ -16,7 +19,7 @@ const About = memo(props => {
             <NextHealthApp />
             <Team />
             <Miss />
-            <Footer />
+            {!sm && <Footer/>}
         </div>
     )
 })

@@ -202,6 +202,9 @@ const Header = memo((props) => {
 						<Box sx={styles.mobileMenuItem}>
 							<Typography sx={styles.mobileMenuText}>MARKETPLACE</Typography>
 						</Box>
+						<Box sx={styles.mobileMenuItem} onClick={() => navigate('/media')}>
+							<Typography sx={styles.mobileMenuText}>MEDIA</Typography>
+						</Box>
 						<ResourcesMenu closeMenu={handleCloseMobileMenu} />
 						<Box sx={styles.mobileMenuItem} onClick={() => navigate('/contact')}>
 							<Typography sx={styles.mobileMenuText}>CONTACT</Typography>

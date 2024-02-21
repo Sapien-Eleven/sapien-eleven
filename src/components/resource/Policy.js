@@ -1,5 +1,5 @@
 import React, {memo, useEffect, useState} from "react";
-import {Box, Button, Container} from "@mui/material";
+import {Box, Button, Container, useMediaQuery, useTheme} from "@mui/material";
 import {ChevronLeft} from "@mui/icons-material";
 import Header from "../Header";
 import {Footer} from "../Footer";
@@ -12,6 +12,8 @@ import ReactMarkdown from 'react-markdown'
 const Policy = memo(props => {
     const {state} = useLocation();
     const [content, setContent] = useState({});
+    const theme = useTheme();
+    const sm = useMediaQuery(theme.breakpoints.down('sm'));
     useEffect(() => {
         window.scrollTo(0, 0);
         fetchContent().then();
@@ -32,7 +34,7 @@ const Policy = memo(props => {
             <Header page={''}/>
             <ContentHeader updatedAt={content.updatedAt} title={content.title} />
             <Content content={content.content} contentList={content.contentList} />
-            <Footer />
+            {!sm && <Footer/>}
         </div>
     )
 })

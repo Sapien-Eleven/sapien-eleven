@@ -1,11 +1,15 @@
-import {Box, Container} from '@mui/material'
+import {Box, Container, useMediaQuery, useTheme} from '@mui/material'
+import Grid from '@mui/material/Unstable_Grid2';
 import Humanhealth from '../../assets/images/human_health.png'
 import {useEffect, useState} from "react";
 import axios from "axios";
 import {StrapiToken, StrapiURL} from "../../const/consts";
+import {colors, fonts} from "../../const/uivar";
 
 export function HumanHealth() {
     const [content, setContent] = useState({})
+    const theme = useTheme();
+    const md = useMediaQuery(theme.breakpoints.down('md'));
     useEffect(() => {
         fetchContent().then();
     }, []);
@@ -44,104 +48,142 @@ export function HumanHealth() {
                 component={'span'}
                 sx={styles.title}
             >{content.title2}</Box>
-            {content.subcontents !== undefined && <Container
-                component={'div'}
-                maxWidth={false}
-                sx={styles.cardPanel}
-            >
-                <Box
-                    component='div'
-                    sx={styles.card}
+            {content.subcontents !== undefined &&
+                <Grid
+                    container
+                    sx={styles.cardPanel}
+                    spacing={3}
                 >
-                    <Box
-                        component={'span'}
-                        sx={styles.cardTitle}
+                    <Grid
+                        md={4}
+                        xs={12}
                     >
-                        {content.subcontents[0].subtitle}
-                    </Box>
-                    <Box
-                        component={'span'}
-                        sx={styles.comment}
-                    >{content.subcontents[0].subdescription}</Box>
-                </Box>
-                <Box
-                    component='div'
-                    sx={styles.card}
-                >
-                    <Box
-                        component={'span'}
-                        sx={styles.cardTitle}
+                        <Box sx={styles.card}>
+                            <Box
+                                component={'span'}
+                                sx={styles.cardTitle}
+                            >
+                                {content.subcontents[0].subtitle}
+                            </Box>
+                            <Box
+                                component={'span'}
+                                sx={styles.comment}
+                            >{content.subcontents[0].subdescription}</Box>
+                        </Box>
+                    </Grid>
+                    <Grid
+                        md={4}
+                        xs={12}
                     >
-                        {content.subcontents[1].subtitle}
-                    </Box>
-                    <Box
-                        component={'span'}
-                        sx={styles.comment}
-                    >{content.subcontents[1].subdescription}</Box>
-                </Box>
-                <Box
-                    component='div'
-                    sx={styles.card}
-                >
-                    <Box
-                        component={'span'}
-                        sx={styles.cardTitle}
+                        <Box sx={styles.card}>
+                            <Box
+                                component={'span'}
+                                sx={styles.cardTitle}
+                            >
+                                {content.subcontents[1].subtitle}
+                            </Box>
+                            <Box
+                                component={'span'}
+                                sx={styles.comment}
+                            >{content.subcontents[1].subdescription}</Box>
+                        </Box>
+                    </Grid>
+                    <Grid
+                        md={4}
+                        xs={12}
                     >
-                        {content.subcontents[2].subtitle}
-                    </Box>
-                    <Box
-                        component={'span'}
-                        sx={styles.comment}
-                    >{content.subcontents[2].subdescription}</Box>
-                </Box>
-            </Container>}
-            {content.subcontents !== undefined && <Container
-                component={'div'}
-                maxWidth={false}
-                sx={styles.cardPanel2}
-            >
-                <Box
-                    component='div'
-                    sx={styles.card}
+                        <Box sx={styles.card}>
+                            <Box
+                                component={'span'}
+                                sx={styles.cardTitle}
+                            >
+                                {content.subcontents[2].subtitle}
+                            </Box>
+                            <Box
+                                component={'span'}
+                                sx={styles.comment}
+                            >{content.subcontents[2].subdescription}</Box>
+                        </Box>
+                    </Grid>
+                </Grid>
+            }
+            {content.subcontents !== undefined &&
+                <Grid
+                    container
+                    spacing={3}
+                    sx={styles.cardPanel2}
                 >
-                    <Box
-                        component={'span'}
-                        sx={styles.cardTitle}
+                    <Grid
+                        md={4}
+                        xs={12}
                     >
-                        {content.subcontents[3].subtitle}
-                    </Box>
-                    <Box
-                        component={'span'}
-                        sx={styles.comment}
-                    >{content.subcontents[3].subdescription}</Box>
-                </Box>
-                <Box
-                    component={'div'}
-                    sx={styles.cardImage}
-                >
-                    <Box
-                        component={'img'}
-                        alt={'human health'}
-                        src={Humanhealth}
-                        sx={styles.humanImage}
-                    />
-                </Box>
-                <Box
-                    component='div'
-                    sx={styles.card}
-                >
-                    <Box
-                        component={'span'}
-                        sx={styles.cardTitle}
+                        <Box sx={[styles.card, {height: 'auto'}]}>
+                            <Box
+                                component={'span'}
+                                sx={styles.cardTitle}
+                            >
+                                {content.subcontents[3].subtitle}
+                            </Box>
+                            <Box
+                                component={'span'}
+                                sx={styles.comment}
+                            >{content.subcontents[3].subdescription}</Box>
+                        </Box>
+                    </Grid>
+                    {!md && <Grid
+                        md={4}
+                        xs={12}
                     >
-                        {content.subcontents[4].subtitle}
-                    </Box>
-                    <Box
-                        component={'span'}
-                        sx={styles.comment}
-                    >{content.subcontents[4].subdescription}</Box>
-                </Box>
-            </Container>}
+                        <Box
+                            component={'div'}
+                            sx={styles.cardImage}
+                        >
+                            <Box
+                                component={'img'}
+                                alt={'human health'}
+                                src={Humanhealth}
+                                sx={styles.humanImage}
+                            />
+                        </Box>
+                    </Grid>}
+                    <Grid
+                        md={4}
+                        xs={12}
+                    >
+                        <Box
+                            component='div'
+                            sx={[styles.card, {height: 'auto'}]}
+                        >
+                            <Box
+                                component={'span'}
+                                sx={styles.cardTitle}
+                            >
+                                {content.subcontents[4].subtitle}
+                            </Box>
+                            <Box
+                                component={'span'}
+                                sx={styles.comment}
+                            >{content.subcontents[4].subdescription}</Box>
+                        </Box>
+                    </Grid>
+                    {md && <Grid
+                        md={4}
+                        xs={12}
+                    >
+                        <Box
+                            component={'div'}
+                            sx={styles.cardImage}
+                        >
+                            <Box
+                                component={'img'}
+                                alt={'human health'}
+                                src={Humanhealth}
+                                sx={styles.humanImage}
+                            />
+                        </Box>
+                    </Grid>}
+                </Grid>
+            }
         </Container>
     )
 }
@@ -155,38 +197,49 @@ const styles = {
         backgroundColor: '#F8F8F8'
     },
     redTxt: {
-        fontFamily: 'Roboto',
+        fontFamily: fonts.roboto,
         fontSize: '35px',
         fontWeight: 700,
         fontStyle: 'normal',
-        color: '#CA3C3D',
+        color: colors.red,
+        marginTop: '108px',
+        marginBottom: '10px'
+    },
+    mobileRedTxt: {
+        fontFamily: fonts.roboto,
+        fontSize: '20px',
+        fontWeight: 700,
+        fontStyle: 'normal',
+        color: colors.red,
         marginTop: '108px',
         marginBottom: '10px'
     },
     title: {
-        fontFamily: 'besan',
+        fontFamily: fonts.besan,
         fontSize: '35px',
         fontWeight: 700,
         fontStyle: 'normal',
         color: '#333333',
         marginBottom: '15px',
     },
+    mobileTitle: {
+        fontFamily: fonts.besan,
+        fontSize: '25px',
+        fontWeight: 400,
+        fontStyle: 'normal',
+        color: '#333333',
+        marginBottom: '15px',
+    },
     cardPanel: {
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
         marginTop: '60px'
     },
     card: {
         backgroundColor: 'white',
-        width: '30%',
         display: 'flex',
+        height: '100%',
         flexDirection: 'column',
         justifyContent: 'flex-start',
         alignItems: 'center',
-        marginLeft: '15px',
-        marginRight: '15px'
     },
     cardTitle: {
         fontFamily: 'Roboto',
@@ -209,23 +262,16 @@ const styles = {
         marginTop: '15px',
         marginBottom: '40px',
         textAlign: 'center',
-        lineHeight: '30px'
+        lineHeight: '24px'
     },
     cardPanel2: {
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'flex-start',
         marginTop: '30px',
     },
     cardImage: {
-        width: '30%',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'flex-start',
         alignItems: 'center',
-        marginLeft: '15px',
-        marginRight: '15px',
         paddingTop: '35px'
     },
     humanImage: {

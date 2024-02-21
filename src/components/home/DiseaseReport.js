@@ -1,11 +1,14 @@
-import { Box, Container } from "@mui/material";
+import {Box, Container, useMediaQuery, useTheme} from "@mui/material";
 import '../../styles/home.css'
 import {useEffect, useState} from "react";
 import axios from "axios";
 import {StrapiToken, StrapiURL} from "../../const/consts";
+import Grid from "@mui/material/Unstable_Grid2";
 
 export function DiseaseReport() {
     const [content, setContent] = useState({})
+    const theme = useTheme();
+    const md = useMediaQuery(theme.breakpoints.down('md'));
     useEffect(() => {
         fetchContent().then();
     }, []);
@@ -27,68 +30,78 @@ export function DiseaseReport() {
         }], []));
     }
     if (content.length > 0) return (
-        <Container
-            component={'div'}
-            maxWidth={false}
+        <Grid
+            container
             sx={styles.panel}
         >
-            <Box
-                component={'div'}
-                sx={styles.box}
+            <Grid
+                lg={6}
+                md={12}
             >
                 <Box
                     component={'div'}
-                    sx={styles.title}
+                    sx={styles.box}
                 >
                     <Box
-                        component={'span'}
-                        sx={styles.number}
+                        component={'div'}
+                        sx={styles.title}
                     >
-                        {content[0].title1}
+                        <Box
+                            component={'span'}
+                            sx={styles.number}
+                        >
+                            {content[0].title1}
+                        </Box>
+                        <Box
+                            component={'span'}
+                            sx={styles.unit}
+                        >
+                            {content[0].title2}
+                        </Box>
                     </Box>
                     <Box
                         component={'span'}
-                        sx={styles.unit}
+                        sx={styles.comment}
                     >
-                        {content[0].title2}
+                        {content[0].description}
                     </Box>
                 </Box>
-                <Box
-                    component={'span'}
-                    sx={styles.comment}
-                >
-                    {content[0].description}
-                </Box>
-            </Box>
-            <Box
-                component={'div'}
-                sx={styles.box}
+            </Grid>
+            <Grid
+                lg={6}
+                md={12}
+                sx={{mt: md ? 10 : 0}}
             >
                 <Box
                     component={'div'}
-                    sx={styles.title}
+                    sx={styles.box}
                 >
                     <Box
-                        component={'span'}
-                        sx={styles.unit}
+                        component={'div'}
+                        sx={styles.title}
                     >
-                        {content[1].title2}
+                        <Box
+                            component={'span'}
+                            sx={styles.unit}
+                        >
+                            {content[1].title2}
+                        </Box>
+                        <Box
+                            component={'span'}
+                            sx={styles.number}
+                        >
+                            {content[1].title1}
+                        </Box>
                     </Box>
                     <Box
                         component={'span'}
-                        sx={styles.number}
+                        sx={styles.comment}
                     >
-                        {content[1].title1}
+                        {content[1].description}
                     </Box>
                 </Box>
-                <Box
-                    component={'span'}
-                    sx={styles.comment}
-                >
-                    {content[1].description}
-                </Box>
-            </Box>
-        </Container>
+            </Grid>
+        </Grid>
     )
 }
 
@@ -98,19 +111,15 @@ const styles = {
         position: 'relative',
         boxShadow: '0px 5px 5px rgba(0, 0, 0, 0.25)',
         backgroundColor: '#1D1D1D',
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-        alignItems: 'center',
         paddingTop: '100px',
         paddingBottom: '100px',
+        justifyContent: 'center'
     },
     box: {
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        marginLeft: '100px'
     },
     title: {
         display: 'flex',
@@ -133,7 +142,7 @@ const styles = {
         fontWeight: '700'
     },
     comment: {
-        width: '80%',
+        width: '70%',
         marginTop: '20px',
         color: '#999999',
         fontFamily: 'Roboto',

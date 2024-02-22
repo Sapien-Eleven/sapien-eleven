@@ -42,11 +42,11 @@ export function HumanHealth() {
         >
             <Box
                 component={'span'}
-                sx={styles.redTxt}
+                sx={md ? styles.mobileRedTxt : styles.redTxt}
             >{content.title1}</Box>
             <Box
                 component={'span'}
-                sx={styles.title}
+                sx={md ? styles.mobileTitle : styles.title}
             >{content.title2}</Box>
             {content.subcontents !== undefined &&
                 <Grid

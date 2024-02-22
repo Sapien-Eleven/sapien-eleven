@@ -207,15 +207,15 @@ const styles = {
     },
     mobileRedTxt: {
         fontFamily: fonts.roboto,
-        fontSize: '22px',
-        fontWeight: 400,
+        fontSize: '26px',
+        fontWeight: 700,
         fontStyle: 'normal',
         color: '#CA3C3D',
     },
     mobileTitle: {
         fontFamily: fonts.besan,
-        fontSize: '26px',
-        fontWeight: 700,
+        fontSize: '22px',
+        fontWeight: 400,
         fontStyle: 'normal',
         color: 'white',
         mt: '15px',
@@ -223,7 +223,7 @@ const styles = {
     },
     mobileComment: {
         fontFamily: 'Roboto',
-        fontSize: '20px',
+        fontSize: '16px',
         fontWeight: 400,
         fontStyle: 'normal',
         textAlign: 'center',

@@ -76,11 +76,11 @@ export const ChronicDisease = (props) => {
                     sx={styles.chartPanel}
                 >
                     <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                        <Tabs value={value} onChange={handleChange} aria-label="Disease chart" orientation={'horizontal'}>
-                            <Tab label="CANCERS" {...a11yProps(0)} style={value === 0 ? styles.activeTab : styles.defaultTab} />
-                            <Tab label="DIABETES" {...a11yProps(1)} style={value === 1 ? styles.activeTab : styles.defaultTab} />
-                            <Tab label="HYPERTENSION" {...a11yProps(2)} style={value === 2 ? styles.activeTab : styles.defaultTab} />
-                            <Tab label="OBESITY" {...a11yProps(3)} style={value === 3 ? styles.activeTab : styles.defaultTab} />
+                        <Tabs value={value} onChange={handleChange} aria-label="Disease chart" variant="scrollable" scrollButtons="true" orientation={'horizontal'}>
+                            <Tab label="CANCERS" {...a11yProps(0)} style={value === 0 ? styles.mobileActiveTab : styles.mobileDefaultTab} />
+                            <Tab label="DIABETES" {...a11yProps(1)} style={value === 1 ? styles.mobileActiveTab : styles.mobileDefaultTab} />
+                            <Tab label="HYPERTENSION" {...a11yProps(2)} style={value === 2 ? styles.mobileActiveTab : styles.mobileDefaultTab} />
+                            <Tab label="OBESITY" {...a11yProps(3)} style={value === 3 ? styles.mobileActiveTab : styles.mobileDefaultTab} />
                         </Tabs>
                     </Box>
                     <TabPanel value={value} index={0}>
@@ -426,6 +426,14 @@ const styles = {
     },
     activeTab: {
         color: 'white'
+    },
+    mobileDefaultTab: {
+        color: '#999',
+        fontSize: pixToRem(14),
+    },
+    mobileActiveTab: {
+        color: 'white',
+        fontSize: pixToRem(14),
     }
 }
 

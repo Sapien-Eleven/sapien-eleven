@@ -94,7 +94,7 @@ export function About() {
                             </Box>
                             <Box
                                 component={'span'}
-                                sx={styles.boxComment}
+                                sx={[styles.boxComment, {width: md ? '70%' : '85%'}]}
                             >
                                 {content.subcontents[0].subdescription}
                             </Box>
@@ -124,7 +124,7 @@ export function About() {
                             </Box>
                             <Box
                                 component={'span'}
-                                sx={styles.boxComment}
+                                sx={[styles.boxComment, {width: md ? '70%' : '85%'}]}
                             >
                                 {content.subcontents[1].subdescription}
                             </Box>
@@ -153,7 +153,7 @@ export function About() {
                             </Box>
                             <Box
                                 component={'span'}
-                                sx={styles.boxComment}
+                                sx={[styles.boxComment, {width: md ? '70%' : '85%'}]}
                             >
                                 {content.subcontents[2].subdescription}
                             </Box>
@@ -206,7 +206,7 @@ const styles = {
     },
     mobileTitle: {
         fontFamily: fonts.besan,
-        fontSize: pixToRem(25),
+        fontSize: pixToRem(24),
         fontWeight: '400',
         fontStyle: 'normal',
         lineHeight: pixToRem(36),
@@ -251,7 +251,6 @@ const styles = {
     boxComment: {
         marginTop: '2em',
         marginBottom: '6em',
-        width: '85%',
         textAlign: 'center',
         fontFamily: fonts.roboto,
         fontSize: pixToRem(16),

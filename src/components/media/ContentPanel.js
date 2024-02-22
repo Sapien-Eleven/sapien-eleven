@@ -1,4 +1,4 @@
-import {Box, Button, Container, Stack} from "@mui/material";
+import {Box, Button, Container, Stack, useMediaQuery, useTheme} from "@mui/material";
 import {memo, useCallback, useEffect, useRef, useState} from "react";
 import {colors, fonts, pixToRem} from "../../const/uivar";
 import {
@@ -15,10 +15,14 @@ import {useCollapse} from "react-collapsed";
 import ReactMarkdown from "react-markdown";
 import useAudio from "../hooks/useAudio";
 import WaveForm from "./WaveForm";
+import Grid from "@mui/material/Unstable_Grid2";
 
 const ContentPanel = memo(props => {
     const [currentCategory, setCurrentCategory] = useState('blog');
     const [content, setContent] = useState([]);
+    const theme = useTheme();
+    const md = useMediaQuery(theme.breakpoints.down('md'));
+    const sm = useMediaQuery(theme.breakpoints.down('sm'));
     useEffect(() => {
         fetchContents(currentCategory).then();
     }, [])
@@ -106,7 +110,7 @@ const ContentPanel = memo(props => {
             sx={styles.container}
         >
             <Stack
-                sx={{width: '50%'}}
+                sx={{width: sm ? '100%' : md ? '75%' : '50%'}}
                 direction={'row'}
                 spacing={1}
             >
@@ -313,38 +317,48 @@ const styles = {
 }
 
 const Blog = memo(props => {
+    const theme = useTheme();
+    const sm = useMediaQuery(theme.breakpoints.down('sm'));
     return (
-        <Stack
-            sx={{width: '95%', marginTop: pixToRem(50)}}
-            direction={'row'}
+        <Grid
+            container
+            sx={{width: sm ? '100%' : '95%', mt: 5}}
             spacing={3}
         >
             {
                 props.content.map((item, index) => (
-                    <Box
-                        key={index}
-                        sx={styles.contentItem}
+                    <Grid
+                        item
+                        lg={3}
+                        md={4}
+                        sm={6}
+                        xs={12}
                     >
                         <Box
-                            component={'img'}
-                            src={item.thumbnail}
-                            sx={styles.contentImage}
-                        />
-                        <Box
-                            component={'span'}
-                            sx={styles.contentTitle}
-                        >{item.title}</Box>
-                        <Button
-                            sx={styles.contentButton}
-                            onClick={() => props.goToDetail(item, props.content.filter(e => e.id !== item.id))}
+                            key={index}
+                            sx={styles.contentItem}
                         >
-                            READ MORE
-                            <ChevronRight sx={{color: colors.red}} />
-                        </Button>
-                    </Box>
+                            <Box
+                                component={'img'}
+                                src={item.thumbnail}
+                                sx={styles.contentImage}
+                            />
+                            <Box
+                                component={'span'}
+                                sx={styles.contentTitle}
+                            >{item.title}</Box>
+                            <Button
+                                sx={styles.contentButton}
+                                onClick={() => props.goToDetail(item, props.content.filter(e => e.id !== item.id))}
+                            >
+                                READ MORE
+                                <ChevronRight sx={{color: colors.red}} />
+                            </Button>
+                        </Box>
+                    </Grid>
                 ))
             }
-        </Stack>
+        </Grid>
     )
 })
 

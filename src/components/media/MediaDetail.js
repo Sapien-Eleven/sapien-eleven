@@ -1,18 +1,23 @@
 import {Box, Button, Stack, useMediaQuery, useTheme} from "@mui/material";
 import {memo} from "react";
 import {colors, fonts, pixToRem} from "../../const/uivar";
-import {AccessTime, ChevronLeft, ChevronRight, Twitter} from "@mui/icons-material";
-import BiMessenger from "../../assets/images/media/bi_messenger";
-import Instagram from "../../assets/images/media/instagram";
-import Whatsapp from "../../assets/images/media/whatsapp";
-import Facebook from "../../assets/images/media/facebook";
-import LinkedIn from '../../assets/images/media/linkedin'
-import Tiktok from "../../assets/images/media/tiktok";
+import {
+    AccessTime,
+    ChevronLeft,
+    ChevronRight,
+    Facebook,
+    Instagram,
+    LinkedIn,
+    Twitter,
+    WhatsApp
+} from "@mui/icons-material";
 import {useLocation, useNavigate} from "react-router-dom";
 import Header from "../Header";
 import {Footer} from "../Footer";
 import ReactMarkdown from "react-markdown";
 import {StrapiBaseURL} from "../../const/consts";
+import {BsMessenger, BsTiktok} from "react-icons/bs";
+import Grid from "@mui/material/Unstable_Grid2";
 
 const MediaDetail = memo(props => {
     const {state} = useLocation();
@@ -36,6 +41,8 @@ export default MediaDetail
 
 const Content = memo(props => {
     const navigate = useNavigate();
+    const theme = useTheme();
+    const sm = useMediaQuery(theme.breakpoints.down('sm'));
     const formatDate = (dateString) => {
         const options = {year: 'numeric', month: 'long', day: 'numeric'};
         const date = new Date(dateString);
@@ -45,17 +52,21 @@ const Content = memo(props => {
         <div style={styles.container}>
             <Box
                 component={'div'}
-                sx={[styles.headerPanel, {backgroundImage: `url(${props.content.headerImage})`}]}
+                sx={[styles.headerPanel, {
+                    backgroundImage: `url(${props.content.headerImage})`,
+                    pt: sm ? 12 : pixToRem(60),
+                    pb: sm ? 12 : pixToRem(60),
+                }]}
             >
                 <Box
                     component={'span'}
-                    sx={styles.redTitle}
+                    sx={sm ? styles.mobileRedTitle : styles.redTitle}
                 >
                     {formatDate(props.content.updatedAt)}
                 </Box>
                 <Box
                     component={'span'}
-                    sx={styles.whiteTitle}
+                    sx={sm ? styles.mobileWhiteTitle : styles.whiteTitle}
                 >
                     {props.content.title}
                 </Box>
@@ -67,24 +78,36 @@ const Content = memo(props => {
                     <Box component={'span'} sx={styles.timeTxt}>{`${props.content.readingTime}m Read Time`}</Box>
                 </Box>
                 <Button
-                    sx={styles.goBackBtn}
+                    sx={[styles.goBackBtn, {
+                        top: sm ? pixToRem(20) : pixToRem(50),
+                        left: sm ? pixToRem(20) : pixToRem(90)
+                    }]}
                     startIcon={<ChevronLeft color={'white'} fontSize={'large'} />}
                     onClick={() => navigate(-1)}
-                >Go back</Button>
+                >{sm ? '' : 'Go back'}</Button>
             </Box>
             <Box
                 component={'div'}
-                sx={styles.contentPanel}
+                sx={[styles.contentPanel, {
+                    width: sm ? '100%' : '46%',
+                    pl: sm ? 2 : 0,
+                    pr: sm ? 2 : 0,
+                    pt: sm ? 5 : pixToRem(80)
+                }]}
             >
                 <ReactMarkdown
-                    className={'blogContentTxt'}
+                    className={sm ? 'mobileBlogContentTxt' : 'blogContentTxt'}
                     urlTransform={uri => `${StrapiBaseURL}${uri}`}
                 >
                     {props.content.content}
                 </ReactMarkdown>
                 <Box
                     component={'div'}
-                    sx={styles.socialLinkPanel}
+                    sx={[styles.socialLinkPanel, {
+                        width: sm ? '90%' : '100%',
+                        pt: sm ? 10 : pixToRem(30),
+                        pb: sm ? 5 : pixToRem(80)
+                    }]}
                 >
                     <Box
                         component={'span'}
@@ -98,88 +121,122 @@ const Content = memo(props => {
                     >
                         <Box
                             component={'div'}
-                            sx={styles.socialLink}
+                            sx={[styles.socialLink, {
+                                width: sm ? pixToRem(40) : pixToRem(46),
+                                height: sm ? pixToRem(40) : pixToRem(46),
+                            }]}
                         >
-                            <BiMessenger />
+                            <BsMessenger color={colors.red} size={pixToRem(20)} />
                         </Box>
                         <Box
                             component={'div'}
-                            sx={styles.socialLink}
+                            sx={[styles.socialLink, {
+                                width: sm ? pixToRem(40) : pixToRem(46),
+                                height: sm ? pixToRem(40) : pixToRem(46),
+                            }]}
                         >
                             <Twitter sx={{color: colors.red, fontSize: pixToRem(25)}} />
                         </Box>
                         <Box
                             component={'div'}
-                            sx={styles.socialLink}
+                            sx={[styles.socialLink, {
+                                width: sm ? pixToRem(40) : pixToRem(46),
+                                height: sm ? pixToRem(40) : pixToRem(46),
+                            }]}
                         >
-                            <Instagram />
+                            <Instagram sx={{color: colors.red, fontSize: pixToRem(25)}} />
                         </Box>
                         <Box
                             component={'div'}
-                            sx={styles.socialLink}
+                            sx={[styles.socialLink, {
+                                width: sm ? pixToRem(40) : pixToRem(46),
+                                height: sm ? pixToRem(40) : pixToRem(46),
+                            }]}
                         >
-                            <Whatsapp />
+                            <WhatsApp sx={{color: colors.red, fontSize: pixToRem(25)}} />
                         </Box>
                         <Box
                             component={'div'}
-                            sx={styles.socialLink}
+                            sx={[styles.socialLink, {
+                                width: sm ? pixToRem(40) : pixToRem(46),
+                                height: sm ? pixToRem(40) : pixToRem(46),
+                            }]}
                         >
-                            <Facebook />
+                            <Facebook sx={{color: colors.red, fontSize: pixToRem(25)}} />
                         </Box>
                         <Box
                             component={'div'}
-                            sx={styles.socialLink}
+                            sx={[styles.socialLink, {
+                                width: sm ? pixToRem(40) : pixToRem(46),
+                                height: sm ? pixToRem(40) : pixToRem(46),
+                            }]}
                         >
-                            <LinkedIn />
+                            <LinkedIn sx={{color: colors.red, fontSize: pixToRem(25)}} />
                         </Box>
                         <Box
                             component={'div'}
-                            sx={styles.socialLink}
+                            sx={[styles.socialLink, {
+                                width: sm ? pixToRem(40) : pixToRem(46),
+                                height: sm ? pixToRem(40) : pixToRem(46),
+                            }]}
                         >
-                            <Tiktok />
+                            <BsTiktok color={colors.red} size={pixToRem(20)} />
                         </Box>
                     </Box>
                 </Box>
                 <Box
                     component={'div'}
-                    sx={styles.recommendPanel}
+                    sx={[styles.recommendPanel, {
+                        pl: sm ? 2 : 0,
+                        pr: sm ? 2 : 0
+                    }]}
                 >
                     <Box
                         component={'span'}
-                        sx={styles.recommendRedTitle}
+                        sx={sm ? styles.mobileRecommendRedTitle : styles.recommendRedTitle}
                     >RECOMMENDED</Box>
                     <Box
                         component={'span'}
-                        sx={styles.recommendBlackTitle}
+                        sx={sm ? styles.mobileRecommendBlackTitle : styles.recommendBlackTitle}
                     >You may also like...</Box>
-                    <Stack sx={{width: '100%', marginTop: pixToRem(60)}} direction={'row'} spacing={2}>
+                    <Grid
+                        container
+                        sx={{marginTop: pixToRem(60)}}
+                        spacing={2}
+                    >
                         {
                             props.recommendItems.slice(0, 2).map((item, index) => (
-                                <Box
-                                    key={index}
-                                    sx={styles.recommendItem}
-                                    item={item}
+                                <Grid
+                                    item
+                                    sm={6}
+                                    xs={12}
                                 >
                                     <Box
-                                        component={'img'}
-                                        src={item.thumbnail}
-                                        sx={styles.recommendItemImage}
-                                    />
-                                    <Box
-                                        component={'span'}
-                                        sx={styles.recommendItemTitle}
-                                    >{item.title}</Box>
-                                    <Button
-                                        sx={styles.recommendItemButton}
-                                        onClick={() => props.goToDetail(item, props.recommendItems.filter(e => e.id !== item.id))}
+                                        key={index}
+                                        sx={styles.recommendItem}
+                                        item={item}
                                     >
-                                        READ MORE
-                                        <ChevronRight sx={{color: colors.red}} />
-                                    </Button>
-                                </Box>
+                                        <Box
+                                            component={'img'}
+                                            src={item.thumbnail}
+                                            sx={styles.recommendItemImage}
+                                        />
+                                        <Box
+                                            component={'span'}
+                                            sx={styles.recommendItemTitle}
+                                        >{item.title}</Box>
+                                        <Button
+                                            sx={styles.recommendItemButton}
+                                            onClick={() => props.goToDetail(item, props.recommendItems.filter(e => e.id !== item.id))}
+                                        >
+                                            READ MORE
+                                            <ChevronRight sx={{color: colors.red}} />
+                                        </Button>
+                                    </Box>
+                                </Grid>
                             ))
                         }
-                    </Stack>
+                    </Grid>
                 </Box>
             </Box>
         </div>
@@ -205,12 +262,17 @@ const styles = {
         justifyContent: 'center',
         alignItems: 'center',
         position: 'relative',
-        paddingTop: pixToRem(60),
-        paddingBottom: pixToRem(60)
     },
     redTitle: {
         fontFamily: fonts.roboto,
         fontSize: pixToRem(25),
+        fontWeight: '700',
+        color: colors.red,
+        lineHeight: pixToRem(45)
+    },
+    mobileRedTitle: {
+        fontFamily: fonts.roboto,
+        fontSize: pixToRem(18),
         fontWeight: '700',
         color: colors.red,
         lineHeight: pixToRem(45)
@@ -222,6 +284,16 @@ const styles = {
         fontWeight: '700',
         color: 'white',
         lineHeight: pixToRem(60),
+        textAlign: 'center',
+        marginTop: pixToRem(10)
+    },
+    mobileWhiteTitle: {
+        width: '95%',
+        fontFamily: fonts.roboto,
+        fontSize: pixToRem(25),
+        fontWeight: '700',
+        color: 'white',
+        lineHeight: pixToRem(40),
         textAlign: 'center',
         marginTop: pixToRem(10)
     },
@@ -246,8 +318,6 @@ const styles = {
         paddingLeft: pixToRem(20),
         paddingRight: pixToRem(20),
         position: 'absolute',
-        top: pixToRem(50),
-        left: pixToRem(90)
     },
     contentPanel: {
         flex: 1,
@@ -255,18 +325,14 @@ const styles = {
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        width: '40%',
         paddingTop: pixToRem(80),
         paddingBottom: pixToRem(80),
     },
     socialLinkPanel: {
-        width: '100%',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'flex-start',
-        paddingTop: pixToRem(30),
-        paddingBottom: pixToRem(80),
         borderBottom: '1px solid #D9D9D9'
     },
     socialLinkTitle: {
@@ -295,6 +361,7 @@ const styles = {
     },
     recommendPanel: {
         display: 'flex',
+        boxSizing: 'border-box',
         width: '100%',
         flexDirection: 'column',
         justifyContent: 'center',
@@ -308,11 +375,25 @@ const styles = {
         lineHeight: pixToRem(45),
         color: colors.red,
     },
+    mobileRecommendRedTitle: {
+        fontFamily: fonts.roboto,
+        fontSize: pixToRem(20),
+        fontWeight: '700',
+        lineHeight: pixToRem(39),
+        color: colors.red,
+    },
     recommendBlackTitle: {
         fontFamily: fonts.roboto,
         fontSize: pixToRem(50),
         fontWeight: '700',
         lineHeight: pixToRem(60),
+        color: colors.bgBlackColor,
+    },
+    mobileRecommendBlackTitle: {
+        fontFamily: fonts.roboto,
+        fontSize: pixToRem(30),
+        fontWeight: '700',
+        lineHeight: pixToRem(39),
         color: colors.bgBlackColor,
     },
     recommendItem: {

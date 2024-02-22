@@ -1,4 +1,4 @@
-import {Box, Button, Container} from "@mui/material";
+import {Box, Button, Container, useMediaQuery, useTheme} from "@mui/material";
 import {memo, useCallback, useState} from "react";
 import {colors, fonts, pixToRem} from "../../const/uivar";
 import Mail from '../../assets/images/media/Mail'
@@ -7,6 +7,8 @@ import JoinModal from "../JoinModal";
 
 const JoinPanel = memo(props => {
     const [modalVisible, setModalVisible] = useState(false);
+    const theme = useTheme();
+    const sm = useMediaQuery(theme.breakpoints.down('sm'));
 
     const openJoinModal = useCallback(() => setModalVisible(true), []);
     const closeJoinModal = useCallback(() => setModalVisible(false), []);
@@ -19,13 +21,13 @@ const JoinPanel = memo(props => {
             <Mail />
             <Box
                 component={'span'}
-                sx={styles.whiteTitle}
+                sx={sm ? styles.mobileWhiteTitle : styles.whiteTitle}
             >
                 JOIN OUR
             </Box>
             <Box
                 component={'span'}
-                sx={styles.redTitle}
+                sx={sm ? styles.mobileRedTitle : styles.redTitle}
             >
                 MAILING LIST
             </Box>
@@ -70,10 +72,25 @@ const styles = {
         color: 'white',
         lineHeight: pixToRem(40)
     },
+    mobileWhiteTitle: {
+        marginTop: pixToRem(30),
+        fontFamily: fonts.roboto,
+        fontSize: pixToRem(20),
+        fontWeight: '700',
+        color: 'white',
+        lineHeight: pixToRem(40)
+    },
     redTitle: {
         fontFamily: fonts.besan,
         fontSize: pixToRem(30),
         fontWeight: '700',
+        color: colors.red,
+        lineHeight: pixToRem(40)
+    },
+    mobileRedTitle: {
+        fontFamily: fonts.besan,
+        fontSize: pixToRem(25),
+        fontWeight: '400',
         color: colors.red,
         lineHeight: pixToRem(40)
     },
@@ -83,6 +100,7 @@ const styles = {
         fontWeight: '400',
         color: colors.comment,
         lineHeight: pixToRem(30),
+        textAlign: 'center',
         marginTop: pixToRem(20)
     },
     mailButton: {

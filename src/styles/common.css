@@ -53,6 +53,30 @@
     border-left: 7px solid #CA3C3D;
 }
 
+.mobileBlogContentTxt {
+    width: 90%;
+    font-family: 'Roboto';
+    font-size: 18px;
+    font-weight: 400;
+    color: #999;
+    line-height: 30px;
+}
+
+.mobileBlogContentTxt em {
+    width: 90%;
+    font-family: 'Roboto';
+    font-size: 18px;
+    font-weight: 400;
+    color: #999;
+    line-height: 30px;
+    padding-left: 20px;
+    border-left: 7px solid #CA3C3D;
+}
+
+.mobileBlogContentTxt img {
+    width: 100%;
+}
+
 .updatesContentTxt {
     font-family: 'Roboto';
     font-size: 20px;

@@ -1,6 +1,7 @@
 import {Box, Container, Tab, Tabs, Typography, useMediaQuery, useTheme} from "@mui/material";
 import Chronic_Disease from '../../assets/images/chronic_disease.jpg'
-import {pixToRem, colors} from "../../const/uivar";
+import MobileChronicDiseaseJSX from '../../assets/images/mobile_chronic_disease'
+import {pixToRem, colors, fonts} from "../../const/uivar";
 import {useEffect, useState} from "react";
 import axios from "axios";
 import {dataCancerArr, dataDeathArr, StrapiToken, StrapiURL} from "../../const/consts";
@@ -45,27 +46,28 @@ export const ChronicDisease = (props) => {
         <Container
             component={'div'}
             maxWidth={false}
-            sx={styles.panel}
+            sx={styles.mobilePanel}
         >
+            <MobileChronicDiseaseJSX />
             <Box
                 component={'div'}
                 sx={styles.mobileExplaination}
             >
                 <Box
                     component={'span'}
-                    sx={styles.whiteTxt}
+                    sx={styles.mobileWhiteTxt}
                 >
                     {content.title1}
                 </Box>
                 <Box
                     component={'span'}
-                    sx={styles.redTxt}
+                    sx={styles.mobileRedTxt}
                 >
                     {content.title2}
                 </Box>
                 <Box
                     component={'span'}
-                    sx={styles.comment}
+                    sx={styles.mobileComment}
                 >
                     {content.description}
                 </Box>
@@ -342,7 +344,12 @@ const styles = {
         paddingTop: pixToRem(90),
         paddingBottom: pixToRem(50)
     },
-    mobilePanel: {},
+    mobilePanel: {
+        width: '100%',
+        zIndex: 1,
+        backgroundColor: '#1D1D1D',
+        pb: pixToRem(50)
+    },
     explaination: {
         marginLeft: '5rem',
         display: 'flex',
@@ -357,23 +364,39 @@ const styles = {
         alignItems: 'center',
     },
     whiteTxt: {
-        fontFamily: 'Roboto',
+        fontFamily: fonts.roboto,
         fontSize: pixToRem(30),
         fontStyle: 'normal',
         fontWeight: '700',
         lineHeight: pixToRem(40),
         color: 'white'
     },
+    mobileWhiteTxt: {
+        fontFamily: fonts.roboto,
+        fontSize: pixToRem(25),
+        fontStyle: 'normal',
+        fontWeight: '700',
+        lineHeight: pixToRem(40),
+        color: 'white'
+    },
     redTxt: {
-        fontFamily: 'besan',
+        fontFamily: fonts.besan,
         fontSize: pixToRem(30),
         fontStyle: 'normal',
         fontWeight: '700',
         lineHeight: pixToRem(40),
-        color: '#CA3C3D'
+        color: colors.red
+    },
+    mobileRedTxt: {
+        fontFamily: fonts.besan,
+        fontSize: pixToRem(25),
+        fontStyle: 'normal',
+        fontWeight: '400',
+        lineHeight: pixToRem(40),
+        color: colors.red
     },
     comment: {
-        fontFamily: 'Roboto',
+        fontFamily: fonts.roboto,
         fontSize: pixToRem(18),
         fontStyle: 'normal',
         fontWeight: '400',
@@ -382,10 +405,21 @@ const styles = {
         marginTop: pixToRem(10),
         width: '50%'
     },
+    mobileComment: {
+        fontFamily: fonts.roboto,
+        fontSize: pixToRem(16),
+        fontStyle: 'normal',
+        fontWeight: '400',
+        lineHeight: pixToRem(24),
+        color: '#999999',
+        marginTop: pixToRem(10),
+        textAlign: 'center',
+        width: '90%'
+    },
     chartPanel: {
         marginTop: pixToRem(50),
         backgroundColor: 'rgba(29,29,29,0.25)',
-        width: '67%'
+        width: '95%'
     },
     defaultTab: {
         color: '#999'

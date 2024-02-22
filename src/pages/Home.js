@@ -12,7 +12,7 @@ import {useMediaQuery, useTheme} from "@mui/material";
 
 export default function Home() {
     const theme = useTheme();
-    const sm = useMediaQuery(theme.breakpoints.down('sm'));
+    const md = useMediaQuery(theme.breakpoints.down('md'));
     return (
         <div
             className="app"
@@ -25,7 +25,7 @@ export default function Home() {
             <ChronicDisease />
             <About />
             <Drop />
-            {!sm && <Footer/>}
+            {!md && <Footer/>}
         </div>
     )
 }

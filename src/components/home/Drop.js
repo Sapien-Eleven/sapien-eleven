@@ -1,6 +1,7 @@
-import { Box, Button, Container } from "@mui/material";
-import { colors, fonts, pixToRem } from "../../const/uivar";
+import {Box, Button, Container, useMediaQuery, useTheme} from "@mui/material";
+import {colors, fonts, pixToRem} from "../../const/uivar";
 import Running from '../../assets/images/running.png'
+import MobileRunning from '../../assets/images/mobile_running.png'
 import SapienMark from '../../assets/sapien.svg'
 import {connect} from "react-redux";
 import {memo, useEffect, useState} from "react";
@@ -10,6 +11,8 @@ import {StrapiToken, StrapiURL} from "../../const/consts";
 
 const Drop = memo(props => {
     const [content, setContent] = useState({})
+    const theme = useTheme();
+    const md = useMediaQuery(theme.breakpoints.down('md'));
     useEffect(() => {
         fetchContent().then();
     }, []);
@@ -30,6 +33,62 @@ const Drop = memo(props => {
             description: data.data[0].attributes.description,
         });
     }
+    if (md) return (
+        <Container
+            maxWidth={false}
+            sx={styles.mobilePanel}
+        >
+            <Box
+                component={'div'}
+                sx={styles.mobileExplaination}
+            >
+                <Box
+                    component={'span'}
+                    sx={styles.mobileWhiteTitle}
+                >
+                    {props.connectedWallet === '' ? content.title1 : 'FULL'}
+                </Box>
+                <Box
+                    component={'span'}
+                    sx={styles.mobileRedTitle}
+                >
+                    {props.connectedWallet === '' ? content.title2 : 'TRANSPARENCY'}
+                </Box>
+                <Box
+                    component={'span'}
+                    sx={styles.mobileComment}
+                >
+                    {
+                        props.connectedWallet === '' ?
+                            content.description
+                            : 'It\'s no secret that transparency is necessary to gain full trust and support of the community. Stay up to date on what the Sapien Eleven team is striving to accomplish.'
+                    }
+                </Box>
+                {
+                    props.connectedWallet === '' ?
+                        <Button
+                            sx={styles.twitterBtn}
+                            startIcon={<Box component={'img'} src={SapienMark}
+                                            sx={{width: '24px', height: 'auto', marginRight: '10px'}}/>}
+                        >
+                            JOIN SAPIEN ELEVEN
+                        </Button>
+                        :
+                        <Button
+                            sx={styles.twitterBtn}
+                            startIcon={<Twitter sx={{width: '24px', height: 'auto', marginRight: '10px'}}/>}
+                        >
+                            FOLLOW US ON TWITTER
+                        </Button>
+                }
+            </Box>
+            <Box
+                component={'img'}
+                src={MobileRunning}
+                sx={{width: '100%', height: 'auto', mt: 15}}
+            />
+        </Container>
+    )
     return (
         <Container
             component={'div'}
@@ -66,14 +125,15 @@ const Drop = memo(props => {
                     props.connectedWallet === '' ?
                         <Button
                             sx={styles.twitterBtn}
-                            startIcon={<Box component={'img'} src={SapienMark} sx={{width: '24px', height: 'auto', marginRight: '10px'}} />}
+                            startIcon={<Box component={'img'} src={SapienMark}
+                                            sx={{width: '24px', height: 'auto', marginRight: '10px'}}/>}
                         >
                             JOIN SAPIEN ELEVEN
                         </Button>
                         :
                         <Button
                             sx={styles.twitterBtn}
-                            startIcon={<Twitter sx={{width: '24px', height: 'auto', marginRight: '10px'}} />}
+                            startIcon={<Twitter sx={{width: '24px', height: 'auto', marginRight: '10px'}}/>}
                         >
                             FOLLOW US ON TWITTER
                         </Button>
@@ -103,6 +163,15 @@ const styles = {
         paddingTop: pixToRem(150),
         paddingBottom: pixToRem(150)
     },
+    mobilePanel: {
+        backgroundColor: colors.bgBlackColor,
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        p: 0,
+        pt: 10
+    },
     explaination: {
         width: '45%',
         display: 'flex',
@@ -110,6 +179,13 @@ const styles = {
         justifyContent: 'center',
         alignItems: 'flex-start',
         marginRight: pixToRem(50)
+    },
+    mobileExplaination: {
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        m: 3
     },
     whiteTitle: {
         fontFamily: fonts.roboto,
@@ -119,12 +195,28 @@ const styles = {
         fontSize: pixToRem(35),
         lineHeight: pixToRem(45)
     },
+    mobileWhiteTitle: {
+        fontFamily: fonts.roboto,
+        color: 'white',
+        fontStyle: 'normal',
+        fontWeight: '700',
+        fontSize: pixToRem(25),
+        lineHeight: pixToRem(40)
+    },
     redTitle: {
         fontFamily: fonts.besan,
         color: colors.red,
         fontStyle: 'normal',
         fontWeight: '700',
         fontSize: pixToRem(35),
+        lineHeight: pixToRem(45)
+    },
+    mobileRedTitle: {
+        fontFamily: fonts.besan,
+        color: colors.red,
+        fontStyle: 'normal',
+        fontWeight: '400',
+        fontSize: pixToRem(30),
         lineHeight: pixToRem(45)
     },
     comment: {
@@ -134,6 +226,16 @@ const styles = {
         fontSize: pixToRem(23),
         lineHeight: pixToRem(35),
         color: colors.comment,
+        marginTop: '1.6em'
+    },
+    mobileComment: {
+        fontFamily: fonts.roboto,
+        fontStyle: 'normal',
+        fontWeight: '400',
+        fontSize: pixToRem(20),
+        lineHeight: pixToRem(30),
+        color: colors.comment,
+        textAlign: 'center',
         marginTop: '1.6em'
     },
     twitterBtn: {

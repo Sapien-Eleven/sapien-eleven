@@ -1,4 +1,4 @@
-import {Box, Container, Stack} from "@mui/material";
+import {Box, Container, Stack, useMediaQuery, useTheme} from "@mui/material";
 import {colors, fonts, pixToRem} from "../../const/uivar";
 import Activity from '../../assets/images/activity.png'
 import Nutriution from '../../assets/images/nutriution.png'
@@ -6,9 +6,12 @@ import Coaching from '../../assets/images/coaching.png'
 import {useEffect, useState} from "react";
 import axios from "axios";
 import {StrapiToken, StrapiURL} from "../../const/consts";
+import Grid from "@mui/material/Unstable_Grid2";
 
 export function About() {
     const [content, setContent] = useState({})
+    const theme = useTheme();
+    const md = useMediaQuery(theme.breakpoints.down('md'));
     useEffect(() => {
         fetchContent().then();
     }, []);
@@ -45,13 +48,13 @@ export function About() {
             >
                 <Box
                     component={'span'}
-                    sx={styles.about}
+                    sx={md ? styles.mobileAbout : styles.about}
                 >
                     {content.title1}
                 </Box>
                 <Box
                     component={'span'}
-                    sx={styles.title}
+                    sx={md ? styles.mobileTitle : styles.title}
                 >
                     {content.title2}
                 </Box>
@@ -63,80 +66,100 @@ export function About() {
                 </Box>
             </Box>
             {content.subcontents !== undefined &&
-                <Stack
-                    direction={'row'}
+                <Grid
+                    container
                     spacing={3}
                     sx={styles.boxPanel}
                 >
-                    <Box
-                        component={'div'}
-                        sx={styles.box}
+                    <Grid
+                        item
+                        md={12}
+                        lg={4}
                     >
                         <Box
-                            component={'img'}
-                            sx={styles.img}
-                            src={Activity}
-                            alt="Physical Activity"
-                        />
-                        <Box
-                            component={'span'}
-                            sx={styles.boxTitle}
+                            component={'div'}
+                            sx={styles.box}
                         >
-                            {content.subcontents[0].subtitle}
+                            <Box
+                                component={'img'}
+                                sx={styles.img}
+                                src={Activity}
+                                alt="Physical Activity"
+                            />
+                            <Box
+                                component={'span'}
+                                sx={styles.boxTitle}
+                            >
+                                {content.subcontents[0].subtitle}
+                            </Box>
+                            <Box
+                                component={'span'}
+                                sx={styles.boxComment}
+                            >
+                                {content.subcontents[0].subdescription}
+                            </Box>
                         </Box>
-                        <Box
-                            component={'span'}
-                            sx={styles.boxComment}
-                        >
-                            {content.subcontents[0].subdescription}
-                        </Box>
-                    </Box>
-                    <Box
-                        component={'div'}
-                        sx={styles.box}
+                    </Grid>
+                    <Grid
+                        item
+                        md={12}
+                        lg={4}
+                        sx={{mt : md ? 12 : 0}}
                     >
                         <Box
-                            component={'img'}
-                            sx={styles.img}
-                            src={Nutriution}
-                            alt="Nutriution and Supplementation"
-                        />
-                        <Box
-                            component={'span'}
-                            sx={styles.boxTitle}
+                            component={'div'}
+                            sx={styles.box}
                         >
-                            {content.subcontents[1].subtitle}
+                            <Box
+                                component={'img'}
+                                sx={styles.img}
+                                src={Nutriution}
+                                alt="Nutriution and Supplementation"
+                            />
+                            <Box
+                                component={'span'}
+                                sx={styles.boxTitle}
+                            >
+                                {content.subcontents[1].subtitle}
+                            </Box>
+                            <Box
+                                component={'span'}
+                                sx={styles.boxComment}
+                            >
+                                {content.subcontents[1].subdescription}
+                            </Box>
                         </Box>
-                        <Box
-                            component={'span'}
-                            sx={styles.boxComment}
-                        >
-                            {content.subcontents[1].subdescription}
-                        </Box>
-                    </Box>
-                    <Box
-                        component={'div'}
-                        sx={styles.box}
+                    </Grid>
+                    <Grid
+                        item
+                        md={12}
+                        lg={4}
+                        sx={{mt : md ? 12 : 0}}
                     >
                         <Box
-                            component={'img'}
-                            sx={styles.img}
-                            src={Coaching}
-                        />
-                        <Box
-                            component={'span'}
-                            sx={styles.boxTitle}
+                            component={'div'}
+                            sx={styles.box}
                         >
-                            {content.subcontents[2].subtitle}
+                            <Box
+                                component={'img'}
+                                sx={styles.img}
+                                src={Coaching}
+                            />
+                            <Box
+                                component={'span'}
+                                sx={styles.boxTitle}
+                            >
+                                {content.subcontents[2].subtitle}
+                            </Box>
+                            <Box
+                                component={'span'}
+                                sx={styles.boxComment}
+                            >
+                                {content.subcontents[2].subdescription}
+                            </Box>
                         </Box>
-                        <Box
-                            component={'span'}
-                            sx={styles.boxComment}
-                        >
-                            {content.subcontents[2].subdescription}
-                        </Box>
-                    </Box>
-                </Stack>}
+                    </Grid>
+                </Grid>}
         </Container>
     )
 }
@@ -150,7 +173,7 @@ const styles = {
         alignItems: 'center',
     },
     titlePanel: {
-        marginTop: '10em',
+        mt: 7,
         marginBottom: '8em',
         display: 'flex',
         flexDirection: 'column',
@@ -165,12 +188,28 @@ const styles = {
         lineHeight: pixToRem(40),
         color: colors.red
     },
+    mobileAbout: {
+        fontFamily: fonts.roboto,
+        fontSize: pixToRem(20),
+        fontWeight: '700',
+        fontStyle: 'normal',
+        lineHeight: pixToRem(36),
+        color: colors.red
+    },
     title: {
         fontFamily: fonts.besan,
         fontSize: pixToRem(30),
         fontWeight: '700',
         fontStyle: 'normal',
         lineHeight: pixToRem(40),
+        color: colors.black
+    },
+    mobileTitle: {
+        fontFamily: fonts.besan,
+        fontSize: pixToRem(25),
+        fontWeight: '400',
+        fontStyle: 'normal',
+        lineHeight: pixToRem(36),
         color: colors.black
     },
     comment: {
@@ -180,19 +219,19 @@ const styles = {
         fontStyle: 'normal',
         lineHeight: pixToRem(30),
         color: colors.comment,
+        textAlign: 'center',
         marginTop: '2em'
     },
     boxPanel: {
-        width: '100%',
-        marginBottom: '6em'
+        mb: '6em'
     },
     box: {
         backgroundColor: 'white',
         display: 'flex',
+        height: '100%',
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        width: '35%',
     },
     img: {
         marginTop: '-2.5em',

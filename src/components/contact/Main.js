@@ -1,4 +1,4 @@
-import {Box, Button, TextField} from "@mui/material";
+import {Box, Button, TextField, useMediaQuery, useTheme} from "@mui/material";
 import {memo, useEffect, useState} from "react";
 import StepBg from '../../assets/images/contact/step_bg.png'
 import FinalBg from '../../assets/images/contact/final_bg.png'
@@ -19,6 +19,10 @@ const Main = memo(props => {
     const [phoneNumber, setPhoneNumber] = useState('');
     const [qc, setQC] = useState('')
     const [stepForwardBtnDisabled, setStepForwardBtnDisabled] = useState(true)
+    const theme = useTheme();
+    const lg = useMediaQuery(theme.breakpoints.down('lg'));
+    const md = useMediaQuery(theme.breakpoints.down('md'));
+    const sm = useMediaQuery(theme.breakpoints.down('sm'));
 
     useEffect(() => {
         emailjs.init(EmailJSPublicKey)
@@ -96,13 +100,18 @@ const Main = memo(props => {
     return (
         <Box
             component={'div'}
-            sx={[styles.container, {backgroundImage: step === 4 ? `url(${FinalBg})` : null}]}
+            sx={[styles.container, {
+                backgroundImage: step === 4 ? `url(${FinalBg})` : null,
+                backgroundSize: sm ? 'cover' : '100% 100%'
+            }]}
         >
             {
                 step <= 3 &&
                 <Box
                     component={'div'}
-                    sx={styles.stepPanel}
+                    sx={[styles.stepPanel, {
+                        width: md ? '90%' : lg ? '70%' : '50%'
+                    }]}
                 >
                     <Box
                         component={'div'}
@@ -110,7 +119,7 @@ const Main = memo(props => {
                     >
                         <Box
                             component={'span'}
-                            sx={styles.stepTitle}
+                            sx={sm ? styles.mobileStepTitle : styles.stepTitle}
                         >CONTACT US</Box>
                         <Box
                             component={'div'}
@@ -137,7 +146,7 @@ const Main = memo(props => {
                     </Box>
                     <Box
                         component={'span'}
-                        sx={styles.stepComment}
+                        sx={sm ? styles.mobileStepComment : styles.stepComment}
                     >
                         Please fill in the details below so that we can get in contact with you.
                     </Box>
@@ -165,11 +174,11 @@ const Main = memo(props => {
                         }
                         <Box
                             component={'div'}
-                            sx={styles.stepBtnPanel}
+                            sx={sm ? styles.mobileStepBtnPanel : styles.stepBtnPanel}
                         >
                             {
                                 step > 0 ?
-                                    <Button sx={styles.stepBackBtn} onClick={stepBack}>go back</Button>
+                                    <Button sx={[styles.stepBackBtn, {mb: sm ? 3 : 0}]} onClick={stepBack}>go back</Button>
                                     :
                                     <Box sx={{width: '30%'}} />
                             }
@@ -204,7 +213,7 @@ const Main = memo(props => {
                         component={'span'}
                         sx={styles.finalStepComment}
                     >
-                        Thanks for taking the time to complete this form. <br/>
+                        Thanks for taking the time to complete this form.
                         We will be in contact within 24 hours.
                     </Box>
                     <Button
@@ -234,7 +243,7 @@ const styles = {
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundSize: '100% 100%',
+        backgroundPosition: 'center'
     },
     stepPanel: {
         width: '50%',
@@ -257,6 +266,16 @@ const styles = {
         fontStyle: 'normal',
         fontWeight: 400,
         fontSize: pixToRem(25),
+        lineHeight: pixToRem(40),
+        color: colors.black,
+        borderBottom: '2px solid #CA3C3D'
+    },
+    mobileStepTitle: {
+        pb: 2,
+        fontFamily: fonts.besan,
+        fontStyle: 'normal',
+        fontWeight: 400,
+        fontSize: pixToRem(20),
         lineHeight: pixToRem(40),
         color: colors.black,
         borderBottom: '2px solid #CA3C3D'
@@ -292,6 +311,17 @@ const styles = {
         alignSelf: 'flex-start',
         marginTop: pixToRem(20),
         marginBottom: pixToRem(20)
+    },
+    mobileStepComment: {
+        width: '80%',
+        fontFamily: fonts.roboto,
+        fontStyle: 'normal',
+        fontSize: pixToRem(16),
+        lineHeight: pixToRem(24),
+        fontWeight: 400,
+        color: '#999',
+        alignSelf: 'flex-start',
+        mt: 2, mb: 3
     },
     stepActionPanel: {
         width: '100%',
@@ -373,6 +403,13 @@ const styles = {
         alignItems: 'center',
         marginTop: pixToRem(25),
     },
+    mobileStepBtnPanel: {
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: pixToRem(25),
+    },
     stepBackBtn: {
         width: pixToRem(190),
         border: '1px solid #ccc',
@@ -424,7 +461,6 @@ const styles = {
         alignItems: 'center',
     },
     stepNameItem: {
-        width: '48%',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
@@ -555,14 +591,20 @@ const styles = {
 }
 
 const Name = memo(props => {
+    const theme = useTheme();
+    const sm = useMediaQuery(theme.breakpoints.down('sm'));
     return (
         <Box
             component={'div'}
-            sx={styles.stepNamePanel}
+            sx={[styles.stepNamePanel, {flexDirection: sm ? 'column' : 'row'}]}
         >
             <Box
                 component={'div'}
-                sx={styles.stepNameItem}
+                sx={[styles.stepNameItem, {
+                    width: sm ? '100%' : '48%',
+                    mt: sm ? 2 : 0,
+                    mb: sm ? 2 : 0
+                }]}
             >
                 <Box
                     component={'span'}
@@ -577,13 +619,18 @@ const Name = memo(props => {
                     }}
                     required={true}
                     type={'text'}
+                    placeholder={'Please enter your name'}
                     defaultValue={props.defaultFirstName}
                     onChange={props.onChangeFirstName}
                 />
             </Box>
             <Box
                 component={'div'}
-                sx={styles.stepNameItem}
+                sx={[styles.stepNameItem, {
+                    width: sm ? '100%' : '48%',
+                    mt: sm ? 2 : 0,
+                    mb: sm ? 2 : 0
+                }]}
             >
                 <Box
                     component={'span'}
@@ -597,6 +644,7 @@ const Name = memo(props => {
                         disableUnderline: true
                     }}
                     required={true}
+                    placeholder={'Please enter your last name'}
                     defaultValue={props.defaultLastName}
                     onChange={props.onChangeLastName}
                 />

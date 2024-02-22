@@ -1,9 +1,8 @@
 import {Box, Button, Stack, useMediaQuery, useTheme} from "@mui/material";
 import {memo} from "react";
 import {colors, fonts, pixToRem} from "../../const/uivar";
-import {AccessTime, ChevronLeft, ChevronRight} from "@mui/icons-material";
+import {AccessTime, ChevronLeft, ChevronRight, Twitter} from "@mui/icons-material";
 import BiMessenger from "../../assets/images/media/bi_messenger";
-import Twitter from '../../assets/images/media/twitter'
 import Instagram from "../../assets/images/media/instagram";
 import Whatsapp from "../../assets/images/media/whatsapp";
 import Facebook from "../../assets/images/media/facebook";
@@ -107,7 +106,7 @@ const Content = memo(props => {
                             component={'div'}
                             sx={styles.socialLink}
                         >
-                            <Twitter />
+                            <Twitter sx={{color: colors.red, fontSize: pixToRem(25)}} />
                         </Box>
                         <Box
                             component={'div'}

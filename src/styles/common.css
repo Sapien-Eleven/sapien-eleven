@@ -71,6 +71,16 @@
     margin-top: 15px;
 }
 
+.mobileAboutWellnessTxt {
+    width: 95%;
+    font-family: 'Roboto';
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 30px;
+    color: #999;
+    text-align: center;
+}
+
 .academyPlaceTxt {
     width: 70%;
     font-family: 'Roboto';

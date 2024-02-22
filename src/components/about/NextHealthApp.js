@@ -1,4 +1,4 @@
-import {Box, Button, Container} from "@mui/material";
+import {Box, Button, Container, useMediaQuery, useTheme} from "@mui/material";
 import {memo, useEffect, useState} from "react";
 import {colors, fonts, pixToRem} from "../../const/uivar";
 import NextHealthBg from '../../assets/images/about/next_health_bg.png';
@@ -7,6 +7,8 @@ import axios from "axios";
 import {StrapiToken, StrapiURL} from "../../const/consts";
 
 const NextHealthApp = memo(props => {
+    const theme = useTheme();
+    const sm = useMediaQuery(theme.breakpoints.down('sm'));
     const [content, setContent] = useState({})
     useEffect(() => {
         fetchContent().then();
@@ -36,19 +38,19 @@ const NextHealthApp = memo(props => {
         >
             <Box
                 component={'span'}
-                sx={styles.whiteTitle}
+                sx={sm ? styles.mobileWhiteTitle : styles.whiteTitle}
             >
                 {content.title1}
             </Box>
             <Box
                 component={'span'}
-                sx={styles.redTitle}
+                sx={sm ? styles.mobileRedTitle : styles.redTitle}
             >
                 {content.title2}
             </Box>
             <Box
                 component={'span'}
-                sx={styles.comment}
+                sx={sm ? styles.mobileComment : styles.comment}
             >
                 {content.description}
             </Box>
@@ -83,12 +85,29 @@ const styles = {
         lineHeight: pixToRem(40),
         color: 'white'
     },
+    mobileWhiteTitle: {
+        fontFamily: fonts.roboto,
+        fontStyle: 'normal',
+        fontWeight: 700,
+        fontSize: pixToRem(20),
+        lineHeight: pixToRem(36),
+        color: 'white'
+    },
     redTitle: {
         fontFamily: fonts.besan,
         fontStyle: 'normal',
         fontSize: pixToRem(30),
         fontWeight: 400,
         lineHeight: pixToRem(40),
+        color: colors.red,
+        marginTop: pixToRem(5)
+    },
+    mobileRedTitle: {
+        fontFamily: fonts.besan,
+        fontStyle: 'normal',
+        fontSize: pixToRem(25),
+        fontWeight: 400,
+        lineHeight: pixToRem(36),
         color: colors.red,
         marginTop: pixToRem(5)
     },
@@ -99,6 +118,17 @@ const styles = {
         lineHeight: pixToRem(30),
         color: 'white',
         marginTop: pixToRem(20)
+    },
+    mobileComment: {
+        width: '70%',
+        fontFamily: fonts.roboto,
+        fontStyle: 'normal',
+        fontSize: pixToRem(16),
+        lineHeight: pixToRem(24),
+        color: 'white',
+        textAlign: 'center',
+        mt: 3,
+        mb: 2
     },
     joinBtn: {
         marginTop: pixToRem(30),

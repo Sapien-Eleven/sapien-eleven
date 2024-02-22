@@ -10,7 +10,7 @@ import {useMediaQuery, useTheme} from "@mui/material";
 
 const About = memo(props => {
     const theme = useTheme();
-    const sm = useMediaQuery(theme.breakpoints.down('sm'));
+    const md = useMediaQuery(theme.breakpoints.down('md'));
     return (
         <div className={'app'}>
             <Header page={'about'} />
@@ -19,7 +19,7 @@ const About = memo(props => {
             <NextHealthApp />
             <Team />
             <Miss />
-            {!sm && <Footer/>}
+            {!md && <Footer/>}
         </div>
     )
 })

@@ -1,14 +1,18 @@
-import {Box, Container, Stack} from "@mui/material";
+import {Box, Container, Stack, useMediaQuery, useTheme} from "@mui/material";
 import {memo, useEffect, useState} from "react";
 import {colors, fonts, pixToRem} from "../../const/uivar";
 import {StrapiBaseURL, StrapiToken, StrapiURL} from "../../const/consts";
-import Twitter from "../../assets/images/media/twitter";
 import axios from "axios";
+import Grid from "@mui/material/Unstable_Grid2";
+import {Twitter} from "@mui/icons-material";
 
 const Team = memo(props => {
     const [content, setContent] = useState({})
     const [ceoContent, setCEOContent] = useState({})
     const [teams, setTeams] = useState([]);
+    const theme = useTheme();
+    const sm = useMediaQuery(theme.breakpoints.down('sm'));
+    const md = useMediaQuery(theme.breakpoints.down('md'));
 
     useEffect(() => {
         fetchContent().then();
@@ -84,92 +88,135 @@ const Team = memo(props => {
         >
             <Box
                 component={'span'}
-                sx={styles.redTitle}
+                sx={sm ? styles.mobileRedTitle : styles.redTitle}
             >
                 {content.title1}
             </Box>
             <Box
                 component={'span'}
-                sx={styles.blackTitle}
+                sx={sm ? styles.mobileBlackTitle : styles.blackTitle}
             >
                 {content.title2}
             </Box>
             <Box
                 component={'span'}
-                sx={styles.comment}
+                sx={[styles.comment, {width: sm ? '95%' : '50%'}]}
             >
                 {content.description}
             </Box>
-            <Box
-                component={'div'}
-                sx={styles.ceoPanel}
+            <Grid
+                container
+                sx={[styles.ceoPanel, {
+                    ml: sm ? 0 : 10,
+                    mr: sm ? 0 : 10
+                }]}
             >
-                <Box
-                    component={'div'}
-                    sx={styles.ceoCommentPanel}
+                {md && <Grid
+                    item
+                    md={12}
                 >
                     <Box
-                        component={'span'}
-                        sx={styles.redTitle}
-                    >{ceoContent.title1}</Box>
+                        component={'img'}
+                        src={ceoContent.image}
+                        sx={styles.ceoPhoto}
+                    />
+                </Grid>}
+                <Grid
+                    item
+                    lg={7}
+                    md={12}
+                >
                     <Box
-                        component={'span'}
-                        sx={styles.blackTitle}
-                    >{ceoContent.title2}</Box>
-                    <Box
-                        component={'span'}
-                        sx={styles.ceoComment}
+                        component={'div'}
+                        sx={md ? styles.mobileCeoCommentPanel : styles.ceoCommentPanel}
                     >
-                        {ceoContent.description}
+                        <Box
+                            component={'span'}
+                            sx={sm ? styles.mobileRedTitle : styles.redTitle}
+                        >{ceoContent.title1}</Box>
+                        <Box
+                            component={'span'}
+                            sx={sm ? styles.mobileBlackTitle : styles.blackTitle}
+                        >{ceoContent.title2}</Box>
+                        <Box
+                            component={'span'}
+                            sx={[styles.ceoComment, {
+                                width: md ? '100%' : '86%',
+                            }]}
+                        >
+                            {ceoContent.description}
+                        </Box>
+                        <Twitter sx={{fontSize: pixToRem(31), color: colors.red, mb: sm ? 0 : 7}} />
                     </Box>
-                    <Twitter />
-                </Box>
-                <Box
-                    component={'img'}
-                    src={ceoContent.image}
-                    sx={styles.ceoPhoto}
-                />
-            </Box>
-            <Stack
-                sx={styles.memberPanel}
-                spacing={2.5}
-                direction={'row'}
-                useFlexGap
-                flexWrap={'wrap'}
+                </Grid>
+                {!md && <Grid
+                    item
+                    lg={5}
+                >
+                    <Box
+                        component={'img'}
+                        src={ceoContent.image}
+                        sx={styles.ceoPhoto}
+                    />
+                </Grid>}
+            </Grid>
+            <Grid
+                container
+                sx={[styles.memberPanel, {
+                    ml: sm ? 0 : 8,
+                    mr: sm ? 0 : 8
+                }]}
+                spacing={3}
             >
                 {
                     teams.map((member, index) => (
-                        <Box
-                            component={'div'}
-                            sx={styles.memberBox}
-                            key={index}
+                        <Grid
+                            item
+                            lg={3}
+                            md={4}
+                            sm={6}
+                            xs={12}
+                            sx={{
+                                mt: 2.5,
+                                mb: 2.5
+                            }}
                         >
                             <Box
-                                component={'img'}
-                                src={member.image}
-                                sx={styles.memberPhoto}
-                            />
-                            <Box
                                 component={'div'}
-                                sx={styles.memberComment}
+                                sx={styles.memberBox}
+                                key={index}
                             >
                                 <Box
-                                    component={'span'}
-                                    sx={styles.memberName}
-                                >
-                                    {member.name}
-                                </Box>
+                                    component={'img'}
+                                    src={member.image}
+                                    sx={[styles.memberPhoto, {
+                                        height: member.image === '' ? pixToRem(300) : '100%'
+                                    }]}
+                                />
                                 <Box
-                                    component={'span'}
-                                    sx={styles.memberRole}
+                                    component={'div'}
+                                    sx={[styles.memberComment, {
+                                        background: member.image !== '' ? 'linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.9) 100%)' : 'none',
+                                    }]}
                                 >
-                                    {member.description}
+                                    <Box
+                                        component={'span'}
+                                        sx={styles.memberName}
+                                    >
+                                        {member.name}
+                                    </Box>
+                                    <Box
+                                        component={'span'}
+                                        sx={styles.memberRole}
+                                    >
+                                        {member.description}
+                                    </Box>
                                 </Box>
                             </Box>
-                        </Box>
+                        </Grid>
                     ))
                 }
-            </Stack>
+            </Grid>
         </Container>
     )
 })
@@ -195,14 +242,31 @@ const styles = {
         lineHeight: pixToRem(45),
         marginTop: pixToRem(40)
     },
+    mobileRedTitle: {
+        fontFamily: fonts.roboto,
+        fontSize: pixToRem(20),
+        fontWeight: 700,
+        fontStyle: 'normal',
+        color: '#CA3C3D',
+        lineHeight: pixToRem(36),
+    },
     blackTitle: {
         fontFamily: fonts.besan,
         fontSize: pixToRem(30),
         fontWeight: 700,
         fontStyle: 'normal',
         color: colors.black,
-        marginTop: pixToRem(15),
-        marginBottom: pixToRem(15),
+        mt: pixToRem(15),
+        mb: pixToRem(15),
+    },
+    mobileBlackTitle: {
+        fontFamily: fonts.besan,
+        fontSize: pixToRem(25),
+        fontWeight: 400,
+        fontStyle: 'normal',
+        color: colors.black,
+        mt: pixToRem(15),
+        mb: pixToRem(15),
     },
     comment: {
         width: '50%',
@@ -213,24 +277,27 @@ const styles = {
         lineHeight: pixToRem(30),
         color: colors.comment,
         marginTop: pixToRem(20),
-        marginBottom: pixToRem(30),
+        mb: 10,
         textAlign: 'center'
     },
     ceoPanel:  {
         backgroundColor: colors.bgWhiteColor,
-        width: '92%',
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginBottom: pixToRem(30)
+        mt: 5
     },
     ceoCommentPanel: {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'flex-start',
         justifyContent: 'center',
-        paddingLeft: pixToRem(130),
+        pl: pixToRem(130)
+    },
+    mobileCeoCommentPanel: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'flex-start',
+        justifyContent: 'center',
+        pt: 5, pb: 5,
+        pl: 3, pr: 3
     },
     ceoComment: {
         width: '86%',
@@ -244,24 +311,23 @@ const styles = {
         marginBottom: pixToRem(30),
     },
     ceoPhoto: {
-        width: 'auto',
-        height: '100%',
+        width: '100%',
+        height: 'auto',
         backgroundSize: '100% 100%'
     },
     memberPanel: {
-        width: '92%',
-        marginTop: pixToRem(20),
-        marginBottom: pixToRem(10)
+        p: 0,
+        mt: pixToRem(20),
+        mb: pixToRem(10)
     },
     memberBox: {
-        width: '21%',
-        height: pixToRem(300),
+        height: '100%',
         backgroundColor: '#1F1F1F',
         padding: '17px 17px',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'flex-start',
-        marginBottom: pixToRem(10)
+        // marginBottom: pixToRem(10)
     },
     memberPhoto: {
         width: '100%',

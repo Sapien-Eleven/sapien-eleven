@@ -2,7 +2,7 @@ import {memo, useEffect, useState} from "react";
 import {Box, Button, Container, useMediaQuery, useTheme} from "@mui/material";
 import {fonts, pixToRem} from "../../const/uivar";
 import PanelBg from '../../assets/images/about/bg.jpg'
-import MobilePanelBg from '../../assets/images/about/mobile_bg.svg'
+import MobilePanelBg from '../../assets/images/about/mobile_bg.png'
 import axios from "axios";
 import {StrapiToken, StrapiURL} from "../../const/consts";
 

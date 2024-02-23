@@ -1,14 +1,20 @@
-import {Box, Button} from "@mui/material";
+import {Box, Button, useMediaQuery, useTheme} from "@mui/material";
 import {memo} from "react";
 import {fonts, pixToRem} from "../../const/uivar";
 import {useCollapse} from "react-collapsed";
 import {BiChevronRight, BiChevronDown} from 'react-icons/bi';
 
 const Category = memo(props => {
+    const theme = useTheme();
+    const md = useMediaQuery(theme.breakpoints.down('md'));
+    const sm = useMediaQuery(theme.breakpoints.down('sm'));
+    const lg = useMediaQuery(theme.breakpoints.down('lg'));
     return (
         <Box
             component={'div'}
-            sx={styles.panel}
+            sx={[styles.panel, {
+                pl: md ? 3 : 10
+            }]}
         >
             {
                 props.categories.filter(c => c.parent_id === 0).map((item, index) => {

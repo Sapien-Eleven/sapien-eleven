@@ -1,4 +1,4 @@
-import {Box, Container} from "@mui/material";
+import {Box, Container, useMediaQuery, useTheme} from "@mui/material";
 import {memo, useCallback, useEffect, useState} from "react";
 import Category from "./Category";
 import {StrapiBaseURL, StrapiToken, StrapiURL} from "../../const/consts";
@@ -8,10 +8,13 @@ import Recipes from "./Recipes";
 import Diets from "./Diets";
 import EatToHeal from "./EatToHeal";
 import {colors, pixToRem} from "../../const/uivar";
+import Grid from "@mui/material/Unstable_Grid2";
 
 const Main = memo(props => {
     const [categories, setCategories] = useState([]);
     const [selectedCategory, selectCategory] = useState({})
+    const theme = useTheme();
+    const sm = useMediaQuery(theme.breakpoints.down('sm'));
     useEffect(() => {
         fetchCategories().then()
     }, []);
@@ -45,49 +48,58 @@ const Main = memo(props => {
 
 
     return (
-        <Container
-            maxWidth={false}
-            sx={styles.panel}
+        <Grid
+            container
+            sx={{p: 0}}
         >
-            <Category categories={categories} selectedCategory={selectedCategory} setCategory={onChangeCategory} />
-            {
-                selectedCategory.parent_id <= 2 ?
-                    <Box
-                        component={'div'}
-                        sx={styles.contentPanel}
-                    >
-                        <MainContent category={selectedCategory} />
-                    </Box>
-                    : selectedCategory.name === 'Recipes' ?
+            <Grid
+                item
+                lg={3}
+                md={4.2}
+                sm={5}
+                xs={0}
+            >
+                <Category categories={categories} selectedCategory={selectedCategory} setCategory={onChangeCategory} />
+            </Grid>
+            <Grid
+                item
+                lg={9}
+                md={7.8}
+                sm={7}
+                xs={12}
+            >
+                {
+                    selectedCategory.parent_id <= 2 ?
                         <Box
                             component={'div'}
-                            sx={styles.contentPanel}
+                            sx={[styles.contentPanel, {
+                                pt: sm ? 0 : 15,
+                                pl: sm ? 0 : 6
+                            }]}
                         >
-                            <Recipes category={selectedCategory} />
+                            <MainContent category={selectedCategory} />
                         </Box>
-                        : selectedCategory.name === 'Diets' ?
-                            <Diets category={selectedCategory} />
-                            : selectedCategory.name === 'Eat to Heal' ?
-                                <EatToHeal category={selectedCategory} />
-                                : null
-            }
-        </Container>
+                        : selectedCategory.name === 'Recipes' ?
+                            <Box
+                                component={'div'}
+                                sx={styles.contentPanel}
+                            >
+                                <Recipes category={selectedCategory} />
+                            </Box>
+                            : selectedCategory.name === 'Diets' ?
+                                <Diets category={selectedCategory} />
+                                : selectedCategory.name === 'Eat to Heal' ?
+                                    <EatToHeal category={selectedCategory} />
+                                    : null
+                }
+            </Grid>
+        </Grid>
     )
 })
 
 export default Main
 
 const styles = {
-    panel: {
-        width: '100%',
-        backgroundColor: 'white',
-        display: 'flex',
-        flex: 1,
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'flex-start',
-        padding: '0px!important'
-    },
     contentPanel: {
         flex: 1,
         backgroundColor: colors.bgWhiteColor,
@@ -95,7 +107,5 @@ const styles = {
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'flex-start',
-        paddingTop: pixToRem(100),
-        paddingLeft: pixToRem(100),
     }
 }

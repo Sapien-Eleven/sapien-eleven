@@ -202,7 +202,7 @@ const styles = {
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
         backgroundSize: 'cover',
-        pt: pixToRem(700),
+        pt: pixToRem(500),
         pb: pixToRem(150)
     },
     mobileRedTxt: {

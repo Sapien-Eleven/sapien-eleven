@@ -304,6 +304,7 @@ const AcademyMenu = (props) => {
 	const [categories, setCategories] = useState([]);
 	const [mainCategory, setMainCategory] = useState({});
     const [selectedCategory, selectCategory] = useState({});
+	const navigate = useNavigate();
 	useEffect(() => {
 		if (props.isConnected) fetchCategories().then();
 	}, [props.isConnected])
@@ -334,6 +335,7 @@ const AcademyMenu = (props) => {
 	const handleExpandMenu = useCallback(
 		() => {
 			if (props.isConnected) setExpaned(!isExpanded)
+			else navigate('/academy');
 		}
 	, [props.isConnected, isExpanded]);
 	const toggleMenu = useCallback(

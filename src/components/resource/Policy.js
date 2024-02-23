@@ -8,6 +8,7 @@ import axios from "axios";
 import {StrapiToken, StrapiURL} from "../../const/consts";
 import {colors, fonts, pixToRem} from "../../const/uivar";
 import ReactMarkdown from 'react-markdown'
+import Grid from "@mui/material/Unstable_Grid2";
 
 const Policy = memo(props => {
     const {state} = useLocation();
@@ -48,7 +49,6 @@ const styles = {
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        paddingTop: pixToRem(70),
         paddingBottom: pixToRem(70)
     },
     redTitle: {
@@ -65,6 +65,13 @@ const styles = {
         lineHeight: pixToRem(60),
         color: 'white'
     },
+    mobileWhiteTitle: {
+        fontFamily: fonts.roboto,
+        fontSize: pixToRem(30),
+        fontWeight: '700',
+        lineHeight: pixToRem(40),
+        color: 'white'
+    },
     backBtn: {
         position: 'absolute',
         top: pixToRem(30),
@@ -74,37 +81,30 @@ const styles = {
         fontWeight: '700',
         color: '#ccc'
     },
+    mobileBackBtn: {
+        position: 'absolute',
+        top: pixToRem(20),
+        left: pixToRem(20),
+        border: '1px solid #ccc'
+    },
     backIcon: {
         fontSize: pixToRem(20),
         color: '#ccc'
     },
-    container: {
-        display: 'flex',
-        flexDirection: 'row',
-        flex: 1
-    },
     leftContainer: {
-        width: '25%',
         display: 'flex',
+        height: '100%',
         flexDirection: 'column',
         justifyContent: 'flex-start',
         alignItems: 'flex-start',
         backgroundColor: colors.bgWhiteColor,
-        paddingTop: pixToRem(100),
-        paddingLeft: pixToRem(70),
-        paddingRight: pixToRem(15)
     },
     rightContainer: {
-        width: '75%',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'flex-start',
         alignItems: 'flex-start',
         backgroundColor: 'white',
-        paddingTop: pixToRem(100),
-        paddingLeft: pixToRem(100),
-        paddingRight: pixToRem(200),
-        paddingBottom: pixToRem(100)
     },
     tableOfContents: {
         width: '100%',
@@ -131,6 +131,8 @@ const styles = {
 
 const ContentHeader = (props) => {
     const navigate = useNavigate();
+    const theme = useTheme();
+    const sm = useMediaQuery(theme.breakpoints.down('sm'));
     const formatDate = (dateString) => {
         const options = {year: 'numeric', month: 'long', day: 'numeric'};
         const date = new Date(dateString);
@@ -139,7 +141,9 @@ const ContentHeader = (props) => {
     return (
         <Container
             maxWidth={false}
-            sx={styles.contentHeaderContainer}
+            sx={[styles.contentHeaderContainer, {
+                pt: sm ? 12 : pixToRem(70)
+            }]}
         >
             <Box
                 component={'span'}
@@ -149,49 +153,72 @@ const ContentHeader = (props) => {
             </Box>
             <Box
                 component={'span'}
-                sx={styles.whiteTitle}
+                sx={sm ? styles.mobileWhiteTitle : styles.whiteTitle}
             >
                 {props.title}
             </Box>
             <Button
-                sx={styles.backBtn}
-                startIcon={<ChevronLeft fontSize={'large'} htmlColor={'#ccc'} />}
+                sx={sm ? styles.mobileBackBtn : styles.backBtn}
+                startIcon={<ChevronLeft style={{fontSize: sm ? 25 : 20}} htmlColor={'#ccc'} />}
                 onClick={() => navigate(-1)}
-            >Go Back</Button>
+            >{sm ? '' : 'Go Back'}</Button>
         </Container>
     )
 }
 
 const Content = (props) => {
+    const theme = useTheme();
+    const sm = useMediaQuery(theme.breakpoints.down('sm'));
     return (
-        <Container
-            maxWidth={false}
-            sx={styles.container}
+        <Grid
+            container
+            spacing={0}
         >
-            <Box
-                component={'div'}
-                sx={styles.leftContainer}
+            <Grid
+                item
+                sm={3.5}
+                xs={12}
             >
                 <Box
-                    component={'span'}
-                    sx={styles.tableOfContents}
-                >Table Of Contents</Box>
-                <ReactMarkdown
-                    className={'reactMarkdownTxt'}
+                    component={'div'}
+                    sx={[styles.leftContainer, {
+                        pt: sm ? 8 : pixToRem(100),
+                        pl: sm ? 5 : pixToRem(70),
+                        pr: sm ? 3 : pixToRem(15)
+                    }]}
                 >
-                    {props.contentList}
-                </ReactMarkdown>
-            </Box>
-            <Box
-                component={'div'}
-                sx={styles.rightContainer}
+                    <Box
+                        component={'span'}
+                        sx={styles.tableOfContents}
+                    >Table Of Contents</Box>
+                    <ReactMarkdown
+                        className={'reactMarkdownTxt'}
+                    >
+                        {props.contentList}
+                    </ReactMarkdown>
+                </Box>
+            </Grid>
+            <Grid
+                item
+                sm={8.5}
+                xs={12}
             >
-                <ReactMarkdown
-                    className={'reactMarkdownTxt'}
+                <Box
+                    component={'div'}
+                    sx={[styles.rightContainer, {
+                        pt: sm ? 10 : pixToRem(100),
+                        pl: sm ? 3 : pixToRem(100),
+                        pr: sm ? 3 : pixToRem(200),
+                        pb: 10
+                    }]}
                 >
-                    {props.content}
-                </ReactMarkdown>
-            </Box>
-        </Container>
+                    <ReactMarkdown
+                        className={'reactMarkdownTxt'}
+                    >
+                        {props.content}
+                    </ReactMarkdown>
+                </Box>
+            </Grid>
+        </Grid>
     )
 }

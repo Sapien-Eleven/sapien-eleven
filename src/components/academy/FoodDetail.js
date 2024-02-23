@@ -1,4 +1,4 @@
-import {Box, Breadcrumbs, Link, Stack, Typography} from "@mui/material";
+import {Box, Breadcrumbs, Link, Stack, Typography, useMediaQuery, useTheme} from "@mui/material";
 import {memo, useCallback, useEffect, useRef, useState} from "react";
 import {colors, fonts, pixToRem} from "../../const/uivar";
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
@@ -14,6 +14,7 @@ import ReactPlayer from "react-player";
 import DairyFreeImg from '../../assets/images/academy/dairy.jpg'
 import GlutenFreeImg from '../../assets/images/academy/gluten.jpg'
 import VeganImg from '../../assets/images/academy/vegan.jpg'
+import Grid from "@mui/material/Unstable_Grid2";
 
 const FoodDetail = memo(props => {
     const [recommendedFoods, setRecommendedFoods] = useState([]);
@@ -26,6 +27,8 @@ const FoodDetail = memo(props => {
         Buffer : true
     });
     const videoPlayer = useRef(null);
+    const theme = useTheme();
+    const sm = useMediaQuery(theme.breakpoints.down('sm'))
 
     useEffect(() => {
         window.scrollTo(0,0);
@@ -80,243 +83,274 @@ const FoodDetail = memo(props => {
         return (
             <Box
                 component={'div'}
-                sx={styles.container}
+                sx={[styles.container, {
+                    pt: sm ? 7 : 12,
+                    pl: sm ? 2 : 12,
+                    pr: sm ? 2 : 12,
+                    pb: 10
+                }]}
             >
-                <Box
-                    component={'div'}
-                    sx={styles.upPanel}
+                <Grid
+                    container
+                    spacing={2}
                 >
-                    <Box
-                        component={'div'}
-                        sx={styles.leftPanel}
+                    <Grid
+                        item
+                        md={6}
+                        sm={12}
                     >
-                        <Breadcrumb recipe={props.recipe} food={props.food} goToMain={props.goToMain} goToSub={props.goToSub} />
                         <Box
                             component={'div'}
-                            sx={styles.titlePanel}
+                            sx={styles.leftPanel}
                         >
+                            <Breadcrumb recipe={props.recipe} food={props.food} goToMain={props.goToMain} goToSub={props.goToSub} />
                             <Box
-                                component={'span'}
-                                sx={styles.blackTitle}
-                            >
-                                {props.food.title}
-                            </Box>
-                            <Stack
-                                direction={'row'}
-                                spacing={1}
-                                useFlexGap
-                                flexWrap={'wrap'}
-                            >
-                                {
-                                    props.food.dairyFree &&
-                                    <Box
-                                        component={'img'}
-                                        src={DairyFreeImg}
-                                        sx={styles.statusImg}
-                                    />
-                                }
-                                {
-                                    props.food.glutenFree &&
-                                    <Box
-                                        component={'img'}
-                                        src={GlutenFreeImg}
-                                        sx={styles.statusImg}
-                                    />
-                                }
-                                {
-                                    props.food.vegan &&
-                                    <Box
-                                        component={'img'}
-                                        src={VeganImg}
-                                        sx={styles.statusImg}
-                                    />
-                                }
-                            </Stack>
-                        </Box>
-                        <Stack sx={styles.explainStack} direction={'row'} spacing={1}>
-                            <Box
-                                sx={styles.explainItem}
                                 component={'div'}
-                            >
-                                <Portion />
-                                <Box
-                                    component={'div'}
-                                    sx={styles.explainGroup}
-                                >
-                                    <Box
-                                        component={'span'}
-                                        sx={styles.explainTitle}
-                                    >Portion Size:</Box>
-                                    <Box
-                                        component={'span'}
-                                        sx={styles.explainComment}
-                                    >
-                                        {props.food.portionSize}
-                                    </Box>
-                                </Box>
-                            </Box>
-                            <Box
-                                sx={styles.explainItem}
-                                component={'div'}
-                            >
-                                <Meal />
-                                <Box
-                                    component={'div'}
-                                    sx={styles.explainGroup}
-                                >
-                                    <Box
-                                        component={'span'}
-                                        sx={styles.explainTitle}
-                                    >Prepare Time:</Box>
-                                    <Box
-                                        component={'span'}
-                                        sx={styles.explainComment}
-                                    >
-                                        {props.food.prepareTime}
-                                    </Box>
-                                </Box>
-                            </Box>
-                            <Box
-                                sx={styles.explainItem}
-                                component={'div'}
+                                sx={styles.titlePanel}
                             >
                                 <Box
-                                    component={'img'}
-                                    sx={{width: 28, height: 28}}
-                                    src={Cooking}
-                                />
-                                <Box
-                                    component={'div'}
-                                    sx={styles.explainGroup}
+                                    component={'span'}
+                                    sx={sm ? styles.mobileBlackTitle : styles.blackTitle}
                                 >
-                                    <Box
-                                        component={'span'}
-                                        sx={styles.explainTitle}
-                                    >Cook Time:</Box>
-                                    <Box
-                                        component={'span'}
-                                        sx={styles.explainComment}
-                                    >
-                                        {props.food.cookTime}
-                                    </Box>
+                                    {props.food.title}
                                 </Box>
-                            </Box>
-                        </Stack>
-                        <Box
-                            component={'div'}
-                            sx={styles.detailImgGroup}
-                        >
-                            <ReactPlayer
-                                ref={videoPlayer}
-                                url={props.food.video}
-                                controls={true}
-                                width={'100%'}
-                                height={pixToRem(500)}
-                                playing={true}
-                                muted={false}
-                                onEnded={() => setVideoState({...videoState, played: 1, playing: false})}
-                            />
-                        </Box>
-                        <Stack sx={styles.detailImgStack} spacing={2} direction={'row'}>
-                            {
-                                props.food.images.map((item, index) => (
-                                    <Box
-                                        key={index}
-                                        sx={styles.detailImgItem}
-                                        component={'div'}
-                                    >
+                                <Stack
+                                    direction={'row'}
+                                    spacing={1}
+                                    useFlexGap
+                                    flexWrap={'wrap'}
+                                >
+                                    {
+                                        props.food.dairyFree &&
                                         <Box
                                             component={'img'}
-                                            src={item}
-                                            sx={{width: '100%', height: 'auto', backgroundSize: 'cover'}}
+                                            src={DairyFreeImg}
+                                            sx={styles.statusImg}
                                         />
+                                    }
+                                    {
+                                        props.food.glutenFree &&
+                                        <Box
+                                            component={'img'}
+                                            src={GlutenFreeImg}
+                                            sx={styles.statusImg}
+                                        />
+                                    }
+                                    {
+                                        props.food.vegan &&
+                                        <Box
+                                            component={'img'}
+                                            src={VeganImg}
+                                            sx={styles.statusImg}
+                                        />
+                                    }
+                                </Stack>
+                            </Box>
+                            <Stack sx={styles.explainStack} direction={'row'} spacing={1}>
+                                <Box
+                                    sx={[styles.explainItem, {padding: sm ? pixToRem(5) : pixToRem(10)}]}
+                                    component={'div'}
+                                >
+                                    <Portion />
+                                    <Box
+                                        component={'div'}
+                                        sx={styles.explainGroup}
+                                    >
+                                        <Box
+                                            component={'span'}
+                                            sx={sm ? styles.mobileExplainTitle : styles.explainTitle}
+                                        >Portion Size:</Box>
+                                        <Box
+                                            component={'span'}
+                                            sx={sm ? styles.mobileExplainComment : styles.explainComment}
+                                        >
+                                            {props.food.portionSize}
+                                        </Box>
                                     </Box>
-                                ))
-                            }
-                        </Stack>
-                        <Stack direction={'column'} spacing={2} sx={{width: '100%'}}>
-                            <Box
-                                component={'div'}
-                                sx={styles.instructionHeader}
-                            >
-                                <ManualBook />
-                                <Box
-                                    component={'span'}
-                                    sx={styles.instructionTitle}
-                                >
-                                    INSTRUCTION
                                 </Box>
-                            </Box>
-                            <ReactMarkdown className={'instructionTxt'}>
-                                {props.food.instructions}
-                            </ReactMarkdown>
-                        </Stack>
-                    </Box>
-                    <Box
-                        component={'div'}
-                        sx={styles.rightPanel}
-                    >
-                        <Stack direction={'column'} spacing={2} sx={{width: '100%'}}>
+                                <Box
+                                    sx={[styles.explainItem, {padding: sm ? pixToRem(5) : pixToRem(10)}]}
+                                    component={'div'}
+                                >
+                                    <Meal />
+                                    <Box
+                                        component={'div'}
+                                        sx={styles.explainGroup}
+                                    >
+                                        <Box
+                                            component={'span'}
+                                            sx={sm ? styles.mobileExplainTitle : styles.explainTitle}
+                                        >Prepare Time:</Box>
+                                        <Box
+                                            component={'span'}
+                                            sx={sm ? styles.mobileExplainComment : styles.explainComment}
+                                        >
+                                            {props.food.prepareTime}
+                                        </Box>
+                                    </Box>
+                                </Box>
+                                <Box
+                                    sx={[styles.explainItem, {padding: sm ? pixToRem(5) : pixToRem(10)}]}
+                                    component={'div'}
+                                >
+                                    <Box
+                                        component={'img'}
+                                        sx={{width: 28, height: 28}}
+                                        src={Cooking}
+                                    />
+                                    <Box
+                                        component={'div'}
+                                        sx={styles.explainGroup}
+                                    >
+                                        <Box
+                                            component={'span'}
+                                            sx={sm ? styles.mobileExplainTitle : styles.explainTitle}
+                                        >Cook Time:</Box>
+                                        <Box
+                                            component={'span'}
+                                            sx={sm ? styles.mobileExplainComment : styles.explainComment}
+                                        >
+                                            {props.food.cookTime}
+                                        </Box>
+                                    </Box>
+                                </Box>
+                            </Stack>
                             <Box
                                 component={'div'}
-                                sx={styles.ingredientHeader}
+                                sx={styles.detailImgGroup}
                             >
-                                <Box
-                                    component={'img'}
-                                    sx={{width: 44, height: 44}}
-                                    src={Ingredient}
+                                <ReactPlayer
+                                    ref={videoPlayer}
+                                    url={props.food.video}
+                                    controls={true}
+                                    width={'100%'}
+                                    height={pixToRem(500)}
+                                    playing={true}
+                                    muted={false}
+                                    onEnded={() => setVideoState({...videoState, played: 1, playing: false})}
                                 />
-                                <Box
-                                    component={'span'}
-                                    sx={styles.ingredientTitle}
-                                >
-                                    INGREDIENTS
-                                </Box>
                             </Box>
-                            <ReactMarkdown className={'ingredientTxt'}>
-                                {props.food.ingredients}
-                            </ReactMarkdown>
-                        </Stack>
-                    </Box>
-                </Box>
+                            <Stack sx={styles.detailImgStack} spacing={2} direction={'row'}>
+                                {
+                                    props.food.images.map((item, index) => (
+                                        <Box
+                                            key={index}
+                                            sx={styles.detailImgItem}
+                                            component={'div'}
+                                        >
+                                            <Box
+                                                component={'img'}
+                                                src={item}
+                                                sx={{width: '100%', height: 'auto', backgroundSize: 'cover'}}
+                                            />
+                                        </Box>
+                                    ))
+                                }
+                            </Stack>
+                            <Stack direction={'column'} spacing={2} sx={{width: '100%'}}>
+                                <Box
+                                    component={'div'}
+                                    sx={[styles.instructionHeader, {mt: sm ? 7 : 5}]}
+                                >
+                                    <ManualBook />
+                                    <Box
+                                        component={'span'}
+                                        sx={styles.instructionTitle}
+                                    >
+                                        INSTRUCTION
+                                    </Box>
+                                </Box>
+                                <ReactMarkdown className={'instructionTxt'}>
+                                    {props.food.instructions}
+                                </ReactMarkdown>
+                            </Stack>
+                        </Box>
+                    </Grid>
+                    <Grid
+                        item
+                        md={6}
+                        sm={12}
+                    >
+                        <Box
+                            component={'div'}
+                            sx={styles.rightPanel}
+                        >
+                            <Stack direction={'column'} spacing={2} sx={{width: '100%'}}>
+                                <Box
+                                    component={'div'}
+                                    sx={[styles.ingredientHeader, {mt: sm ? 7 : 0}]}
+                                >
+                                    <Box
+                                        component={'img'}
+                                        sx={{width: 44, height: 44}}
+                                        src={Ingredient}
+                                    />
+                                    <Box
+                                        component={'span'}
+                                        sx={styles.ingredientTitle}
+                                    >
+                                        INGREDIENTS
+                                    </Box>
+                                </Box>
+                                <ReactMarkdown className={'ingredientTxt'}>
+                                    {props.food.ingredients}
+                                </ReactMarkdown>
+                            </Stack>
+                        </Box>
+                    </Grid>
+                </Grid>
                 <Box
                     component={'div'}
-                    sx={styles.downPanel}
+                    sx={[styles.downPanel, {
+                        mt: sm ? 10 : pixToRem(30),
+                        alignItems: sm ? 'center' : 'flex-start'
+                    }]}
                 >
                     <Box
                         component={'span'}
-                        sx={styles.redTitle}
+                        sx={sm ? styles.mobileRedTitle : styles.redTitle}
                     >
                         RECOMMENDED
                     </Box>
                     <Box
                         component={'span'}
-                        sx={styles.blackTitle}
+                        sx={sm ? styles.mobileBlackTitle : styles.blackTitle}
                     >
                         Recipes
                     </Box>
-                    <Stack direction={'row'} spacing={3} sx={{width: '100%', marginTop: pixToRem(30)}}>
+                    <Grid
+                        container
+                        spacing={3}
+                        sx={{width: '100%', marginTop: pixToRem(30)}}
+                    >
                         {
                             recommendedFoods.slice(0, 3).map((item, index) => (
-                                <Box
+                                <Grid
                                     key={index}
-                                    component={'div'}
-                                    sx={styles.upImgItem}
-                                    onClick={() => {
-                                        window.scrollTo(0, 0);
-                                        props.setPage(item);
-                                    }}
+                                    item
+                                    md={4}
+                                    sm={12}
+                                    sx={{width: '100%'}}
                                 >
                                     <Box
-                                        component={'img'}
-                                        sx={styles.upImg}
-                                        src={item.thumbnail}
-                                    />
-                                    <Box component={'span'} sx={styles.imgTitle} >{item.title}</Box>
-                                </Box>
+                                        component={'div'}
+                                        sx={styles.upImgItem}
+                                        onClick={() => {
+                                            window.scrollTo(0, 0);
+                                            props.setPage(item);
+                                        }}
+                                    >
+                                        <Box
+                                            component={'img'}
+                                            sx={styles.upImg}
+                                            src={item.thumbnail}
+                                        />
+                                        <Box component={'span'} sx={styles.imgTitle} >{item.title}</Box>
+                                    </Box>
+                                </Grid>
                             ))
                         }
-                    </Stack>
+                    </Grid>
                 </Box>
             </Box>
         )
@@ -328,7 +362,6 @@ const styles = {
     container: {
         display: 'flex',
         flex: 1,
-        width: '92%',
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'flex-start',
@@ -337,6 +370,14 @@ const styles = {
     redTitle: {
         fontFamily: fonts.roboto,
         fontSize: pixToRem(12),
+        fontWeight: 700,
+        fontStyle: 'normal',
+        color: '#CA3C3D',
+        lineHeight: pixToRem(45),
+    },
+    mobileRedTitle: {
+        fontFamily: fonts.roboto,
+        fontSize: pixToRem(20),
         fontWeight: 700,
         fontStyle: 'normal',
         color: '#CA3C3D',
@@ -360,6 +401,16 @@ const styles = {
         marginTop: pixToRem(5),
         marginBottom: pixToRem(15),
     },
+    mobileBlackTitle: {
+        fontFamily: fonts.roboto,
+        fontSize: pixToRem(33),
+        fontWeight: 700,
+        fontStyle: 'normal',
+        lineHeight: pixToRem(41.5),
+        color: colors.black,
+        marginTop: pixToRem(5),
+        marginBottom: pixToRem(15),
+    },
     statusImg: {
         width: pixToRem(40),
         height: pixToRem(40)
@@ -374,28 +425,18 @@ const styles = {
         marginTop: pixToRem(20),
         marginBottom: pixToRem(30),
     },
-    upPanel: {
-        width: '100%',
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'flex-start'
-    },
     downPanel: {
         width: '100%',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'flex-start',
-        marginTop: pixToRem(30)
     },
     leftPanel: {
-        width: '53%',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'flex-start'
     },
     rightPanel: {
-        width: '45%',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'flex-start'
@@ -403,6 +444,16 @@ const styles = {
     breadcrumb: {
         fontFamily: fonts.roboto,
         fontSize: pixToRem(14),
+        fontWeight: '700',
+        color: colors.red,
+        textTransform: 'capitalize',
+        ':hover': {
+            cursor: 'pointer'
+        },
+    },
+    mobileBreadcrumb: {
+        fontFamily: fonts.roboto,
+        fontSize: pixToRem(10),
         fontWeight: '700',
         color: colors.red,
         textTransform: 'capitalize',
@@ -420,7 +471,6 @@ const styles = {
         justifyContent: 'flex-start',
         alignItems: 'center',
         backgroundColor: 'white',
-        padding: pixToRem(10)
     },
     explainGroup: {
         display: 'flex',
@@ -435,9 +485,21 @@ const styles = {
         fontWeight: '700',
         color: colors.comment
     },
+    mobileExplainTitle: {
+        fontFamily: fonts.roboto,
+        fontSize: pixToRem(8),
+        fontWeight: '700',
+        color: colors.comment
+    },
     explainComment: {
         fontFamily: fonts.roboto,
         fontSize: pixToRem(14),
+        fontWeight: '700',
+        color: colors.black
+    },
+    mobileExplainComment: {
+        fontFamily: fonts.roboto,
+        fontSize: pixToRem(11),
         fontWeight: '700',
         color: colors.black
     },
@@ -533,6 +595,8 @@ const styles = {
     },
     upImgItem: {
         flex: 1,
+        width: '100%',
+        height: '100%',
         display: 'inline-flex',
         position: 'relative',
         ':hover': {
@@ -558,6 +622,8 @@ const styles = {
 }
 
 const Breadcrumb = memo(props => {
+    const theme = useTheme();
+    const sm = useMediaQuery(theme.breakpoints.down('sm'));
     return (
         <Breadcrumbs
             separator={<NavigateNextIcon sx={{color: colors.red}} fontSize="small" />}
@@ -566,7 +632,7 @@ const Breadcrumb = memo(props => {
             <Link
                 underline="hover"
                 key="1"
-                sx={styles.breadcrumb}
+                sx={sm ? styles.mobileBreadcrumb : styles.breadcrumb}
                 onClick={props.goToMain}
             >
                 Recipes
@@ -574,12 +640,12 @@ const Breadcrumb = memo(props => {
             <Link
                 underline="hover"
                 key="2"
-                sx={styles.breadcrumb}
+                sx={sm ? styles.mobileBreadcrumb : styles.breadcrumb}
                 onClick={props.goToSub}
             >
                 {props.recipe.title1}
             </Link>,
-            <Typography key="3" color={colors.red} sx={styles.breadcrumb}>
+            <Typography key="3" color={colors.red} sx={sm ? styles.mobileBreadcrumb : styles.breadcrumb}>
                 {props.food.title}
             </Typography>,
         </Breadcrumbs>

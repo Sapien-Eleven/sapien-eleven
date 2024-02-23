@@ -1,10 +1,11 @@
-import {Box, Breadcrumbs, Link, Stack, Typography} from "@mui/material";
+import {Box, Breadcrumbs, Link, Stack, Typography, useMediaQuery, useTheme} from "@mui/material";
 import {memo, useCallback, useEffect, useState} from "react";
 import {colors, fonts, pixToRem} from "../../const/uivar";
 import FoodDetail from "./FoodDetail";
 import axios from "axios";
 import {StrapiBaseURL, StrapiToken, StrapiURL} from "../../const/consts";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
+import Grid from "@mui/material/Unstable_Grid2";
 
 const Recipes = memo(props => {
     const [header, setHeader] = useState({});
@@ -75,75 +76,94 @@ const Recipes = memo(props => {
 export default Recipes
 
 const Main = memo(props => {
+    const theme = useTheme();
+    const sm = useMediaQuery(theme.breakpoints.down('sm'));
     return (
         <Box
             component={'div'}
-            sx={styles.panel}
+            sx={[styles.panel, {
+                pt: sm ? 7 : 12,
+                pl: sm ? 0 : 12,
+                pr: sm ? 0 : 10,
+                alignItems: sm ? 'center' : 'flex-start',
+            }]}
         >
             <Box
                 component={'span'}
-                sx={styles.redTitle}
+                sx={sm ? styles.mobileRedTitle : styles.redTitle}
             >
                 {props.header.title1}
             </Box>
             <Box
                 component={'span'}
-                sx={styles.blackTitle}
+                sx={sm ? styles.mobileBlackTitle : styles.blackTitle}
             >
                 {props.header.title2}
             </Box>
             <Box
                 component={'span'}
-                sx={styles.comment}
+                sx={sm ? styles.mobileComment : styles.comment}
             >
                 {props.header.description}
             </Box>
-            <Stack
+            <Grid
+                container
                 sx={styles.upImgPanel}
                 spacing={3}
-                direction={'row'}
             >
                 {
                     props.recipes.filter(i => i.title1 === 'BREAKFAST' || i.title1 === 'LUNCH' || i.title1 === 'DINNER').map((item, index) => (
-                        <Box
+                        <Grid
                             key={index}
-                            component={'div'}
-                            sx={styles.upImgItem}
-                            onClick={() => props.setPage(item)}
+                            item
+                            md={4}
+                            xs={12}
                         >
                             <Box
-                                component={'img'}
-                                sx={styles.upImg}
-                                src={item.thumbnail}
-                            />
-                            <Box component={'span'} sx={styles.imgTitle}>{item.title1}</Box>
-                        </Box>
+                                component={'div'}
+                                sx={styles.upImgItem}
+                                onClick={() => props.setPage(item)}
+                            >
+                                <Box
+                                    component={'img'}
+                                    sx={styles.upImg}
+                                    src={item.thumbnail}
+                                />
+                                <Box component={'span'} sx={styles.imgTitle}>{item.title1}</Box>
+                            </Box>
+                        </Grid>
                     ))
                 }
-            </Stack>
-            <Stack
+            </Grid>
+            <Grid
+                container
                 sx={styles.downImgPanel}
                 spacing={3}
-                direction={'row'}
             >
                 {
                     props.recipes.filter(i => i.title1 === 'SNACKS' || i.title1 === 'SIDES').map((item, index) => (
-                        <Box
-                            key={index}
-                            component={'div'}
-                            sx={styles.downImgItem}
-                            onClick={() => props.setPage(item)}
+                        <Grid
+                            item
+                            md={6}
+                            sm={12}
                         >
                             <Box
-                                component={'img'}
-                                sx={styles.downImg}
-                                src={item.thumbnail}
-                            />
-                            <Box component={'span'} sx={styles.imgTitle}>{item.title1}</Box>
-                        </Box>
+                                key={index}
+                                component={'div'}
+                                sx={styles.downImgItem}
+                                onClick={() => props.setPage(item)}
+                            >
+                                <Box
+                                    component={'img'}
+                                    sx={styles.downImg}
+                                    src={item.thumbnail}
+                                />
+                                <Box component={'span'} sx={styles.imgTitle}>{item.title1}</Box>
+                            </Box>
+                        </Grid>
                     ))
                 }
-            </Stack>
+            </Grid>
         </Box>
     )
 })
@@ -152,11 +172,10 @@ const styles = {
     panel: {
         display: 'flex',
         flex: 1,
-        width: '88%',
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'flex-start',
-        paddingBottom: pixToRem(30)
+        pb: 12
     },
     redTitle: {
         fontFamily: fonts.roboto,
@@ -166,6 +185,14 @@ const styles = {
         color: '#CA3C3D',
         lineHeight: pixToRem(45),
     },
+    mobileRedTitle: {
+        fontFamily: fonts.roboto,
+        fontSize: pixToRem(20),
+        fontWeight: 700,
+        fontStyle: 'normal',
+        color: '#CA3C3D',
+        lineHeight: pixToRem(36),
+    },
     blackTitle: {
         fontFamily: fonts.besan,
         fontSize: pixToRem(30),
@@ -173,6 +200,17 @@ const styles = {
         fontStyle: 'normal',
         lineHeight: pixToRem(45),
         color: colors.black,
+        marginTop: pixToRem(5),
+        marginBottom: pixToRem(15),
+    },
+    mobileBlackTitle: {
+        fontFamily: fonts.besan,
+        fontSize: pixToRem(25),
+        fontWeight: 400,
+        fontStyle: 'normal',
+        lineHeight: pixToRem(36),
+        color: colors.black,
+        textAlign: 'center',
         marginTop: pixToRem(5),
         marginBottom: pixToRem(15),
     },
@@ -186,12 +224,25 @@ const styles = {
         marginTop: pixToRem(20),
         marginBottom: pixToRem(30),
     },
+    mobileComment: {
+        width: '95%',
+        fontFamily: fonts.roboto,
+        fontStyle: 'normal',
+        fontWeight: 400,
+        fontSize: pixToRem(18),
+        lineHeight: pixToRem(24),
+        color: colors.comment,
+        textAlign: 'center',
+        marginTop: pixToRem(20),
+        marginBottom: pixToRem(30),
+    },
     upImgPanel: {
         width: '100%',
         marginTop: pixToRem(20),
     },
     upImgItem: {
         flex: 1,
+        width: '100%',
         display: 'inline-flex',
         position: 'relative',
         ':hover': {
@@ -211,6 +262,7 @@ const styles = {
         display: 'inline-flex',
         position: 'relative',
         flex: 1,
+        height: '100%',
         ':hover': {
             cursor: 'pointer'
         }
@@ -232,9 +284,10 @@ const styles = {
         color: 'white'
     },
     imgItem: {
+        flex: 1,
+        width: '100%',
         display: 'inline-flex',
         position: 'relative',
-        width: '31%',
         ':hover': {
             cursor: 'pointer'
         },
@@ -257,10 +310,24 @@ const styles = {
             cursor: 'pointer'
         },
     },
+    mobileBreadcrumb: {
+        fontFamily: fonts.roboto,
+        fontSize: pixToRem(20),
+        fontWeight: 700,
+        fontStyle: 'normal',
+        color: colors.red,
+        lineHeight: pixToRem(36),
+        textTransform: 'capitalize',
+        ':hover': {
+            cursor: 'pointer'
+        },
+    }
 }
 
 const SubContent = memo(props => {
     const [content, setContent] = useState([]);
+    const theme = useTheme();
+    const sm = useMediaQuery(theme.breakpoints.down('sm'));
     useEffect(() => {
         fetchContent().then();
     }, []);
@@ -317,62 +384,73 @@ const SubContent = memo(props => {
         return (
             <Box
                 component={'div'}
-                sx={styles.panel}
+                sx={[styles.panel, {
+                    pt: sm ? 7 : 12,
+                    pl: sm ? 0 : 12,
+                    pr: sm ? 0 : 10,
+                    alignItems: sm ? 'center' : 'flex-start',
+                }]}
             >
                 <Breadcrumb title={props.recipe.title1} goToMain={props.goToMain}/>
                 <Box
                     component={'span'}
-                    sx={styles.blackTitle}
+                    sx={sm ? styles.mobileBlackTitle : styles.blackTitle}
                 >
                     {props.recipe.title2}
                 </Box>
                 <Box
                     component={'span'}
-                    sx={styles.comment}
+                    sx={sm ? styles.mobileComment : styles.comment}
                 >
                     {props.recipe.description}
                 </Box>
-                <Stack
+                <Grid
+                    container
                     sx={styles.upImgPanel}
-                    direction={'row'}
                     spacing={3}
-                    useFlexGap
-                    flexWrap={'wrap'}
-                    justifyContent={'space-between'}
                 >
                     {
                         content.map((item, index) => (
-                            <Box
-                                key={index}
-                                component={'div'}
-                                sx={[styles.imgItem, {height: item.thumbnail === '' ? pixToRem(240) : 'auto'}]}
-                                onClick={() => props.setPage(item)}
+                            <Grid
+                                item
+                                lg={4}
+                                md={6}
+                                sm={12}
+                                sx={{width: '100%'}}
                             >
-                                {
-                                    item.thumbnail !== '' &&
+                                <Box
+                                    key={index}
+                                    component={'div'}
+                                    sx={[styles.imgItem, {height: item.thumbnail === '' ? pixToRem(240) : '100%'}]}
+                                    onClick={() => props.setPage(item)}
+                                >
+                                    {
+                                        item.thumbnail !== '' &&
                                         <Box
                                             component={'img'}
                                             sx={styles.upImg}
                                             src={item.thumbnail}
                                         />
-                                }
-                                <Box
-                                    component={'div'}
-                                    sx={styles.imgBack}
-                                >
-                                    <Box component={'span'} sx={styles.imgTitle}>{item.title}</Box>
+                                    }
+                                    <Box
+                                        component={'div'}
+                                        sx={styles.imgBack}
+                                    >
+                                        <Box component={'span'} sx={styles.imgTitle}>{item.title}</Box>
+                                    </Box>
                                 </Box>
-                            </Box>
+                            </Grid>
                         ))
                     }
-                </Stack>
-                <Box sx={{height: pixToRem(200)}}/>
+                </Grid>
             </Box>
         )
     } else return <Box/>
 })
 
 const Breadcrumb = memo(props => {
+    const theme = useTheme();
+    const sm = useMediaQuery(theme.breakpoints.down('sm'));
     return (
         <Breadcrumbs
             separator={<NavigateNextIcon sx={{color: colors.red}} fontSize="small" />}
@@ -381,12 +459,12 @@ const Breadcrumb = memo(props => {
             <Link
                 underline="hover"
                 key="1"
-                sx={styles.breadcrumb}
+                sx={sm ? styles.mobileBreadcrumb : styles.breadcrumb}
                 onClick={props.goToMain}
             >
                 Recipes
             </Link>,
-            <Typography key="3" color={colors.red} sx={styles.breadcrumb}>
+            <Typography key="3" color={colors.red} sx={sm ? styles.mobileBreadcrumb : styles.breadcrumb}>
                 {props.title}
             </Typography>,
         </Breadcrumbs>

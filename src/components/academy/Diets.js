@@ -1,9 +1,10 @@
-import {Box, Stack} from "@mui/material";
+import {Box, Stack, useMediaQuery, useTheme} from "@mui/material";
 import {memo, useCallback, useEffect, useState} from "react";
 import {colors, fonts, pixToRem} from "../../const/uivar";
 import DietDetail from "./DietDetail";
 import axios from "axios";
 import {StrapiBaseURL, StrapiToken, StrapiURL} from "../../const/consts";
+import Grid from "@mui/material/Unstable_Grid2";
 
 const Diets = memo(props => {
     const [content, setContent] = useState([])
@@ -64,9 +65,6 @@ const styles = {
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'flex-start',
-        paddingTop: pixToRem(100),
-        paddingLeft: pixToRem(100),
-        paddingRight: pixToRem(100),
         paddingBottom: pixToRem(80)
     },
     redTitle: {
@@ -77,6 +75,14 @@ const styles = {
         color: '#CA3C3D',
         lineHeight: pixToRem(45),
     },
+    mobileRedTitle: {
+        fontFamily: fonts.roboto,
+        fontSize: pixToRem(20),
+        fontWeight: 700,
+        fontStyle: 'normal',
+        color: '#CA3C3D',
+        lineHeight: pixToRem(36),
+    },
     blackTitle: {
         fontFamily: fonts.besan,
         fontSize: pixToRem(35),
@@ -84,6 +90,17 @@ const styles = {
         fontStyle: 'normal',
         lineHeight: pixToRem(45),
         color: colors.black,
+        marginTop: pixToRem(5),
+        marginBottom: pixToRem(15),
+    },
+    mobileBlackTitle: {
+        fontFamily: fonts.besan,
+        fontSize: pixToRem(25),
+        fontWeight: 400,
+        fontStyle: 'normal',
+        lineHeight: pixToRem(36),
+        color: colors.black,
+        textAlign: 'center',
         marginTop: pixToRem(5),
         marginBottom: pixToRem(15),
     },
@@ -103,7 +120,7 @@ const styles = {
         marginBottom: pixToRem(10)
     },
     imgItem: {
-        width: '45%',
+        width: '100%',
         display: 'inline-flex',
         position: 'relative',
         ':hover': {
@@ -161,55 +178,66 @@ const styles = {
 }
 
 const Main = memo(props => {
+    const theme = useTheme();
+    const sm = useMediaQuery(theme.breakpoints.down('sm'));
     if (props.content !== undefined && props.content.length > 0)
         return (
             <Box
                 component={'div'}
-                sx={styles.container}
+                sx={[styles.container, {
+                    pt: sm ? 7 : 12,
+                    pl: sm ? 2 : 12,
+                    pr: sm ? 2 : 12,
+                    alignItems: sm ? 'center' : 'flex-start'
+                }]}
             >
                 <Box
                     component={'span'}
-                    sx={styles.redTitle}
+                    sx={sm ? styles.mobileRedTitle : styles.redTitle}
                 >
                     {props.content[0].title1}
                 </Box>
                 <Box
                     component={'span'}
-                    sx={styles.blackTitle}
+                    sx={sm ? styles.mobileBlackTitle : styles.blackTitle}
                 >
                     {props.content[0].title2}
                 </Box>
                 <Box
                     component={'span'}
-                    sx={styles.comment}
+                    sx={[styles.comment, {textAlign: sm ? 'center' : 'start'}]}
                 >
                     {props.content[0].description}
                 </Box>
-                <Stack
+                <Grid
+                    container
                     sx={styles.imgPanel}
                     spacing={3}
-                    direction={'row'}
-                    useFlexGap
-                    flexWrap={'wrap'}
                 >
                     {
                         props.content.map((item, index) => (
-                            <Box
+                            <Grid
                                 key={index}
-                                component={'div'}
-                                sx={styles.imgItem}
-                                onClick={() => props.setPage(item)}
+                                item
+                                md={6}
+                                sm={12}
                             >
                                 <Box
-                                    component={'img'}
-                                    sx={styles.img}
-                                    src={item.thumbnail}
-                                />
-                                <Box component={'span'} sx={styles.imgTitle}>{item.thumbnailTitle}</Box>
-                            </Box>
+                                    component={'div'}
+                                    sx={styles.imgItem}
+                                    onClick={() => props.setPage(item)}
+                                >
+                                    <Box
+                                        component={'img'}
+                                        sx={styles.img}
+                                        src={item.thumbnail}
+                                    />
+                                    <Box component={'span'} sx={styles.imgTitle}>{item.thumbnailTitle}</Box>
+                                </Box>
+                            </Grid>
                         ))
                     }
-                </Stack>
+                </Grid>
             </Box>
         )
     else return <Box/>

@@ -1,5 +1,5 @@
 import {memo} from "react";
-import {Box, Breadcrumbs, Link, Stack, Typography} from "@mui/material";
+import {Box, Breadcrumbs, Link, Stack, Typography, useMediaQuery, useTheme} from "@mui/material";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import {colors, fonts, pixToRem} from "../../const/uivar";
 import ManualBookGrey from "../../assets/images/academy/ManualBookGrey";
@@ -9,8 +9,11 @@ import Minus from "../../assets/images/academy/Minus";
 import NoFood from "../../assets/images/academy/NoFood";
 import IngredientGreen from "../../assets/images/academy/IngredientGreen";
 import ReactMarkdown from "react-markdown";
+import Grid from "@mui/material/Unstable_Grid2";
 
 const DietDetail = memo(props => {
+    const theme = useTheme();
+    const sm = useMediaQuery(theme.breakpoints.down('sm'));
     if (props.diet !== undefined) {
         return (
             <Box
@@ -19,177 +22,208 @@ const DietDetail = memo(props => {
             >
                 <Box
                     component={'div'}
-                    sx={[styles.header, {backgroundImage: `url(${props.diet.headerImage})`}]}
+                    sx={[sm ? styles.mobileHeader : styles.header, {backgroundImage: `url(${props.diet.headerImage})`}]}
                 >
                     <Box
                         component={'div'}
-                        sx={styles.headerContent}
+                        sx={sm ? styles.mobileHeaderContent : styles.headerContent}
                     >
                         <Breadcrumb diet={props.diet} goToMain={props.goToMain} />
                         <Box
                             component={'span'}
-                            sx={styles.whiteTitle}
+                            sx={sm ? styles.mobileWhiteTitle : styles.whiteTitle}
                         >{props.diet.thumbnailTitle}</Box>
                     </Box>
                 </Box>
                 <Box
                     component={'div'}
-                    sx={styles.panel}
+                    sx={[styles.panel, {
+                        pt: sm ? 7 : 10,
+                        pl: sm ? 2 : 12,
+                        pr: sm ? 2 : 12,
+                        pb: sm ? 7 : 10
+                    }]}
                 >
-                    <Box
-                        component={'div'}
-                        sx={styles.upPanel}
+                    <Grid
+                        container
+                        spacing={3}
                     >
-                        <Box
-                            component={'div'}
-                            sx={styles.leftPanel}
+                        <Grid
+                            item
+                            md={7}
+                            sm={12}
                         >
-                            <Stack sx={{width: '100%'}} direction={'column'} spacing={4}>
-                                <Stack sx={{width: '100%'}} direction={'column'} spacing={3}>
-                                    <Box
-                                        component={'div'}
-                                        sx={styles.commentPanel}
-                                    >
-                                        <ManualBookGrey />
+                            <Box
+                                component={'div'}
+                                sx={styles.leftPanel}
+                            >
+                                <Stack sx={{width: '100%'}} direction={'column'} spacing={4}>
+                                    <Stack sx={{width: '100%'}} direction={'column'} spacing={3}>
                                         <Box
-                                            component={'span'}
-                                            sx={styles.blackCommentTitle}
-                                        >What is it?</Box>
-                                    </Box>
-                                    <Box
-                                        component={'div'}
-                                        sx={styles.comment}
-                                    >
-                                        {props.diet.whatIsIt}
-                                    </Box>
-                                </Stack>
-                                <Stack sx={{width: '100%'}} direction={'column'} spacing={3}>
-                                    <Box
-                                        component={'div'}
-                                        sx={styles.commentPanel}
-                                    >
-                                        <QuestionMark />
+                                            component={'div'}
+                                            sx={styles.commentPanel}
+                                        >
+                                            <ManualBookGrey />
+                                            <Box
+                                                component={'span'}
+                                                sx={styles.blackCommentTitle}
+                                            >What is it?</Box>
+                                        </Box>
                                         <Box
-                                            component={'span'}
-                                            sx={styles.blackCommentTitle}
-                                        >How and why it works?</Box>
-                                    </Box>
-                                    <Box
-                                        component={'div'}
-                                        sx={styles.comment}
-                                    >
-                                        {props.diet.howWhyWorks}
-                                    </Box>
-                                </Stack>
-                                <Stack sx={{width: '100%'}} direction={'column'} spacing={3}>
-                                    <Box
-                                        component={'div'}
-                                        sx={styles.commentPanel}
-                                    >
-                                        <Plus />
+                                            component={'div'}
+                                            sx={styles.comment}
+                                        >
+                                            {props.diet.whatIsIt}
+                                        </Box>
+                                    </Stack>
+                                    <Stack sx={{width: '100%'}} direction={'column'} spacing={3}>
                                         <Box
-                                            component={'span'}
-                                            sx={styles.blackCommentTitle}
-                                        >Pros</Box>
-                                    </Box>
-                                    <ReactMarkdown className={'instructionTxt'}>
-                                        {props.diet.pros}
-                                    </ReactMarkdown>
-                                </Stack>
-                                <Stack sx={{width: '100%'}} direction={'column'} spacing={3}>
-                                    <Box
-                                        component={'div'}
-                                        sx={styles.commentPanel}
-                                    >
-                                        <Minus />
+                                            component={'div'}
+                                            sx={styles.commentPanel}
+                                        >
+                                            <QuestionMark />
+                                            <Box
+                                                component={'span'}
+                                                sx={styles.blackCommentTitle}
+                                            >How and why it works?</Box>
+                                        </Box>
                                         <Box
-                                            component={'span'}
-                                            sx={styles.blackCommentTitle}
-                                        >Cons</Box>
-                                    </Box>
-                                    <ReactMarkdown className={'instructionTxt'}>
-                                        {props.diet.cons}
-                                    </ReactMarkdown>
+                                            component={'div'}
+                                            sx={styles.comment}
+                                        >
+                                            {props.diet.howWhyWorks}
+                                        </Box>
+                                    </Stack>
+                                    <Stack sx={{width: '100%'}} direction={'column'} spacing={3}>
+                                        <Box
+                                            component={'div'}
+                                            sx={styles.commentPanel}
+                                        >
+                                            <Plus />
+                                            <Box
+                                                component={'span'}
+                                                sx={styles.blackCommentTitle}
+                                            >Pros</Box>
+                                        </Box>
+                                        <ReactMarkdown className={'instructionTxt'}>
+                                            {props.diet.pros}
+                                        </ReactMarkdown>
+                                    </Stack>
+                                    <Stack sx={{width: '100%'}} direction={'column'} spacing={3}>
+                                        <Box
+                                            component={'div'}
+                                            sx={styles.commentPanel}
+                                        >
+                                            <Minus />
+                                            <Box
+                                                component={'span'}
+                                                sx={styles.blackCommentTitle}
+                                            >Cons</Box>
+                                        </Box>
+                                        <ReactMarkdown className={'instructionTxt'}>
+                                            {props.diet.cons}
+                                        </ReactMarkdown>
+                                    </Stack>
                                 </Stack>
-                            </Stack>
-                        </Box>
-                        <Box
-                            component={'div'}
-                            sx={styles.rightPanel}
+                            </Box>
+                        </Grid>
+                        <Grid
+                            item
+                            mdOffset={1}
+                            md={4}
+                            sm={12}
                         >
-                            <Stack sx={{width: '100%'}} direction={'column'} spacing={4}>
-                                <Stack sx={{width: '100%'}} direction={'column'} spacing={3}>
-                                    <Box
-                                        component={'div'}
-                                        sx={styles.commentPanel}
-                                    >
-                                        <IngredientGreen fill={colors.green} />
+                            <Box
+                                component={'div'}
+                                sx={styles.rightPanel}
+                            >
+                                <Stack sx={{width: '100%'}} direction={'column'} spacing={4}>
+                                    <Stack sx={{width: '100%'}} direction={'column'} spacing={3}>
                                         <Box
-                                            component={'span'}
-                                            sx={[styles.blackCommentTitle, {color: colors.green}]}
-                                        >Foods to eat!</Box>
-                                    </Box>
-                                    <ReactMarkdown className={'ingredientTxt'}>
-                                        {props.diet.foodsToEat}
-                                    </ReactMarkdown>
-                                </Stack>
-                                <Stack sx={{width: '100%'}} direction={'column'} spacing={3}>
-                                    <Box
-                                        component={'div'}
-                                        sx={styles.commentPanel}
-                                    >
-                                        <NoFood />
+                                            component={'div'}
+                                            sx={styles.commentPanel}
+                                        >
+                                            <IngredientGreen fill={colors.green} />
+                                            <Box
+                                                component={'span'}
+                                                sx={[styles.blackCommentTitle, {color: colors.green}]}
+                                            >Foods to eat!</Box>
+                                        </Box>
+                                        <ReactMarkdown className={'ingredientTxt'}>
+                                            {props.diet.foodsToEat}
+                                        </ReactMarkdown>
+                                    </Stack>
+                                    <Stack sx={{width: '100%'}} direction={'column'} spacing={3}>
                                         <Box
-                                            component={'span'}
-                                            sx={[styles.blackCommentTitle, {color: colors.red}]}
-                                        >Foods to avoid!</Box>
-                                    </Box>
-                                    <ReactMarkdown className={'ingredientTxt'}>
-                                        {props.diet.foodsToAvoid}
-                                    </ReactMarkdown>
+                                            component={'div'}
+                                            sx={styles.commentPanel}
+                                        >
+                                            <NoFood />
+                                            <Box
+                                                component={'span'}
+                                                sx={[styles.blackCommentTitle, {color: colors.red}]}
+                                            >Foods to avoid!</Box>
+                                        </Box>
+                                        <ReactMarkdown className={'ingredientTxt'}>
+                                            {props.diet.foodsToAvoid}
+                                        </ReactMarkdown>
+                                    </Stack>
                                 </Stack>
-                            </Stack>
-                        </Box>
-                    </Box>
+                            </Box>
+                        </Grid>
+                    </Grid>
                     <Box
                         component={'div'}
-                        sx={styles.downPanel}
+                        sx={[styles.downPanel, {
+                            mt: sm ? 10 : pixToRem(80),
+                            alignItems: sm ? 'center' : 'flex-start'
+                        }]}
                     >
                         <Box
                             component={'span'}
-                            sx={styles.redTitle}
+                            sx={sm ? styles.mobileRedTitle : styles.redTitle}
                         >
                             RECOMMENDED
                         </Box>
                         <Box
                             component={'span'}
-                            sx={styles.blackTitle}
+                            sx={sm ? styles.mobileBlackTitle : styles.blackTitle}
                         >Diets</Box>
-                        <Stack sx={{width: '100%', marginTop: pixToRem(30)}} direction={'row'} spacing={3}>
+                        <Grid
+                            sx={{width: '100%', marginTop: pixToRem(30)}}
+                            container
+                            spacing={3}
+                        >
                             {
                                 props.recommendedDiets.filter(e => e.thumbnailTitle !== props.diet.thumbnailTitle).map((item, index) => (
-                                    <Box
+                                    <Grid
                                         key={index}
-                                        component={'div'}
-                                        sx={styles.downImgItem}
-                                        onClick={() => {
-                                            window.scrollTo(0, 0);
-                                            props.changeDetail(item);
-                                        }}
+                                        item
+                                        md={4}
+                                        sm={12}
                                     >
                                         <Box
-                                            component={'img'}
-                                            src={item.thumbnail}
-                                            sx={styles.downImg}
-                                        />
-                                        <Box
-                                            component={'span'}
-                                            sx={styles.imgTitle}
-                                        >{item.thumbnailTitle}</Box>
-                                    </Box>
+                                            component={'div'}
+                                            sx={styles.downImgItem}
+                                            onClick={() => {
+                                                window.scrollTo(0, 0);
+                                                props.changeDetail(item);
+                                            }}
+                                        >
+                                            <Box
+                                                component={'img'}
+                                                src={item.thumbnail}
+                                                sx={styles.downImg}
+                                            />
+                                            <Box
+                                                component={'span'}
+                                                sx={styles.imgTitle}
+                                            >{item.thumbnailTitle}</Box>
+                                        </Box>
+                                    </Grid>
                                 ))
                             }
-                        </Stack>
+                        </Grid>
                     </Box>
                 </Box>
             </Box>
@@ -210,13 +244,9 @@ const styles = {
     },
     panel: {
         display: 'flex',
-        width: '83%',
         flexDirection: 'column',
         justifyContent: 'center',
-        alignItems: 'flex-start',
-        paddingTop: pixToRem(80),
-        paddingBottom: pixToRem(80),
-        marginLeft: pixToRem(100)
+        alignItems: 'center',
     },
     header: {
         width: '100%',
@@ -228,12 +258,30 @@ const styles = {
         backgroundRepeat: 'no-repeat',
         backgroundSize: 'cover',
     },
+    mobileHeader: {
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundRepeat: 'no-repeat',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center'
+    },
     headerContent: {
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'flex-start',
         marginLeft: pixToRem(180)
+    },
+    mobileHeaderContent: {
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        pt: 20,
+        pb: 5
     },
     whiteTitle: {
         fontFamily: fonts.roboto,
@@ -245,18 +293,21 @@ const styles = {
         marginTop: pixToRem(5),
         marginBottom: pixToRem(15),
     },
+    mobileWhiteTitle: {
+        fontFamily: fonts.roboto,
+        fontSize: pixToRem(33),
+        fontWeight: 700,
+        fontStyle: 'normal',
+        lineHeight: pixToRem(41.5),
+        color: 'white',
+        marginTop: pixToRem(5),
+        marginBottom: pixToRem(15),
+    },
     breadcrumb: {
         fontFamily: fonts.roboto,
         fontSize: pixToRem(14),
         fontWeight: '700',
         color: colors.red
-    },
-    upPanel: {
-        width: '100%',
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'flex-start'
     },
     downPanel: {
         display: 'flex',
@@ -264,17 +315,14 @@ const styles = {
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'flex-start',
-        marginTop: pixToRem(80)
     },
     leftPanel: {
-        width: '50%',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'flex-start'
     },
     rightPanel: {
-        width: '35%',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
@@ -312,12 +360,28 @@ const styles = {
         color: '#CA3C3D',
         lineHeight: pixToRem(45),
     },
+    mobileRedTitle: {
+        fontFamily: fonts.roboto,
+        fontSize: pixToRem(20),
+        fontWeight: 700,
+        fontStyle: 'normal',
+        color: '#CA3C3D',
+        lineHeight: pixToRem(45),
+    },
     blackTitle: {
         fontFamily: fonts.roboto,
         fontSize: pixToRem(45),
         fontWeight: 700,
         fontStyle: 'normal',
         lineHeight: pixToRem(65),
+        color: colors.black,
+    },
+    mobileBlackTitle: {
+        fontFamily: fonts.roboto,
+        fontSize: pixToRem(33),
+        fontWeight: 700,
+        fontStyle: 'normal',
+        lineHeight: pixToRem(36),
         color: colors.black,
     },
     downImgItem: {

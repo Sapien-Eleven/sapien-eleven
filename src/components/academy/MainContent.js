@@ -144,6 +144,7 @@ const styles = {
         marginBottom: pixToRem(15),
     },
     mobileBlackTitle: {
+        maxWidth: '90%',
         fontFamily: fonts.besan,
         fontSize: pixToRem(25),
         fontWeight: 400,

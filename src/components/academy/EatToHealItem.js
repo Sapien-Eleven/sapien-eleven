@@ -1,5 +1,5 @@
 import {memo, useCallback, useEffect, useState} from "react";
-import {Box, Breadcrumbs, Button, Link, Stack, Typography} from "@mui/material";
+import {Box, Breadcrumbs, Button, Link, Stack, Typography, useMediaQuery, useTheme} from "@mui/material";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import {colors, fonts, pixToRem} from "../../const/uivar";
 import {ArrowDropDown, ArrowRight} from "@mui/icons-material";
@@ -35,6 +35,8 @@ const EatToHealItem = memo(props => {
     const [currentColor, setCurrentColor] = useState('Reds');
     const [content, setContent] = useState([]);
     const [showLearnMore, setShowLearnMore] = useState(false);
+    const theme = useTheme();
+    const sm = useMediaQuery(theme.breakpoints.down('sm'));
 
     useEffect(() => {
         fetchContent().then();
@@ -77,11 +79,11 @@ const EatToHealItem = memo(props => {
         >
             <Box
                 component={'div'}
-                sx={[styles.header, {backgroundImage: `url(${props.heal.headerImage})`}]}
+                sx={[sm ? styles.mobileHeader : styles.header, {backgroundImage: `url(${props.heal.headerImage})`}]}
             >
                 <Box
                     component={'div'}
-                    sx={styles.headerContent}
+                    sx={sm ? styles.mobileHeaderContent : styles.headerContent}
                 >
                     <Breadcrumb currentPage={props.heal.title} goToMain={props.goToMain} />
                     <Box
@@ -90,7 +92,11 @@ const EatToHealItem = memo(props => {
                     >{props.heal.title}</Box>
                 </Box>
                 <Button
-                    sx={styles.learnMoreBtn}
+                    sx={[styles.learnMoreBtn, {
+                        mr: sm ? 0 : '7%',
+                        mt: sm ? 2 : 0,
+                        mb: sm ? 7 : 0
+                    }]}
                     onClick={toggleLearnMore}
                 >
                     {
@@ -102,7 +108,12 @@ const EatToHealItem = memo(props => {
                 showLearnMore &&
                 <Box
                     component={'div'}
-                    sx={styles.learnMorePanel}
+                    sx={[styles.learnMorePanel, {
+                        pl: sm ? 5 : pixToRem(200),
+                        pr: sm ? 5 : pixToRem(200),
+                        pt: sm ? 7 : pixToRem(100),
+                        pb: sm ? 7 : pixToRem(100)
+                    }]}
                 >
                     <ReactMarkdown className={'learnMoreTxt'}>
                         {props.heal.learnMore}
@@ -111,24 +122,24 @@ const EatToHealItem = memo(props => {
             }
             <Box
                 component={'div'}
-                sx={styles.panel}
+                sx={sm ? styles.mobilePanel : styles.panel}
             >
                 {
                     props.heal.title.toLowerCase() === 'colors' &&
                     <Stack
                         sx={{width: '100%'}}
                         direction={'row'}
-                        spacing={3}
+                        spacing={sm ? 1 : 3}
                     >
                         {
                             preColors.map((item, index) => (
                                 <Box
                                     key={index}
                                     component={'div'}
-                                    sx={[styles.colorsTab, {borderBottomColor: currentColor === item.name ? item.color : 'white'}]}
+                                    sx={[sm ? styles.mobileColorsTab : styles.colorsTab, {borderBottomColor: currentColor === item.name ? item.color : 'white'}]}
                                     onClick={() => changeColor(item.name)}
                                 >
-                                    <Box component={'span'} sx={styles.colorsTabTxt}>{item.name}</Box>
+                                    <Box component={'span'} sx={[styles.colorsTabTxt, {mb: sm ? 1 : 0}]}>{item.name}</Box>
                                     <Box component={'div'} sx={[styles.colorsTabColor, {backgroundColor: item.color}]}/>
                                 </Box>
                             ))
@@ -142,9 +153,9 @@ const EatToHealItem = memo(props => {
                             key={index}
                             item={item}
                             borderColor={
-                            props.heal.title === 'COLORS' ?
-                                preColors.find(e => e.name === currentColor).color
-                                : colors.red
+                                props.heal.title === 'COLORS' ?
+                                    preColors.find(e => e.name === currentColor).color
+                                    : colors.red
                             }
                         />
                     ))
@@ -164,7 +175,7 @@ const styles = {
         backgroundColor: colors.bgWhiteColor,
         flexDirection: 'column',
         justifyContent: 'center',
-        alignItems: 'flex-start',
+        alignItems: 'center',
     },
     panel: {
         display: 'flex',
@@ -175,7 +186,18 @@ const styles = {
         alignItems: 'flex-start',
         paddingTop: pixToRem(30),
         paddingBottom: pixToRem(30),
-        marginLeft: pixToRem(100),
+    },
+    mobilePanel: {
+        display: 'flex',
+        boxSizing: 'border-box',
+        flex: 1,
+        width: '100%',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        pl: 1.5, pr: 1.5,
+        paddingTop: pixToRem(30),
+        paddingBottom: pixToRem(30),
     },
     header: {
         width: '100%',
@@ -187,12 +209,29 @@ const styles = {
         backgroundRepeat: 'no-repeat',
         backgroundSize: 'cover',
     },
+    mobileHeader: {
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundRepeat: 'no-repeat',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center'
+    },
     headerContent: {
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'flex-start',
         marginLeft: pixToRem(100)
+    },
+    mobileHeaderContent: {
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        pt: 20,
     },
     learnMoreBtn: {
         border: '1px solid #CA3C3D',
@@ -202,7 +241,6 @@ const styles = {
         alignItems: 'center',
         width: pixToRem(250),
         height: pixToRem(45),
-        marginRight: '7%',
         fontFamily: fonts.roboto,
         fontWeight: '700',
         fontSize: pixToRem(14),
@@ -211,10 +249,6 @@ const styles = {
     learnMorePanel: {
         width: '100%',
         backgroundColor: '#111',
-        paddingLeft: pixToRem(200),
-        paddingRight: pixToRem(200),
-        paddingTop: pixToRem(100),
-        paddingBottom: pixToRem(100),
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
@@ -256,6 +290,17 @@ const styles = {
         borderBottomWidth: pixToRem(2),
         borderBottomStyle: 'solid'
     },
+    mobileColorsTab: {
+        display: 'flex',
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'white',
+        padding: pixToRem(5),
+        borderBottomWidth: pixToRem(2),
+        borderBottomStyle: 'solid'
+    },
     colorsTabTxt: {
         fontFamily: fonts.roboto,
         fontSize: pixToRem(14),
@@ -268,7 +313,6 @@ const styles = {
         borderRadius: pixToRem(16)
     },
     contentItem: {
-        width: '100%',
         padding: pixToRem(20),
         backgroundColor: 'white',
         borderBottomWidth: pixToRem(1),
@@ -297,7 +341,11 @@ const styles = {
         paddingBottom: pixToRem(40),
         paddingLeft: pixToRem(30),
         paddingRight: pixToRem(30),
-    }
+    },
+    mobileContentItemBody: {
+        pt: 3, pb: 3,
+        pl: 2, pr: 2
+    },
 }
 
 const Breadcrumb = memo(props => {
@@ -317,6 +365,8 @@ const Breadcrumb = memo(props => {
 })
 
 const ContentItem = memo(props => {
+    const theme = useTheme();
+    const sm = useMediaQuery(theme.breakpoints.down('sm'));
     const {getCollapseProps, getToggleProps, isExpanded, setExpanded} = useCollapse({
         duration: 1000,
     });
@@ -326,7 +376,10 @@ const ContentItem = memo(props => {
     return (
         <Box
             component={'div'}
-            sx={[styles.contentItem, {border: isExpanded ? `1px solid ${props.borderColor}` : null}]}
+            sx={[styles.contentItem, {
+                width: sm ? '90%' : '100%',
+                border: isExpanded ? `1px solid ${props.borderColor}` : null
+            }]}
         >
             <Box
                 component={'div'}
@@ -345,16 +398,16 @@ const ContentItem = memo(props => {
                         <ArrowRight sx={{marginLeft: pixToRem(10)}} />
                 }
             </Box>
-            <Box
-                component={'div'}
-                sx={styles.contentItemBody}
-                {...getCollapseProps()}
-            >
-                <ReactMarkdown className={'eatToHealDescriptionTxt'}>
-                    {props.item.description}
-                </ReactMarkdown>
-            </Box>
-
+            <div {...getCollapseProps()}>
+                <Box
+                    component={'div'}
+                    sx={sm ? styles.mobileContentItemBody: styles.contentItemBody}
+                >
+                    <ReactMarkdown className={'eatToHealDescriptionTxt'}>
+                        {props.item.description}
+                    </ReactMarkdown>
+                </Box>
+            </div>
         </Box>
     )
 })

@@ -1,4 +1,4 @@
-import {Box, Stack} from "@mui/material";
+import {Box, Stack, useMediaQuery, useTheme} from "@mui/material";
 import {memo, useCallback, useEffect, useState} from "react";
 import {colors, fonts, pixToRem} from "../../const/uivar";
 import EatToHealItem from "./EatToHealItem";
@@ -7,6 +7,7 @@ import {StrapiBaseURL, StrapiToken, StrapiURL} from "../../const/consts";
 import ReactMarkdown from "react-markdown";
 import {useCollapse} from "react-collapsed";
 import {ArrowDropDown, ArrowRight} from "@mui/icons-material";
+import Grid from "@mui/material/Unstable_Grid2";
 
 const EatToHeal = memo(props => {
     const [header, setHeader] = useState({});
@@ -73,11 +74,7 @@ const styles = {
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'flex-start',
-        width: '80%',
-        paddingTop: pixToRem(80),
         paddingBottom: pixToRem(80),
-        paddingLeft: pixToRem(100),
-        paddingRight: pixToRem(80),
     },
     redTitle: {
         fontFamily: fonts.roboto,
@@ -87,6 +84,14 @@ const styles = {
         color: '#CA3C3D',
         lineHeight: pixToRem(45),
     },
+    mobileRedTitle: {
+        fontFamily: fonts.roboto,
+        fontSize: pixToRem(20),
+        fontWeight: 700,
+        fontStyle: 'normal',
+        color: '#CA3C3D',
+        lineHeight: pixToRem(36),
+    },
     blackTitle: {
         fontFamily: fonts.besan,
         fontSize: pixToRem(35),
@@ -94,6 +99,17 @@ const styles = {
         fontStyle: 'normal',
         lineHeight: pixToRem(45),
         color: colors.black,
+        marginTop: pixToRem(5),
+        marginBottom: pixToRem(15),
+    },
+    mobileBlackTitle: {
+        fontFamily: fonts.besan,
+        fontSize: pixToRem(25),
+        fontWeight: 400,
+        fontStyle: 'normal',
+        lineHeight: pixToRem(36),
+        color: colors.black,
+        textAlign: 'center',
         marginTop: pixToRem(5),
         marginBottom: pixToRem(15),
     },
@@ -118,6 +134,17 @@ const styles = {
         marginTop: pixToRem(20),
         marginBottom: pixToRem(30),
     },
+    mobileComment: {
+        fontFamily: fonts.roboto,
+        fontStyle: 'normal',
+        fontWeight: 400,
+        fontSize: pixToRem(18),
+        lineHeight: pixToRem(24),
+        color: colors.comment,
+        textAlign: 'center',
+        marginTop: pixToRem(20),
+        marginBottom: pixToRem(30),
+    },
     howItWorksPanel: {
         width: '80%',
         backgroundColor: 'white',
@@ -134,7 +161,7 @@ const styles = {
         justifyContent: 'space-between',
     },
     imgItem: {
-        width: '31%',
+        width: '100%',
         display: 'inline-flex',
         position: 'relative',
         ':hover': {
@@ -192,29 +219,36 @@ const styles = {
 }
 
 const Main = memo(props => {
+    const theme = useTheme();
+    const sm = useMediaQuery(theme.breakpoints.down('sm'));
     const {getCollapseProps, getToggleProps, isExpanded} = useCollapse({
         duration: 1000,
     });
     return (
         <Box
             component={'div'}
-            sx={styles.container}
+            sx={[styles.container, {
+                pt: sm ? 7 : 12,
+                pl: sm ? 2 : 12,
+                pr: sm ? 2 : 12,
+                alignItems: sm ? 'center' : 'flex-start'
+            }]}
         >
             <Box
                 component={'span'}
-                sx={styles.redTitle}
+                sx={sm ? styles.mobileRedTitle : styles.redTitle}
             >
                 {props.header.title1}
             </Box>
             <Box
                 component={'span'}
-                sx={styles.blackTitle}
+                sx={sm ? styles.mobileBlackTitle : styles.blackTitle}
             >
                 {props.header.title2}
             </Box>
             <Box
                 component={'span'}
-                sx={styles.comment}
+                sx={sm ? styles.mobileComment : styles.comment}
             >
                 {props.header.description}
             </Box>
@@ -244,27 +278,27 @@ const Main = memo(props => {
                     component={'div'}
                     {...getCollapseProps()}
                 >
-                    <ReactMarkdown className={'howItWorksTxt'}>
+                    <ReactMarkdown className={sm ? 'mobileHowItWorksTxt' : 'howItWorksTxt'}>
                         {props.header.howItWorks}
                     </ReactMarkdown>
                 </Box>
             </Box>
-            <Stack
+            <Grid
                 sx={{width: '100%', marginTop: pixToRem(20), marginBottom: pixToRem(50)}}
-                direction={'column'}
+                container
                 spacing={3}
             >
-                <Stack
-                    sx={{width: '100%'}}
-                    spacing={3}
-                    direction={'row'}
-                    useFlexGap
-                    flexWrap={'wrap'}
-                >
-                    {
-                        props.heals.map((item, index) => (
+                {
+                    props.heals.map((item, index) => (
+                        <Grid
+                            key={index}
+                            item
+                            lg={4}
+                            md={6}
+                            sm={12}
+                            sx={{width: '100%'}}
+                        >
                             <Box
-                                key={index}
                                 component={'div'}
                                 sx={styles.imgItem}
                                 onClick={() => props.goToDetail(item)}
@@ -276,10 +310,10 @@ const Main = memo(props => {
                                 />
                                 <Box component={'span'} sx={styles.imgTitle} >{item.title}</Box>
                             </Box>
-                        ))
-                    }
-                </Stack>
-            </Stack>
+                        </Grid>
+                    ))
+                }
+            </Grid>
         </Box>
     )
 })

@@ -116,6 +116,17 @@
     margin-top: 15px;
 }
 
+.mobileAcademyPlaceTxt {
+    width: 90%;
+    font-family: 'Roboto';
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 24px;
+    color: #999;
+    text-align: center;
+    margin-top: 15px;
+}
+
 .instructionTxt {
     padding: 20px 30px;
     background-color: white;

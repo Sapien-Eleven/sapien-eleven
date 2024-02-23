@@ -1,13 +1,17 @@
-import {Box, Container} from "@mui/material";
+import {Box, Container, useMediaQuery, useTheme} from "@mui/material";
 import {memo, useEffect, useState} from "react";
 import {colors, fonts, pixToRem} from "../../const/uivar";
 import Mindfullness from '../../assets/images/academy/mindfulness_room.png'
 import axios from "axios";
 import {StrapiToken, StrapiURL} from "../../const/consts";
 import ReactMarkdown from "react-markdown";
+import Grid from "@mui/material/Unstable_Grid2";
 
 const Middle = memo(props => {
     const [content, setContent] = useState({})
+    const theme = useTheme();
+    const sm = useMediaQuery(theme.breakpoints.down('sm'));
+    const md = useMediaQuery(theme.breakpoints.down('md'));
     useEffect(() => {
         fetchContent().then();
     }, []);
@@ -29,50 +33,67 @@ const Middle = memo(props => {
         });
     }
     return (
-        <Container
-            maxWidth={false}
-            component={'div'}
+        <Grid
+            container
             sx={styles.panel}
         >
-            <Box
-                component={'img'}
-                sx={styles.image}
-                src={Mindfullness}
-            />
-            <Box
-                component={'div'}
-                sx={styles.commentPanel}
+            {!md && <Grid
+                item
+                md={6}
+                sm={12}
             >
                 <Box
-                    component={'span'}
-                    sx={styles.redTitle}
-                >{content.title1}</Box>
+                    component={'img'}
+                    sx={styles.image}
+                    src={Mindfullness}
+                />
+            </Grid>}
+            <Grid
+                item
+                md={6}
+                sm={12}
+            >
                 <Box
-                    component={'span'}
-                    sx={styles.blackTitle}
-                >{content.title2}</Box>
-                <ReactMarkdown className={'academyPlaceTxt'}>
-                    {content.description}
-                </ReactMarkdown>
-            </Box>
-        </Container>
+                    component={'div'}
+                    sx={sm ? styles.mobileCommentPanel : styles.commentPanel}
+                >
+                    <Box
+                        component={'span'}
+                        sx={sm ? styles.mobileRedTitle : styles.redTitle}
+                    >{content.title1}</Box>
+                    <Box
+                        component={'span'}
+                        sx={sm ? styles.mobileBlackTitle : styles.blackTitle}
+                    >{content.title2}</Box>
+                    <ReactMarkdown className={sm ? 'mobileAcademyPlaceTxt' : 'academyPlaceTxt'}>
+                        {content.description}
+                    </ReactMarkdown>
+                </Box>
+            </Grid>
+            {md && <Grid
+                item
+                md={6}
+                sm={12}
+            >
+                <Box
+                    component={'img'}
+                    sx={styles.image}
+                    src={Mindfullness}
+                />
+            </Grid>}
+        </Grid>
     )
 })
 export default Middle
 
 const styles = {
     panel: {
-        width: '100%',
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
         backgroundColor: colors.bgWhiteColor,
-        padding: '0px!important'
+        p: 0
     },
     image: {
-        width: '50%',
-        height: 'auto',
+        width: '100%',
+        height: '100%',
         backgroundRepeat: 'no-repeat',
         backgroundSize: 'cover',
     },
@@ -82,7 +103,17 @@ const styles = {
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'flex-start',
-        paddingLeft: '12%'
+        pt: 10,
+        pl: 13,
+        pb: 5
+    },
+    mobileCommentPanel: {
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        pt: 7,
+        pb: 7
     },
     redTitle: {
         fontFamily: fonts.roboto,
@@ -92,6 +123,14 @@ const styles = {
         color: '#CA3C3D',
         lineHeight: pixToRem(45),
     },
+    mobileRedTitle: {
+        fontFamily: fonts.roboto,
+        fontSize: pixToRem(20),
+        fontWeight: 700,
+        fontStyle: 'normal',
+        color: '#CA3C3D',
+        lineHeight: pixToRem(36),
+    },
     blackTitle: {
         fontFamily: fonts.besan,
         fontSize: pixToRem(35),
@@ -99,6 +138,16 @@ const styles = {
         fontStyle: 'normal',
         color: '#333',
         lineHeight: pixToRem(45),
+        marginTop: pixToRem(5),
+        marginBottom: pixToRem(15),
+    },
+    mobileBlackTitle: {
+        fontFamily: fonts.besan,
+        fontSize: pixToRem(25),
+        fontWeight: 400,
+        fontStyle: 'normal',
+        color: '#333',
+        lineHeight: pixToRem(36),
         marginTop: pixToRem(5),
         marginBottom: pixToRem(15),
     },

@@ -1,12 +1,15 @@
 import {memo, useEffect, useState} from "react";
-import {Box, Button, Container} from "@mui/material";
+import {Box, Button, Container, useMediaQuery, useTheme} from "@mui/material";
 import {colors, fonts, pixToRem} from "../../const/uivar";
 import Wellness from '../../assets/images/academy/wellness.png'
 import {connect} from "react-redux";
 import axios from "axios";
 import {StrapiToken, StrapiURL} from "../../const/consts";
+import MobileBg from "../../assets/images/academy/mobile_bg.png";
 
 const IntroPanel = memo(props => {
+    const theme = useTheme();
+    const sm = useMediaQuery(theme.breakpoints.down('sm'));
     const [content, setContent] = useState({})
     useEffect(() => {
         fetchContent().then();
@@ -32,23 +35,28 @@ const IntroPanel = memo(props => {
         <Container
             component={'div'}
             maxWidth={false}
-            sx={styles.panel}
+            sx={[styles.panel, {
+                backgroundImage: sm ? `url(${MobileBg})` : 'none',
+                backgroundRepeat: 'no-repeat',
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+            }]}
         >
             <Box
                 component={'span'}
-                sx={styles.redTitle}
+                sx={sm ? styles.mobileRedTitle : styles.redTitle}
             >
                 {content.title1}
             </Box>
             <Box
                 component={'span'}
-                sx={styles.whiteTitle}
+                sx={sm ? styles.mobileWhiteTitle : styles.whiteTitle}
             >
                 {content.title2}
             </Box>
             <Box
                 component={'span'}
-                sx={styles.comment}
+                sx={sm ? styles.mobileComment : styles.comment}
             >
                 {content.description}
             </Box>
@@ -92,6 +100,15 @@ const styles = {
         lineHeight: pixToRem(45),
         marginTop: pixToRem(150)
     },
+    mobileRedTitle: {
+        fontFamily: fonts.roboto,
+        fontSize: pixToRem(26),
+        fontWeight: 700,
+        fontStyle: 'normal',
+        color: '#CA3C3D',
+        lineHeight: pixToRem(30),
+        mt: 13
+    },
     whiteTitle: {
         fontFamily: fonts.besan,
         fontSize: pixToRem(35),
@@ -99,6 +116,16 @@ const styles = {
         fontStyle: 'normal',
         color: 'white',
         lineHeight: pixToRem(45),
+        marginTop: pixToRem(5),
+        marginBottom: pixToRem(15),
+    },
+    mobileWhiteTitle: {
+        fontFamily: fonts.besan,
+        fontSize: pixToRem(22),
+        fontWeight: 400,
+        fontStyle: 'normal',
+        color: 'white',
+        lineHeight: pixToRem(30),
         marginTop: pixToRem(5),
         marginBottom: pixToRem(15),
     },
@@ -110,6 +137,18 @@ const styles = {
         fontStyle: 'normal',
         color: 'white',
         lineHeight: pixToRem(30),
+        marginTop: pixToRem(15),
+        marginBottom: pixToRem(60),
+        textAlign: 'center'
+    },
+    mobileComment: {
+        width: '90%',
+        fontFamily: fonts.roboto,
+        fontSize: pixToRem(16),
+        fontWeight: 400,
+        fontStyle: 'normal',
+        color: 'white',
+        lineHeight: pixToRem(24),
         marginTop: pixToRem(15),
         marginBottom: pixToRem(60),
         textAlign: 'center'

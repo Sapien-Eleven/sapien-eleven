@@ -195,7 +195,7 @@ const Header = memo((props) => {
 					sx={{width: '100%', boxShadow: 4, borderTop: '1px solid #ccc'}}
 				>
 					<Collapse in={showMobileMenu}>
-						<AcademyMenu isConnected={props.walletAddress !== '' || props.isAuthenticated} />
+						<AcademyMenu isConnected={props.walletAddress !== '' || props.isAuthenticated} closeMenu={handleCloseMobileMenu} />
 						<Box sx={styles.mobileMenuItem} onClick={() => navigate('/about')}>
 							<Typography sx={styles.mobileMenuText}>ABOUT</Typography>
 						</Box>
@@ -349,7 +349,11 @@ const AcademyMenu = (props) => {
 		}
 	, [mainCategory, isSubExpanded]);
 	const handleClickSubMenu = useCallback(
-		(subCategory) => selectCategory(subCategory)
+		(subCategory) => {
+			selectCategory(subCategory);
+			navigate('/academy', {state: {category: subCategory}});
+			props.closeMenu();
+		}
 	, []);
 	return (
 		<Box sx={styles.mobileMenuItem}>

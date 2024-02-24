@@ -9,6 +9,7 @@ import Diets from "./Diets";
 import EatToHeal from "./EatToHeal";
 import {colors, pixToRem} from "../../const/uivar";
 import Grid from "@mui/material/Unstable_Grid2";
+import {useLocation} from "react-router-dom";
 
 const Main = memo(props => {
     const [categories, setCategories] = useState([]);
@@ -16,8 +17,11 @@ const Main = memo(props => {
     const theme = useTheme();
     const sm = useMediaQuery(theme.breakpoints.down('sm'));
     useEffect(() => {
-        fetchCategories().then()
+        fetchCategories().then();
     }, []);
+    useEffect(() => {
+        if (sm && props.mobileCategory !== null) selectCategory(props.mobileCategory)
+    }, [sm, props.mobileCategory]);
     const fetchCategories = async () => {
         const data = (await axios.get(`${StrapiURL}academy-categories`, {
             headers: {
@@ -40,7 +44,8 @@ const Main = memo(props => {
             }], []
         );
         setCategories(result);
-        selectCategory(result.find(c => c.parent_id !== 0));
+        if (sm && props.mobileCategory !== null) selectCategory(props.mobileCategory)
+        else selectCategory(result.find(c => c.parent_id !== 0));
     }
     const onChangeCategory = useCallback((value) => {
         selectCategory(value);

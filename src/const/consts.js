@@ -59,11 +59,11 @@ export const StrapiToken = '7c00ee7a00372d4c2bbf7255ab3e9b40f6aff3d0a117cc62039b
 
 export const SERVER_URL = 'http://162.247.131.12:3030/'
 
-export const EmailJSPublicKey = '2Cl51tnICav3IAQC1';
+export const EmailJSPublicKey = 'WB1Ewno2NUKmytZsO';
 
-export const EmailJSServiceID = 'service_mdel1l9';
+export const EmailJSServiceID = 'service_j61mg88';
 
-export const EmailJSTemplateID = 'template_2dhn51k';
+export const EmailJSTemplateID = 'template_3x6oxnb';
 
 export const dataCancerArr = [
     { name: '1990', uv: 1.04, pv: 1.64 },

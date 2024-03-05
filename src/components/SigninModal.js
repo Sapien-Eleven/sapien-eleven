@@ -1,4 +1,4 @@
-import {Backdrop, Box, Button, Modal, TextField} from "@mui/material";
+import {Backdrop, Box, Button, Modal, TextField, useMediaQuery, useTheme} from "@mui/material";
 import React, {memo, useEffect, useState} from "react";
 import {useSpring, animated} from "@react-spring/web";
 import PropTypes from "prop-types";
@@ -58,6 +58,8 @@ const SigninModal = memo(props => {
     const [enableBtn, setEnableBtn] = useState(false);
     const { enqueueSnackbar } = useSnackbar();
     const dispatch = useDispatch();
+    const theme = useTheme();
+    const sm = useMediaQuery(theme.breakpoints.down('sm'));
     const handleInputChange = (event, input) => {
         if (input === 'email') setEmail(event.target.value);
         else setPassword(event.target.value);
@@ -92,74 +94,146 @@ const SigninModal = memo(props => {
             }}
         >
             <Fade in={props.visible}>
-                <Box
-                    component={'div'}
-                    sx={styles.panel}
-                >
-                    <Box
-                        component={'div'}
-                        sx={styles.titlePanel}
-                    >
+                {
+                    sm ?
                         <Box
-                            component={'img'}
-                            src={SapienMark}
-                            sx={{width: pixToRem(22)}}
-                        />
-                        <Box
-                            component={'span'}
-                            sx={styles.title}
+                            component={'div'}
+                            sx={styles.mobilePanel}
                         >
-                            SIGN IN
+                            <Box
+                                component={'div'}
+                                sx={styles.titlePanel}
+                            >
+                                <Box
+                                    component={'img'}
+                                    src={SapienMark}
+                                    sx={{width: pixToRem(22)}}
+                                />
+                                <Box
+                                    component={'span'}
+                                    sx={styles.title}
+                                >
+                                    SIGN IN
+                                </Box>
+                            </Box>
+                            <Box
+                                component={'div'}
+                                sx={styles.divider}
+                            >
+                                <Box component={'div'} sx={styles.redLine} />
+                                <Box component={'div'} sx={styles.whiteLine} />
+                            </Box>
+                            <TextField
+                                sx={styles.input}
+                                fullWidth={true}
+                                variant={'standard'}
+                                InputProps={{
+                                    disableUnderline: true,
+                                    style: {
+                                        paddingLeft: pixToRem(30),
+                                        paddingRight: pixToRem(30),
+                                        paddingTop: pixToRem(20),
+                                        paddingBottom: pixToRem(20),
+                                    }
+                                }}
+                                placeholder={'john.doe@email.com'}
+                                required={true}
+                                type={'text'}
+                                onChange={(e) => handleInputChange(e, 'email')}
+                            />
+                            <TextField
+                                sx={styles.input}
+                                fullWidth={true}
+                                variant={'standard'}
+                                InputProps={{
+                                    disableUnderline: true,
+                                    style: {
+                                        paddingLeft: pixToRem(30),
+                                        paddingRight: pixToRem(30),
+                                        paddingTop: pixToRem(20),
+                                        paddingBottom: pixToRem(20),
+                                    }
+                                }}
+                                placeholder={'Password'}
+                                required={true}
+                                type={'password'}
+                                onChange={(e) => handleInputChange(e, 'password')}
+                            />
+                            <Button
+                                sx={[styles.sendBtn, {backgroundColor: enableBtn ? colors.red : 'rgba(202, 60, 61, 0.10)'}]}
+                                onClick={onSend}
+                            >Send</Button>
                         </Box>
-                    </Box>
-                    <Box
-                        component={'div'}
-                        sx={styles.divider}
-                    >
-                        <Box component={'div'} sx={styles.redLine} />
-                        <Box component={'div'} sx={styles.whiteLine} />
-                    </Box>
-                    <TextField
-                        sx={styles.input}
-                        fullWidth={true}
-                        variant={'standard'}
-                        InputProps={{
-                            disableUnderline: true,
-                            style: {
-                                paddingLeft: pixToRem(30),
-                                paddingRight: pixToRem(30),
-                                paddingTop: pixToRem(20),
-                                paddingBottom: pixToRem(20),
-                            }
-                        }}
-                        placeholder={'john.doe@email.com'}
-                        required={true}
-                        type={'text'}
-                        onChange={(e) => handleInputChange(e, 'email')}
-                    />
-                    <TextField
-                        sx={styles.input}
-                        fullWidth={true}
-                        variant={'standard'}
-                        InputProps={{
-                            disableUnderline: true,
-                            style: {
-                                paddingLeft: pixToRem(30),
-                                paddingRight: pixToRem(30),
-                                paddingTop: pixToRem(20),
-                                paddingBottom: pixToRem(20),
-                            }
-                        }}
-                        placeholder={'Password'}
-                        required={true}
-                        type={'password'}
-                        onChange={(e) => handleInputChange(e, 'password')}
-                    />
-                    <Button
-                        sx={[styles.sendBtn, {backgroundColor: enableBtn ? colors.red : 'rgba(202, 60, 61, 0.10)'}]}
-                        onClick={onSend}
-                    >Send</Button>
-                </Box>
+                        :
+                        <Box
+                            component={'div'}
+                            sx={styles.panel}
+                        >
+                            <Box
+                                component={'div'}
+                                sx={styles.titlePanel}
+                            >
+                                <Box
+                                    component={'img'}
+                                    src={SapienMark}
+                                    sx={{width: pixToRem(22)}}
+                                />
+                                <Box
+                                    component={'span'}
+                                    sx={styles.title}
+                                >
+                                    SIGN IN
+                                </Box>
+                            </Box>
+                            <Box
+                                component={'div'}
+                                sx={styles.divider}
+                            >
+                                <Box component={'div'} sx={styles.redLine} />
+                                <Box component={'div'} sx={styles.whiteLine} />
+                            </Box>
+                            <TextField
+                                sx={styles.input}
+                                fullWidth={true}
+                                variant={'standard'}
+                                InputProps={{
+                                    disableUnderline: true,
+                                    style: {
+                                        paddingLeft: pixToRem(30),
+                                        paddingRight: pixToRem(30),
+                                        paddingTop: pixToRem(20),
+                                        paddingBottom: pixToRem(20),
+                                    }
+                                }}
+                                placeholder={'john.doe@email.com'}
+                                required={true}
+                                type={'text'}
+                                onChange={(e) => handleInputChange(e, 'email')}
+                            />
+                            <TextField
+                                sx={styles.input}
+                                fullWidth={true}
+                                variant={'standard'}
+                                InputProps={{
+                                    disableUnderline: true,
+                                    style: {
+                                        paddingLeft: pixToRem(30),
+                                        paddingRight: pixToRem(30),
+                                        paddingTop: pixToRem(20),
+                                        paddingBottom: pixToRem(20),
+                                    }
+                                }}
+                                placeholder={'Password'}
+                                required={true}
+                                type={'password'}
+                                onChange={(e) => handleInputChange(e, 'password')}
+                            />
+                            <Button
+                                sx={[styles.sendBtn, {backgroundColor: enableBtn ? colors.red : 'rgba(202, 60, 61, 0.10)'}]}
+                                onClick={onSend}
+                            >Send</Button>
+                        </Box>
+                }
             </Fade>
         </Modal>
     )
@@ -187,6 +261,24 @@ const styles = {
         paddingTop: pixToRem(140),
         paddingBottom: pixToRem(140),
         borderRadius: pixToRem(9)
+    },
+    mobilePanel: {
+        position: 'absolute',
+        left: '50%',
+        top: '50%',
+        transform: 'translate(-50%, -50%)',
+        width: '100%',
+        display: 'flex',
+        boxSizing: 'border-box',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'flex-start',
+        backgroundColor: colors.bgBlackColor,
+        backgroundImage: `url(${Triangles})`,
+        backgroundPosition: 'center',
+        backgroundClip: 'border-box',
+        pt: 5, pb: 5, pl: 3, pr: 3,
+        borderRadius: pixToRem(20)
     },
     titlePanel: {
         display: 'flex',

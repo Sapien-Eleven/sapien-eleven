@@ -5,7 +5,7 @@ import RainbowIcon from '../assets/images/icons/rainbow.png';
 import CoinbaseIcon from '../assets/images/icons/coinbase.png';
 import WalletConnectIcon from '../assets/images/icons/walletconnect.png';
 import PhantomIcon from '../assets/images/icons/phantom.jpg'
-import {injected, walletconnect} from "./connectors";
+import {coinbasewallet, injected, walletconnect} from "./connectors";
 export const pages = ['ACADEMY', 'ABOUT', 'MARKETPLACE', 'MEDIA', 'CONTACT'];
 
 export const policies = ['PRIVACY POLICY', 'TERMS AND CONDITIONS', 'DISCLAIMER', 'COOKIE POLICY', 'SHIPPING POLICY', 'RETURN POLICY'];
@@ -29,9 +29,10 @@ export const wallets = {
     },
     'coinbase': {
         icon: CoinbaseIcon,
-        name: 'Coinbase Wallet',
+        name: 'Coinbase',
         platform: 'Mobile Wallet',
         stepCount: 3,
+        connector: coinbasewallet,
         url: 'https://www.coinbase.com/wallet'
     },
     'walletconnect': {

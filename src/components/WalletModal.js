@@ -1,6 +1,14 @@
 import {cloneElement, forwardRef, memo, useEffect, useState} from "react";
 import PropTypes from "prop-types";
-import {Backdrop, Box, Button, IconButton, Modal} from "@mui/material";
+import {
+    Backdrop,
+    Box,
+    Button, Divider,
+    IconButton,
+    Modal, Stack,
+    useMediaQuery,
+    useTheme
+} from "@mui/material";
 import {useSpring, animated} from "@react-spring/web";
 import {fonts, pixToRem} from "../const/uivar";
 import {ChevronLeft, Close} from "@mui/icons-material";
@@ -68,6 +76,8 @@ const WalletModal = memo((props) => {
     const [selectedWallet, setSelectedWallet] = useState('');
     const [canBack, setCanBack] = useState(false);
     const [activatingConnector, setActivatingConnector] = useState();
+    const theme = useTheme();
+    const sm = useMediaQuery(theme.breakpoints.down('sm'));
 
     useEffect(() => {
         if (activatingConnector && activatingConnector === connector) {
@@ -87,6 +97,20 @@ const WalletModal = memo((props) => {
             await onConnectMetamask();
             return;
         }
+        else if (wallet == 'coinbase') {
+            setActivatingConnector(wallets['coinbase'].connector);
+            await activate(wallets['coinbase'].connector);
+            props.setConnectedWallet('coinbase');
+            onCloseModal();
+            return;
+        }
+        else if (wallet === 'walletconnect') {
+            setActivatingConnector(wallets['walletconnect'].connector);
+            await activate(wallets['walletconnect'].connector);
+            props.setConnectedWallet('walletconnect');
+            onCloseModal();
+            return;
+        }
         setSelectedWallet(wallet);
         if (wallets[wallet].stepCount > 0) setActionStep(1);
     };
@@ -96,7 +120,7 @@ const WalletModal = memo((props) => {
             setActionStep(0);
             return;
         }
-        if (actionStep > 0) setActionStep(actionStep - 1);
+        if (actionStep >= 0) setActionStep(actionStep - 1);
     };
     const onStepForward = () => {
         if (actionStep < 3) {
@@ -160,6 +184,7 @@ const WalletModal = memo((props) => {
         onCloseModal();
         props.showSigninModal();
     }
+
     return (
         <Modal
             aria-labelledby={"spring-modal-title"}
@@ -174,108 +199,213 @@ const WalletModal = memo((props) => {
             }}
         >
             <Fade in={props.visible}>
-                <Box component={'div'} sx={WalletModalStyles.panel}>
-                    <IconButton
-                        children={<Close sx={WalletModalStyles.closeIcon} />}
-                        sx={WalletModalStyles.closeBtn}
-                        onClick={onCloseModal}
-                    />
-                    <Box
-                        component={'div'}
-                        sx={WalletModalStyles.walletList}
-                    >
-                        <Box
-                            component={'span'}
-                            sx={WalletModalStyles.listTitle}
-                        >
-                            Connect a Wallet
-                        </Box>
-                        {/*<Box*/}
-                        {/*    component={'div'}*/}
-                        {/*    sx={WalletModalStyles.recentWallet}*/}
-                        {/*>*/}
-                        {/*    <Box component={'div'} sx={WalletModalStyles.category}>Recent</Box>*/}
-                        {/*    {*/}
-                        {/*        recentWallets.map((wallet, index) => {*/}
-                        {/*            return (*/}
-                        {/*                <Button*/}
-                        {/*                    key={index}*/}
-                        {/*                    startIcon={<img src={wallets[wallet].icon} style={WalletModalStyles.walletIcon} alt='metamask' />}*/}
-                        {/*                    sx={WalletModalStyles.walletItem}*/}
-                        {/*                    onClick={() => onSelectWallet(wallet)}*/}
-                        {/*                >{wallets[wallet].name}</Button>*/}
-                        {/*            )*/}
-                        {/*        })*/}
-                        {/*    }*/}
-                        {/*</Box>*/}
-                        <Box
-                            component={'div'}
-                            sx={WalletModalStyles.popularWallet}
-                        >
-                            {/*<Box*/}
-                            {/*    component={'div'}*/}
-                            {/*    sx={WalletModalStyles.category}*/}
-                            {/*>Popular</Box>*/}
-                            <Button
-                                key={-1}
-                                startIcon={<img src={EmailIcon} style={WalletModalStyles.walletIcon} alt='email' />}
-                                sx={WalletModalStyles.walletItem}
-                                onClick={openSigninModal}
-                            >
-                                Email / Username
-                            </Button>
-                            {
-                                popularWallets.map((wallet, index) => {
-                                    return (
-                                        <Button
-                                            key={index}
-                                            startIcon={<img src={wallets[wallet].icon} style={WalletModalStyles.walletIcon} alt='metamask' />}
-                                            sx={[WalletModalStyles.walletItem, {backgroundColor: selectedWallet === wallet ? '#5899ff' : null}]}
-                                            onClick={() => onSelectWallet(wallet)}
-                                        >{wallets[wallet].name}</Button>
-                                    )
-                                })
-                            }
-                        </Box>
-                    </Box>
-                    {
-                        actionStep === -1 ?
-                            <AboutWallet
-                                onStepForward={onStepForward}
-                                onLearnMore={onLearnMore}
+                {
+                    sm ?
+                        <Box component={'div'} sx={WalletModalStyles.mobilePanel}>
+                            <IconButton
+                                children={<Close sx={WalletModalStyles.closeIcon} />}
+                                sx={WalletModalStyles.closeBtn}
+                                onClick={onCloseModal}
                             />
-                            :
-                            actionStep === 0 ?
-                                <WalletList
-                                    onGetWallet={onGetWallet}
-                                    onBack={onStepBack}
-                                />
-                                :
-                                actionStep === 1 ?
-                                    <ScanWithWallet
-                                        wallet={wallets[selectedWallet]}
+                            <Box
+                                component={'div'}
+                                sx={WalletModalStyles.mobileWalletList}
+                            >
+                                <Box
+                                    component={'span'}
+                                    sx={WalletModalStyles.mobileListTitle}
+                                >
+                                    Connect a Wallet
+                                </Box>
+                                <Stack
+                                    direction={'row'}
+                                    sx={WalletModalStyles.mobilePopularWallet}
+                                    spacing={5}
+                                >
+                                    <Box
+                                        key={-1}
+                                        sx={WalletModalStyles.mobileWalletItem}
+                                        onClick={openSigninModal}
+                                    >
+                                        <Box
+                                            component={'img'}
+                                            src={EmailIcon}
+                                            sx={WalletModalStyles.mobileWalletIcon}
+                                        />
+                                        <Box
+                                            component={'span'}
+                                            sx={WalletModalStyles.mobileWalletTxt}
+                                        >
+                                            Email /<br/>Username
+                                        </Box>
+                                    </Box>
+                                    {
+                                        popularWallets.map((wallet, index) => {
+                                            return (
+                                                <Box
+                                                    key={index}
+                                                    sx={WalletModalStyles.mobileWalletItem}
+                                                    onClick={() => onSelectWallet(wallet)}
+                                                >
+                                                    <Box
+                                                        component={'img'}
+                                                        sx={WalletModalStyles.mobileWalletIcon}
+                                                        src={wallets[wallet].icon}
+                                                    />
+                                                    <Box
+                                                        component={'span'}
+                                                        sx={WalletModalStyles.mobileWalletTxt}
+                                                    >
+                                                        {wallets[wallet].name}
+                                                    </Box>
+                                                </Box>
+                                            )
+                                        })
+                                    }
+                                </Stack>
+                            </Box>
+                            <Divider orientation={'horizontal'} sx={{mt: 2, width: '80%', border: "0.5px solid #282e38"}} />
+                            {
+                                actionStep === -1 ?
+                                    <AboutWallet
                                         onStepForward={onStepForward}
-                                        onOpenWallet={onOpenWallet}
+                                        onLearnMore={onLearnMore}
                                     />
                                     :
-                                    actionStep === 2 && wallets[selectedWallet].stepCount > 1 ?
-                                        <InstallWallet
-                                            wallet={wallets[selectedWallet]}
+                                    actionStep === 0 ?
+                                        <WalletList
+                                            onGetWallet={onGetWallet}
                                             onBack={onStepBack}
-                                            onStepForward={onStepForward}
                                         />
                                         :
-                                        actionStep === 3 && wallets[selectedWallet].stepCount > 1 ?
-                                            <StartedWallet
+                                        actionStep === 1 ?
+                                            <ScanWithWallet
                                                 wallet={wallets[selectedWallet]}
-                                                onBack={onStepBack}
                                                 onStepForward={onStepForward}
-                                                onLearnMore={onLearnMore}
+                                                onOpenWallet={onOpenWallet}
                                             />
                                             :
-                                            null
-                    }
-                </Box>
+                                            actionStep === 2 && wallets[selectedWallet].stepCount > 1 ?
+                                                <InstallWallet
+                                                    wallet={wallets[selectedWallet]}
+                                                    onBack={onStepBack}
+                                                    onStepForward={onStepForward}
+                                                />
+                                                :
+                                                actionStep === 3 && wallets[selectedWallet].stepCount > 1 ?
+                                                    <StartedWallet
+                                                        wallet={wallets[selectedWallet]}
+                                                        onBack={onStepBack}
+                                                        onStepForward={onStepForward}
+                                                        onLearnMore={onLearnMore}
+                                                    />
+                                                    :
+                                                    null
+                            }
+                        </Box> :
+                        <Box component={'div'} sx={WalletModalStyles.panel}>
+                            <IconButton
+                                children={<Close sx={WalletModalStyles.closeIcon} />}
+                                sx={WalletModalStyles.closeBtn}
+                                onClick={onCloseModal}
+                            />
+                            <Box
+                                component={'div'}
+                                sx={WalletModalStyles.walletList}
+                            >
+                                <Box
+                                    component={'span'}
+                                    sx={WalletModalStyles.listTitle}
+                                >
+                                    Connect a Wallet
+                                </Box>
+                                {/*<Box*/}
+                                {/*    component={'div'}*/}
+                                {/*    sx={WalletModalStyles.recentWallet}*/}
+                                {/*>*/}
+                                {/*    <Box component={'div'} sx={WalletModalStyles.category}>Recent</Box>*/}
+                                {/*    {*/}
+                                {/*        recentWallets.map((wallet, index) => {*/}
+                                {/*            return (*/}
+                                {/*                <Button*/}
+                                {/*                    key={index}*/}
+                                {/*                    startIcon={<img src={wallets[wallet].icon} style={WalletModalStyles.walletIcon} alt='metamask' />}*/}
+                                {/*                    sx={WalletModalStyles.walletItem}*/}
+                                {/*                    onClick={() => onSelectWallet(wallet)}*/}
+                                {/*                >{wallets[wallet].name}</Button>*/}
+                                {/*            )*/}
+                                {/*        })*/}
+                                {/*    }*/}
+                                {/*</Box>*/}
+                                <Box
+                                    component={'div'}
+                                    sx={WalletModalStyles.popularWallet}
+                                >
+                                    {/*<Box*/}
+                                    {/*    component={'div'}*/}
+                                    {/*    sx={WalletModalStyles.category}*/}
+                                    {/*>Popular</Box>*/}
+                                    <Button
+                                        key={-1}
+                                        startIcon={<img src={EmailIcon} style={WalletModalStyles.walletIcon} alt='email' />}
+                                        sx={WalletModalStyles.walletItem}
+                                        onClick={openSigninModal}
+                                    >
+                                        Email / Username
+                                    </Button>
+                                    {
+                                        popularWallets.map((wallet, index) => {
+                                            return (
+                                                <Button
+                                                    key={index}
+                                                    startIcon={<img src={wallets[wallet].icon} style={WalletModalStyles.walletIcon} alt='metamask' />}
+                                                    sx={[WalletModalStyles.walletItem, {backgroundColor: selectedWallet === wallet ? '#5899ff' : null}]}
+                                                    onClick={() => onSelectWallet(wallet)}
+                                                >{wallets[wallet].name}</Button>
+                                            )
+                                        })
+                                    }
+                                </Box>
+                            </Box>
+                            {
+                                actionStep === -1 ?
+                                    <AboutWallet
+                                        onStepForward={onStepForward}
+                                        onLearnMore={onLearnMore}
+                                    />
+                                    :
+                                    actionStep === 0 ?
+                                        <WalletList
+                                            onGetWallet={onGetWallet}
+                                            onBack={onStepBack}
+                                        />
+                                        :
+                                        actionStep === 1 ?
+                                            <ScanWithWallet
+                                                wallet={wallets[selectedWallet]}
+                                                onStepForward={onStepForward}
+                                                onOpenWallet={onOpenWallet}
+                                            />
+                                            :
+                                            actionStep === 2 && wallets[selectedWallet].stepCount > 1 ?
+                                                <InstallWallet
+                                                    wallet={wallets[selectedWallet]}
+                                                    onBack={onStepBack}
+                                                    onStepForward={onStepForward}
+                                                />
+                                                :
+                                                actionStep === 3 && wallets[selectedWallet].stepCount > 1 ?
+                                                    <StartedWallet
+                                                        wallet={wallets[selectedWallet]}
+                                                        onBack={onStepBack}
+                                                        onStepForward={onStepForward}
+                                                        onLearnMore={onLearnMore}
+                                                    />
+                                                    :
+                                                    null
+                            }
+                        </Box>
+                }
             </Fade>
         </Modal>
     )
@@ -359,18 +489,32 @@ const WalletModalStyles = {
     panel: {
         transform: 'translate(-50%, 50%)',
         width: pixToRem(800),
-        height: '57%',
+        height: '60%',
         position: 'absolute',
         left: '50%',
         top: '-7%',
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'center',
-        alignItems: 'center',
+        alignItems: 'flex-start',
         backgroundColor: '#111822',
         borderRadius: 7,
         boxShadow: '0px 5px 5px rgba(0, 0, 0, 0.25)',
-        border: '1px solid #282e38'
+        border: '1px solid #282e38',
+    },
+    mobilePanel: {
+        width: '100%',
+        position: 'absolute',
+        bottom: 0,
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#111822',
+        borderTopLeftRadius: 20, borderTopRightRadius: 20,
+        boxShadow: '0px 5px 5px rgba(0, 0, 0, 0.25)',
+        border: '1px solid #282e38',
+        pt: 2, pb: 2
     },
     closeBtn: {
         width: pixToRem(30),
@@ -400,6 +544,13 @@ const WalletModalStyles = {
         alignItems: 'flex-start',
         borderRight: '1px solid #282e38'
     },
+    mobileWalletList: {
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
     walletAction: {
         width: '60%',
         height: '100%',
@@ -416,6 +567,14 @@ const WalletModalStyles = {
         justifyContent: 'center',
         alignItems: 'center',
     },
+    mobileAboutWallet: {
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        pl: 3, pr: 3
+    },
     listTitle: {
         fontFamily: fonts.roboto,
         fontWeight: '700',
@@ -424,6 +583,14 @@ const WalletModalStyles = {
         color: 'white',
         marginLeft: pixToRem(30),
         marginTop: pixToRem(30)
+    },
+    mobileListTitle: {
+        fontFamily: fonts.roboto,
+        fontWeight: '700',
+        fontSize: pixToRem(20),
+        fontStyle: 'normal',
+        color: 'white',
+        mt: 2
     },
     recentWallet: {
         width: '85%',
@@ -443,6 +610,17 @@ const WalletModalStyles = {
         justifyContent: 'center',
         alignItems: 'flex-start'
     },
+    mobilePopularWallet: {
+        display: 'flex',
+        width: '100%',
+        flexDirection: 'row',
+        justifyContent: 'flex-start',
+        alignItems: 'flex-start',
+        boxSizing: 'border-box',
+        mt: 4, pr: 3, pl: 3,
+        overflowX: 'scroll',
+        '&::-webkit-scrollbar': {display: 'none'}
+    },
     walletItem: {
         fontFamily: fonts.roboto,
         fontWeight: '700',
@@ -461,6 +639,23 @@ const WalletModalStyles = {
         alignItems: 'center',
         justifyContent: 'flex-start',
     },
+    mobileWalletItem: {
+        borderRadius: pixToRem(10),
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'flex-start',
+    },
+    mobileWalletTxt: {
+        fontFamily: fonts.roboto,
+        fontWeight: '700',
+        fontStyle: 'normal',
+        fontSize: pixToRem(14),
+        color: 'white',
+        lineHeight: pixToRem(16),
+        textTransform: 'capitalize',
+        textAlign: 'center'
+    },
     category: {
         fontFamily: fonts.roboto,
         fontWeight: '700',
@@ -474,6 +669,12 @@ const WalletModalStyles = {
         height: pixToRem(30),
         borderRadius: pixToRem(5),
         marginRight: pixToRem(7)
+    },
+    mobileWalletIcon: {
+        width: pixToRem(60),
+        height: pixToRem(60),
+        borderRadius: pixToRem(15),
+        mb: 2
     },
     aboutWalletTitle: {
         marginTop: pixToRem(50),
@@ -492,12 +693,26 @@ const WalletModalStyles = {
         alignItems: 'center',
         justifyContent: 'center'
     },
+    mobileExplaination: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'flex-start',
+        mt: 3, ml: 3, mr: 3,
+    },
     explainationItem: {
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'flex-start',
         marginBottom: pixToRem(30)
+    },
+    mobileExplainationItem: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'flex-start',
+        justifyContent: 'flex-start',
+        mb: 3
     },
     explainationIcon: {
         width: pixToRem(60),
@@ -525,6 +740,14 @@ const WalletModalStyles = {
         fontStyle: 'normal',
         color: '#a6a9ad',
         lineHeight: pixToRem(20),
+    },
+    mobileBtnPanel: {
+        width: '90%',
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        alignItems: 'center',
+        mt: 3, mb: 2
     },
     getWalletBtn: {
         marginTop: pixToRem(30),
@@ -777,7 +1000,6 @@ const WalletModalStyles = {
         justifyContent: 'center',
         marginBottom: pixToRem(30)
     },
-
     walletListPanel: {
         width: '60%',
         height: '100%',
@@ -785,6 +1007,14 @@ const WalletModalStyles = {
         flexDirection: 'column',
         justifyContent: 'flex-start',
         alignItems: 'center',
+    },
+    mobileWalletListPanel: {
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'flex-start',
+        alignItems: 'center',
+        position: 'relative'
     },
     walletListTitle: {
         fontFamily: fonts.roboto,
@@ -888,6 +1118,83 @@ const WalletModalStyles = {
 }
 
 const AboutWallet = memo(props => {
+    const theme = useTheme();
+    const sm = useMediaQuery(theme.breakpoints.down('sm'));
+    if (sm) return (
+        <Box
+            component={'div'}
+            sx={WalletModalStyles.mobileAboutWallet}
+        >
+            <Box
+                component={'span'}
+                sx={[WalletModalStyles.aboutWalletTitle, {mt: 3}]}
+            >
+                What is a Wallet?
+            </Box>
+            <Box
+                component={'div'}
+                sx={WalletModalStyles.mobileExplaination}
+            >
+                <Box
+                    component={'div'}
+                    sx={WalletModalStyles.mobileExplainationItem}
+                >
+                    <Box component={'img'} src={WalletExplainationHome} sx={WalletModalStyles.explainationIcon} />
+                    <Box component={'div'} sx={WalletModalStyles.explainationCommentPanel}>
+                        <Box
+                            component={'span'}
+                            sx={WalletModalStyles.explainationCommentTitle}
+                        >
+                            A Home for your Digital Assets
+                        </Box>
+                        <Box
+                            component={'span'}
+                            sx={WalletModalStyles.explainationComment}
+                        >
+                            Wallets are used to send, receive, store, and display digital assets like Ethereum and NFTs.
+                        </Box>
+                    </Box>
+                </Box>
+                <Box
+                    component={'div'}
+                    sx={WalletModalStyles.mobileExplainationItem}
+                >
+                    <Box component={'img'} src={WalletExplainationNewWay} sx={WalletModalStyles.explainationIcon} />
+                    <Box component={'div'} sx={WalletModalStyles.explainationCommentPanel}>
+                        <Box
+                            component={'span'}
+                            sx={WalletModalStyles.explainationCommentTitle}
+                        >
+                            A New Way to Log In
+                        </Box>
+                        <Box
+                            component={'span'}
+                            sx={WalletModalStyles.explainationComment}
+                        >
+                            Instead of creating new accounts and passwords on every website, just connect your wallet.
+                        </Box>
+                    </Box>
+                </Box>
+            </Box>
+            <Box
+                component={'div'}
+                sx={WalletModalStyles.mobileBtnPanel}
+            >
+                <Button
+                    sx={[WalletModalStyles.getWalletBtn, {mt: 0}]}
+                    onClick={props.onStepForward}
+                >
+                    Get a Wallet
+                </Button>
+                <Button
+                    sx={[WalletModalStyles.learnBtn, {mt: 0}]}
+                    onClick={props.onLearnMore}
+                >
+                    Learn More
+                </Button>
+            </Box>
+        </Box>
+    )
     return (
         <Box
             sx={WalletModalStyles.aboutWallet}
@@ -1213,6 +1520,91 @@ const StartedWallet = memo(props => {
 })
 
 const WalletList = memo(props => {
+    const theme = useTheme();
+    const sm = useMediaQuery(theme.breakpoints.down('sm'));
+    if (sm) return (
+        <Box
+            component={'div'}
+            sx={WalletModalStyles.mobileWalletListPanel}
+        >
+            <IconButton
+                children={<ChevronLeft fontSize={'large'} sx={WalletModalStyles.backIcon} />}
+                sx={[WalletModalStyles.startedWalletBackBtn, {left: 5}]}
+                size={'large'}
+                onClick={props.onBack}
+            />
+            <Box
+                component={'span'}
+                sx={WalletModalStyles.walletListTitle}
+            >
+                Get a Wallet
+            </Box>
+            <Box
+                component={'div'}
+                sx={WalletModalStyles.walletListGroup}
+            >
+                {
+                    Object.keys(wallets).filter((wallet) => wallets[wallet].platform !== undefined).map((wallet, index) => {
+                        return (
+                            <Box
+                                key={index}
+                                component={'div'}
+                                sx={WalletModalStyles.walletListItem}
+                            >
+                                <Box
+                                    component={'div'}
+                                    sx={WalletModalStyles.walletListItemLeft}
+                                >
+                                    <Box
+                                        component={'img'}
+                                        src={wallets[wallet].icon}
+                                        sx={WalletModalStyles.walletListItemIcon}
+                                    />
+                                    <Box
+                                        component={'div'}
+                                        sx={WalletModalStyles.walletListItemCommentGroup}
+                                    >
+                                        <Box
+                                            component={'span'}
+                                            sx={WalletModalStyles.walletListItemName}
+                                        >
+                                            {wallets[wallet].name}
+                                        </Box>
+                                        <Box
+                                            component={'span'}
+                                            sx={WalletModalStyles.walletListItemComment}
+                                        >
+                                            {wallets[wallet].platform}
+                                        </Box>
+                                    </Box>
+                                </Box>
+                                <Button
+                                    sx={WalletModalStyles.walletListItemAction}
+                                >Get</Button>
+                            </Box>
+                        )
+                    })
+                }
+            </Box>
+            <Box
+                component={'div'}
+                sx={WalletModalStyles.walletListFooter}
+            >
+                <Box
+                    component={'span'}
+                    sx={WalletModalStyles.walletListFooterTitle}
+                >
+                    Not what you're looking for?
+                </Box>
+                <Box
+                    component={'span'}
+                    sx={[WalletModalStyles.walletListFooterComment, {width: '85%'}]}
+                >
+                    Select a wallet on the left to get started with a different wallet providers
+                </Box>
+            </Box>
+        </Box>
+    )
     return (
         <Box
             component={'div'}

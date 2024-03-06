@@ -1,5 +1,5 @@
 import {ConnectButton} from '@rainbow-me/rainbowkit';
-import {Button} from "@mui/material";
+import {Button, useMediaQuery, useTheme} from "@mui/material";
 import {fonts, pixToRem} from "../const/uivar";
 import MetaMaskLogo from '../assets/metamask.svg'
 
@@ -209,6 +209,8 @@ export const MobileHeaderConnectButton = () => {
 };
 
 export const HomeConnectButton = () => {
+    const theme = useTheme();
+    const sm = useMediaQuery(theme.breakpoints.down('sm'));
     return (
         <ConnectButton.Custom>
             {({
@@ -244,7 +246,7 @@ export const HomeConnectButton = () => {
                             if (!connected) {
                                 return (
                                     <Button
-                                        sx={styles.homeBtn}
+                                        sx={[styles.homeBtn, {ml: sm ? 0 : pixToRem(70)}]}
                                         startIcon={<img src={MetaMaskLogo} style={{width: pixToRem(20), height: pixToRem(20)}} alt='metamask' />}
                                         onClick={openConnectModal}
                                     >
@@ -255,7 +257,7 @@ export const HomeConnectButton = () => {
                             if (chain.unsupported) {
                                 return (
                                     <Button
-                                        sx={styles.homeBtn}
+                                        sx={[styles.homeBtn, {ml: sm ? 0 : pixToRem(70)}]}
                                         onClick={openChainModal}>
                                         Wrong network
                                     </Button>
@@ -263,7 +265,7 @@ export const HomeConnectButton = () => {
                             }
                             return (
                                 <Button
-                                    sx={styles.homeBtn}
+                                    sx={[styles.homeBtn, {ml: sm ? 0 : pixToRem(70)}]}
                                     startIcon={<img src={chain.iconUrl} style={{width: pixToRem(20), height: pixToRem(20)}} alt={chain.name} />}
                                 >
                                     Full Access

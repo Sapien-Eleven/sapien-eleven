@@ -8,9 +8,11 @@ import {memo, useEffect, useState} from "react";
 import {Twitter} from "@mui/icons-material";
 import axios from "axios";
 import {StrapiToken, StrapiURL} from "../../const/consts";
+import {useAccount} from "wagmi";
 
 const Drop = memo(props => {
     const [content, setContent] = useState({})
+    const {isConnected} = useAccount()
     const theme = useTheme();
     const md = useMediaQuery(theme.breakpoints.down('md'));
     useEffect(() => {
@@ -46,26 +48,26 @@ const Drop = memo(props => {
                     component={'span'}
                     sx={styles.mobileWhiteTitle}
                 >
-                    {props.connectedWallet === '' ? content.title1 : 'FULL'}
+                    {!isConnected ? content.title1 : 'FULL'}
                 </Box>
                 <Box
                     component={'span'}
                     sx={styles.mobileRedTitle}
                 >
-                    {props.connectedWallet === '' ? content.title2 : 'TRANSPARENCY'}
+                    {!isConnected ? content.title2 : 'TRANSPARENCY'}
                 </Box>
                 <Box
                     component={'span'}
                     sx={styles.mobileComment}
                 >
                     {
-                        props.connectedWallet === '' ?
+                        !isConnected ?
                             content.description
                             : 'It\'s no secret that transparency is necessary to gain full trust and support of the community. Stay up to date on what the Sapien Eleven team is striving to accomplish.'
                     }
                 </Box>
                 {
-                    props.connectedWallet === '' ?
+                    !isConnected ?
                         <Button
                             sx={styles.twitterBtn}
                             startIcon={<Box component={'img'} src={SapienMark}
@@ -103,26 +105,26 @@ const Drop = memo(props => {
                     component={'span'}
                     sx={styles.whiteTitle}
                 >
-                    {props.connectedWallet === '' ? content.title1 : 'FULL'}
+                    {!isConnected ? content.title1 : 'FULL'}
                 </Box>
                 <Box
                     component={'span'}
                     sx={styles.redTitle}
                 >
-                    {props.connectedWallet === '' ? content.title2 : 'TRANSPARENCY'}
+                    {!isConnected ? content.title2 : 'TRANSPARENCY'}
                 </Box>
                 <Box
                     component={'span'}
                     sx={styles.comment}
                 >
                     {
-                        props.connectedWallet === '' ?
+                        !isConnected ?
                             content.description
                             : 'It\'s no secret that transparency is necessary to gain full trust and support of the community. Stay up to date on what the Sapien Eleven team is striving to accomplish.'
                     }
                 </Box>
                 {
-                    props.connectedWallet === '' ?
+                    !isConnected ?
                         <Button
                             sx={styles.twitterBtn}
                             startIcon={<Box component={'img'} src={SapienMark}
@@ -145,7 +147,7 @@ const Drop = memo(props => {
 
 export default connect(
     state => ({
-        connectedWallet: state.authReducer.connectedWallet
+        isAuthenticated: state.authReducer.isAuthenticated
     })
 )(Drop)
 

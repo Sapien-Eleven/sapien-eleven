@@ -1,40 +1,16 @@
-import {Box, Button, Container, styled, useMediaQuery, useTheme} from "@mui/material";
+import {Box, Container, useMediaQuery, useTheme} from "@mui/material";
 import MainBg from '../../assets/images/main_bg.png'
 import MobileMainBg from '../../assets/images/mobile_main_bg.png'
 import '@fontsource/roboto/400.css';
-import MetaMaskLogo from '../../assets/metamask.svg'
-import WalletModal from "../WalletModal";
-import {memo, useCallback, useEffect, useState} from "react";
+import {memo, useEffect, useState} from "react";
 import {connect} from "react-redux";
 import {StrapiToken, StrapiURL, wallets} from "../../const/consts";
 import {fonts, pixToRem} from "../../const/uivar";
 import axios from "axios";
 import SigninModal from "../SigninModal";
-
-const WalletButton = styled(Button)((props) => ({
-	boxSizing: 'border-box',
-	display: 'flex',
-	flexDirection: 'row',
-	justifyContent: 'center',
-	alignItems: 'center',
-	padding: 10,
-	gap: 10,
-	width: '233px',
-	height: '48px',
-	color: 'white',
-	fontFamily: 'Roboto',
-	fontSize: '14px',
-	fontWeight: 700,
-	fontStyle: 'normal',
-	lineHeight: 16,
-	border: '1px solid #CA3C3D',
-	borderRadius: 0,
-    marginTop: '15px',
-    marginLeft: pixToRem(70)
-}))
+import {HomeConnectButton} from "../WalletConnectButton";
 
 const IntroPanel = memo((props) => {
-    const [walletModalVisible, setWalletModalVisible] = useState(false);
     const [showSigninModal, setShowSigninModal] = useState(false);
     const [content, setContent] = useState({});
     const theme = useTheme();
@@ -61,11 +37,6 @@ const IntroPanel = memo((props) => {
         });
     }
 
-    const onOpenWallet = useCallback(() => {
-        if (props.connectedWallet !== '') return;
-        setWalletModalVisible(true);
-    }, [props.connectedWallet]);
-
     if (sm)
         return (
             <Container
@@ -85,16 +56,7 @@ const IntroPanel = memo((props) => {
                     component={'span'}
                     sx={styles.mobileComment}
                 >{content.description}</Box>
-                <WalletButton
-                    sx={{ml: 0}}
-                    startIcon={<img src={props.connectedWallet === '' ? MetaMaskLogo : wallets[props.connectedWallet].remoteIcon} style={styles.metamaskLogo} alt='metamask' />}
-                    onClick={onOpenWallet}
-                >{(props.connectedWallet !== '' || props.isAuthenticated) ? `FULL ACCESS` : `CONNECT WALLET`}</WalletButton>
-                <WalletModal
-                    visible={walletModalVisible}
-                    closeModal={() => setWalletModalVisible(false)}
-                    showSigninModal={() => setShowSigninModal(true)}
-                />
+                <HomeConnectButton/>
                 <SigninModal
                     visible={showSigninModal}
                     onClose={() => setShowSigninModal(false)}
@@ -119,15 +81,7 @@ const IntroPanel = memo((props) => {
                 component={'span'}
                 sx={styles.comment}
             >{content.description}</Box>
-            <WalletButton
-                startIcon={<img src={props.connectedWallet === '' ? MetaMaskLogo : wallets[props.connectedWallet].remoteIcon} style={styles.metamaskLogo} alt='metamask' />}
-                onClick={onOpenWallet}
-            >{(props.connectedWallet !== '' || props.isAuthenticated) ? `FULL ACCESS` : `CONNECT WALLET`}</WalletButton>
-            <WalletModal
-                visible={walletModalVisible}
-                closeModal={() => setWalletModalVisible(false)}
-                showSigninModal={() => setShowSigninModal(true)}
-            />
+            <HomeConnectButton/>
             <SigninModal
                 visible={showSigninModal}
                 onClose={() => setShowSigninModal(false)}

@@ -7,34 +7,27 @@ import {connect} from "react-redux";
 import WalletModal from "../WalletModal";
 import SigninModal from "../SigninModal";
 import {useMediaQuery, useTheme} from "@mui/material";
+import {useAccount} from "wagmi";
 
 const Home = memo(props => {
     const [isEntered, setEntered] = useState(false);
-    const [walletModalVisible, setWalletModalVisible] = useState(false);
-    const closeWalletModal = useCallback(() => setWalletModalVisible(false), [])
+    const {isConnected} = useAccount()
     const [showSigninModal, setShowSigninModal] = useState(false);
     const theme = useTheme();
     const sm = useMediaQuery(theme.breakpoints.down('sm'));
 
     const onEnter = useCallback(() => {
-        if (props.connectedWallet !== '' || props.isAuthenticated) {
+        if (isConnected || props.isAuthenticated) {
             setEntered(true);
-        } else {
-            setWalletModalVisible(true)
         }
-    }, [isEntered, props.connectedWallet, props.isAuthenticated]);
-    if (sm && (props.connectedWallet !== '' || props.isAuthenticated) && props.mobileCategory !== null) return <Main mobileCategory={props.mobileCategory} />
-    else if (isEntered && (props.connectedWallet !== '' || props.isAuthenticated)) return <Main mobileCategory={props.mobileCategory} />
+    }, [isEntered, isConnected, props.isAuthenticated]);
+    if (sm && (isConnected || props.isAuthenticated) && props.mobileCategory !== null) return <Main mobileCategory={props.mobileCategory} />
+    else if (isEntered && (isConnected || props.isAuthenticated)) return <Main mobileCategory={props.mobileCategory} />
     else return (
         <div>
             <IntroPanel onPress={onEnter} />
             <Middle />
             <Membership />
-            <WalletModal
-                visible={walletModalVisible}
-                closeModal={closeWalletModal}
-                showSigninModal={() => setShowSigninModal(true)}
-            />
             <SigninModal
                 visible={showSigninModal}
                 onClose={() => setShowSigninModal(false)}

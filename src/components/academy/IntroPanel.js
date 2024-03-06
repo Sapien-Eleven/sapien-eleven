@@ -1,11 +1,12 @@
 import {memo, useEffect, useState} from "react";
-import {Box, Button, Container, useMediaQuery, useTheme} from "@mui/material";
+import {Box, Container, useMediaQuery, useTheme} from "@mui/material";
 import {colors, fonts, pixToRem} from "../../const/uivar";
 import Wellness from '../../assets/images/academy/wellness.png'
 import {connect} from "react-redux";
 import axios from "axios";
 import {StrapiToken, StrapiURL} from "../../const/consts";
 import MobileBg from "../../assets/images/academy/mobile_bg.png";
+import {AcademyConnectButton} from "../WalletConnectButton";
 
 const IntroPanel = memo(props => {
     const theme = useTheme();
@@ -60,12 +61,7 @@ const IntroPanel = memo(props => {
             >
                 {content.description}
             </Box>
-            <Button
-                sx={styles.enterButton}
-                onClick={props.onPress}
-            >
-                {(props.connectedWallet !== '' || props.isAuthenticated) ? `Enter` : `CONNECT WALLET`}
-            </Button>
+            <AcademyConnectButton onPress={props.onPress}/>
             <Box
                 component={'img'}
                 src={Wellness}

@@ -5,13 +5,59 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import {ThemeProvider} from '@emotion/react';
 import {createTheme} from '@mui/material';
-import {Web3ReactProvider} from "@web3-react/core";
-import {Web3Provider} from "@ethersproject/providers";
 import {Provider} from 'react-redux'
 import {createStore} from "redux";
 import reducer from './store/reducers/index'
 import { Buffer } from 'buffer';
 import { SnackbarProvider } from 'notistack';
+
+import '@rainbow-me/rainbowkit/styles.css';
+
+import {
+    connectorsForWallets,
+    RainbowKitProvider,
+    darkTheme,
+} from '@rainbow-me/rainbowkit';
+import { WagmiProvider, createConfig } from 'wagmi';
+import {
+    mainnet,
+    polygon,
+    optimism,
+    arbitrum,
+    base,
+    zora,
+} from 'wagmi/chains';
+import {
+    QueryClientProvider,
+    QueryClient,
+} from "@tanstack/react-query";
+import {
+    coinbaseWallet,
+    metaMaskWallet,
+    rainbowWallet,
+    walletConnectWallet,
+    phantomWallet,
+} from '@rainbow-me/rainbowkit/wallets';
+
+const connectors = connectorsForWallets(
+    [
+        {
+            groupName: 'Popular',
+            wallets: [metaMaskWallet, rainbowWallet, coinbaseWallet, walletConnectWallet, phantomWallet],
+        },
+    ],
+    {
+        appName: 'Sapien Eleven',
+        projectId: 'SapienEleven',
+    }
+);
+
+const config = createConfig({
+    connectors,
+    chains: [mainnet, polygon, optimism, arbitrum, base, zora,]
+})
+
+const queryClient = new QueryClient();
 
 window.Buffer = window.Buffer || Buffer;
 
@@ -24,24 +70,26 @@ let theme = createTheme({
         }
     }
 })
-const getLibrary = (provider) => {
-    return new Web3Provider(provider)
-}
 
 const store = createStore(reducer);
+
 root.render(
     <React.StrictMode>
         <ThemeProvider theme={theme}>
-            <Provider store={store}>
-                <Web3ReactProvider getLibrary={getLibrary}>
-                    <SnackbarProvider
-                        anchorOrigin={{horizontal: 'center', vertical: 'top'}}
-                        autoHideDuration={3500}
-                    >
-                        <App/>
-                    </SnackbarProvider>
-                </Web3ReactProvider>
-            </Provider>
+            <WagmiProvider config={config}>
+                <QueryClientProvider client={queryClient}>
+                    <RainbowKitProvider theme={darkTheme()}>
+                        <Provider store={store}>
+                            <SnackbarProvider
+                                anchorOrigin={{horizontal: 'center', vertical: 'top'}}
+                                autoHideDuration={3500}
+                            >
+                                <App/>
+                            </SnackbarProvider>
+                        </Provider>
+                    </RainbowKitProvider>
+                </QueryClientProvider>
+            </WagmiProvider>
         </ThemeProvider>
     </React.StrictMode>
 );

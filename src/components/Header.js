@@ -13,8 +13,7 @@ import {useTheme} from '@mui/material/styles'
 import '../styles/common.css'
 import SapienLogo from '../assets/logo.svg'
 import SapienIcon from '../assets/sapien.svg'
-import MetaMaskLogo from '../assets/metamask.svg'
-import {pages, wallets} from '../const/consts'
+import {pages} from '../const/consts'
 import WalletModal from "./WalletModal";
 import {memo, useCallback, useEffect, useState} from "react";
 import {colors, fonts, pixToRem} from "../const/uivar";
@@ -28,6 +27,8 @@ import CloseIcon from '@mui/icons-material/Close';
 import { ChevronRight, ExpandMore } from '@mui/icons-material'
 import {StrapiBaseURL, StrapiToken, StrapiURL} from "../const/consts";
 import axios from "axios";
+import {HeaderConnectButton, MobileHeaderConnectButton} from "./WalletConnectButton";
+import {useAccount} from "wagmi";
 
 const NavButton = styled(Button)((props) => ({
 	height: 81,
@@ -40,54 +41,16 @@ const NavButton = styled(Button)((props) => ({
 	borderRadius: 0
 }));
 
-const WalletButton = styled(Button)((props) => ({
-	boxSizing: 'border-box',
-	display: 'flex',
-	flexDirection: 'row',
-	justifyContent: 'center',
-	alignItems: 'center',
-	paddingTop: pixToRem(10),
-	paddingBottom: pixToRem(10),
-	paddingLeft: pixToRem(20),
-	paddingRight: pixToRem(20),
-	height: pixToRem(35),
-	backgroundColor: '#F8F8F8',
-	color: '#333333',
-	fontFamily: 'Roboto',
-	fontSize: pixToRem(10),
-	fontWeight: '700',
-	fontStyle: 'normal',
-	lineHeight: pixToRem(12),
-	border: '1px solid #CA3C3D',
-	borderRadius: 0,
-}))
-
 const Header = memo((props) => {
-	const {account, active, deactivate} = useWeb3React();
-	const [walletModalVisible, setWalletModalVisible] = useState(false);
-	const closeWalletModal = useCallback(() => setWalletModalVisible(false), [])
 	const [showSigninModal, setShowSigninModal] = useState(false);
 	const [showMobileMenu, setShowMobileMenu] = useState(false)
 	const navigate = useNavigate()
+	const {isConnected} = useAccount();
 	const theme = useTheme();
 	const md = useMediaQuery(theme.breakpoints.down('md'));
 	const sm = useMediaQuery(theme.breakpoints.down('sm'));
 	const lg = useMediaQuery(theme.breakpoints.down('lg'));
 
-	useEffect(() => {
-		if (active) {
-			props.setWalletAddress(account)
-		}
-	}, [props]);
-	const connectWallet = () => {
-		if (active) {
-			deactivate();
-			props.setConnectedWallet('');
-			props.setWalletAddress('');
-		} else {
-			setWalletModalVisible(true);
-		}
-	};
 	const onNavigate = (page) => {
 		navigate(`/${page.toLowerCase()}`);
 	}
@@ -150,14 +113,7 @@ const Header = memo((props) => {
 							</Stack>
 						}
 						{
-							!md &&
-							<WalletButton
-								startIcon={<img src={props.connectedWallet === '' ? MetaMaskLogo : wallets[props.connectedWallet].remoteIcon} style={styles.metamaskLogo} alt='metamask' />}
-								onClick={connectWallet}
-							>
-								{/*{active? `${account.substring(0, 4)}...${account.substring(account.length - 4)}` : 'CONNECT WALLET'}*/}
-								{(props.walletAddress !== '' || props.isAuthenticated) ? props.walletAddress !== '' ? `${props.walletAddress.substring(0, 4)}...${props.walletAddress.substring(props.walletAddress.length - 4)}` : 'CONNECTED' : 'CONNECT WALLET'}
-							</WalletButton>
+							!md && <HeaderConnectButton/>
 						}
 						{
 							sm && !showMobileMenu &&
@@ -179,11 +135,6 @@ const Header = memo((props) => {
 						}
 					</Toolbar>
 				</Container>
-				<WalletModal
-					visible={walletModalVisible}
-					closeModal={closeWalletModal}
-					showSigninModal={() => setShowSigninModal(true)}
-				/>
 				<SigninModal
 					visible={showSigninModal}
 					onClose={() => setShowSigninModal(false)}
@@ -195,7 +146,7 @@ const Header = memo((props) => {
 					sx={{width: '100%', boxShadow: 4, borderTop: '1px solid #ccc'}}
 				>
 					<Collapse in={showMobileMenu}>
-						<AcademyMenu isConnected={props.walletAddress !== '' || props.isAuthenticated} closeMenu={handleCloseMobileMenu} />
+						<AcademyMenu isConnected={isConnected || props.isAuthenticated} closeMenu={handleCloseMobileMenu} />
 						<Box sx={styles.mobileMenuItem} onClick={() => navigate('/about')}>
 							<Typography sx={styles.mobileMenuText}>ABOUT</Typography>
 						</Box>
@@ -212,13 +163,14 @@ const Header = memo((props) => {
 						<Box
 							sx={[styles.mobileMenuItem, {alignItems: 'center'}]}
 						>
-							<Button
-								sx={styles.mobileWalletBtn}
-								endIcon={<img src={props.connectedWallet === '' ? MetaMaskLogo : wallets[props.connectedWallet].remoteIcon} style={{width: pixToRem(20), height: pixToRem(20)}} alt='metamask' />}
-								onClick={connectWallet}
-							>
-								{(props.walletAddress !== '' || props.isAuthenticated) ? 'DISCONNECT WALLET' : 'CONNECT WALLET'}
-							</Button>
+							{/*<Button*/}
+							{/*	sx={styles.mobileWalletBtn}*/}
+							{/*	endIcon={<img src={props.connectedWallet === '' ? MetaMaskLogo : wallets[props.connectedWallet].remoteIcon} style={{width: pixToRem(20), height: pixToRem(20)}} alt='metamask' />}*/}
+							{/*	onClick={connectWallet}*/}
+							{/*>*/}
+							{/*	{(props.walletAddress !== '' || props.isAuthenticated) ? 'DISCONNECT WALLET' : 'CONNECT WALLET'}*/}
+							{/*</Button>*/}
+							<MobileHeaderConnectButton/>
 						</Box>
 					</Collapse>
 				</Box>

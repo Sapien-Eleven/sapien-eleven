@@ -13,7 +13,7 @@ import {useTheme} from '@mui/material/styles'
 import '../styles/common.css'
 import SapienLogo from '../assets/logo.svg'
 import SapienIcon from '../assets/sapien.svg'
-import {pages} from '../const/consts'
+import {pages, SERVER_URL} from '../const/consts'
 import WalletModal from "./WalletModal";
 import {memo, useCallback, useEffect, useState} from "react";
 import {colors, fonts, pixToRem} from "../const/uivar";
@@ -29,6 +29,7 @@ import {StrapiBaseURL, StrapiToken, StrapiURL} from "../const/consts";
 import axios from "axios";
 import {HeaderConnectButton, MobileHeaderConnectButton} from "./WalletConnectButton";
 import {useAccount} from "wagmi";
+import {enqueueSnackbar} from "notistack";
 
 const NavButton = styled(Button)((props) => ({
 	height: 81,
@@ -44,12 +45,28 @@ const NavButton = styled(Button)((props) => ({
 const Header = memo((props) => {
 	const [showSigninModal, setShowSigninModal] = useState(false);
 	const [showMobileMenu, setShowMobileMenu] = useState(false)
+	const [whitelisted, setWhitelisted] = useState(false);
 	const navigate = useNavigate()
-	const {isConnected} = useAccount();
+	const {isConnected, address} = useAccount();
 	const theme = useTheme();
 	const md = useMediaQuery(theme.breakpoints.down('md'));
 	const sm = useMediaQuery(theme.breakpoints.down('sm'));
 	const lg = useMediaQuery(theme.breakpoints.down('lg'));
+
+	useEffect(() => {
+		checkWhitelisted().then();
+	}, [isConnected]);
+	const checkWhitelisted = async () => {
+		if (!isConnected) return;
+		try {
+			const data = (await axios.post(`${SERVER_URL}checkWhitelisted`, {
+				wallet_address: address
+			})).data
+			if (data.status === 'success') setWhitelisted(true)
+		} catch (e) {
+			console.log(e);
+		}
+	}
 
 	const onNavigate = (page) => {
 		navigate(`/${page.toLowerCase()}`);
@@ -146,7 +163,7 @@ const Header = memo((props) => {
 					sx={{width: '100%', boxShadow: 4, borderTop: '1px solid #ccc'}}
 				>
 					<Collapse in={showMobileMenu}>
-						<AcademyMenu isConnected={isConnected || props.isAuthenticated} closeMenu={handleCloseMobileMenu} />
+						<AcademyMenu isConnected={whitelisted} closeMenu={handleCloseMobileMenu} />
 						<Box sx={styles.mobileMenuItem} onClick={() => navigate('/about')}>
 							<Typography sx={styles.mobileMenuText}>ABOUT</Typography>
 						</Box>
@@ -260,6 +277,7 @@ const AcademyMenu = (props) => {
 	useEffect(() => {
 		if (props.isConnected) fetchCategories().then();
 	}, [props.isConnected])
+
 	const fetchCategories = async () => {
         const data = (await axios.get(`${StrapiURL}academy-categories`, {
             headers: {

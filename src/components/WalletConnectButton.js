@@ -2,6 +2,8 @@ import {ConnectButton} from '@rainbow-me/rainbowkit';
 import {Button, useMediaQuery, useTheme} from "@mui/material";
 import {fonts, pixToRem} from "../const/uivar";
 import MetaMaskLogo from '../assets/metamask.svg'
+import {useDisconnect} from "wagmi";
+import {colors} from '../const/uivar'
 
 export const HeaderConnectButton = () => {
     return (
@@ -106,6 +108,10 @@ export const HeaderConnectButton = () => {
 };
 
 export const MobileHeaderConnectButton = () => {
+    const {disconnect} = useDisconnect();
+    const disconnectWallet = async () => {
+        await disconnect();
+    }
     return (
         <ConnectButton.Custom>
             {({
@@ -160,43 +166,21 @@ export const MobileHeaderConnectButton = () => {
                                 );
                             }
                             return (
-                                <div style={{display: 'flex', gap: 12}}>
-                                    {/*<button*/}
-                                    {/*    onClick={openChainModal}*/}
-                                    {/*    style={{display: 'flex', alignItems: 'center'}}*/}
-                                    {/*    type="button"*/}
-                                    {/*>*/}
-                                    {/*    {chain.hasIcon && (*/}
-                                    {/*        <div*/}
-                                    {/*            style={{*/}
-                                    {/*                background: chain.iconBackground,*/}
-                                    {/*                width: 12,*/}
-                                    {/*                height: 12,*/}
-                                    {/*                borderRadius: 999,*/}
-                                    {/*                overflow: 'hidden',*/}
-                                    {/*                marginRight: 4,*/}
-                                    {/*            }}*/}
-                                    {/*        >*/}
-                                    {/*            {chain.iconUrl && (*/}
-                                    {/*                <img*/}
-                                    {/*                    alt={chain.name ?? 'Chain icon'}*/}
-                                    {/*                    src={chain.iconUrl}*/}
-                                    {/*                    style={{width: 12, height: 12}}*/}
-                                    {/*                />*/}
-                                    {/*            )}*/}
-                                    {/*        </div>*/}
-                                    {/*    )}*/}
-                                    {/*    {chain.name}*/}
-                                    {/*</button>*/}
+                                <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: 5}}>
                                     <Button
                                         sx={styles.mobileHeaderBtn}
                                         endIcon={<img src={chain.iconUrl} style={{width: pixToRem(20), height: pixToRem(20)}} alt={chain.name} />}
-                                        onClick={openAccountModal}
                                     >
                                         {account.displayName}
                                         {account.displayBalance
                                             ? ` (${account.displayBalance})`
                                             : ''}
+                                    </Button>
+                                    <Button
+                                        sx={[styles.mobileHeaderBtn, {color: colors.red}]}
+                                        onClick={disconnectWallet}
+                                    >
+                                        Disconnect Wallet
                                     </Button>
                                 </div>
                             );

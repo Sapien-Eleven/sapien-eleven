@@ -48,7 +48,7 @@ const connectors = connectorsForWallets(
     ],
     {
         appName: 'Sapien Eleven',
-        projectId: 'SapienEleven',
+        projectId: 'ddb5107e6f6790ae6a3ccb638d2dd4cc',
     }
 );
 

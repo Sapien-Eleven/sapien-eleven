@@ -6,6 +6,7 @@ import {useDisconnect} from "wagmi";
 import {colors} from '../const/uivar'
 
 export const HeaderConnectButton = () => {
+    const {disconnect} = useDisconnect();
     return (
         <ConnectButton.Custom>
             {({
@@ -59,43 +60,21 @@ export const HeaderConnectButton = () => {
                                 );
                             }
                             return (
-                                <div style={{display: 'flex', gap: 12}}>
-                                    {/*<button*/}
-                                    {/*    onClick={openChainModal}*/}
-                                    {/*    style={{display: 'flex', alignItems: 'center'}}*/}
-                                    {/*    type="button"*/}
-                                    {/*>*/}
-                                    {/*    {chain.hasIcon && (*/}
-                                    {/*        <div*/}
-                                    {/*            style={{*/}
-                                    {/*                background: chain.iconBackground,*/}
-                                    {/*                width: 12,*/}
-                                    {/*                height: 12,*/}
-                                    {/*                borderRadius: 999,*/}
-                                    {/*                overflow: 'hidden',*/}
-                                    {/*                marginRight: 4,*/}
-                                    {/*            }}*/}
-                                    {/*        >*/}
-                                    {/*            {chain.iconUrl && (*/}
-                                    {/*                <img*/}
-                                    {/*                    alt={chain.name ?? 'Chain icon'}*/}
-                                    {/*                    src={chain.iconUrl}*/}
-                                    {/*                    style={{width: 12, height: 12}}*/}
-                                    {/*                />*/}
-                                    {/*            )}*/}
-                                    {/*        </div>*/}
-                                    {/*    )}*/}
-                                    {/*    {chain.name}*/}
-                                    {/*</button>*/}
+                                <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: 2}}>
                                     <Button
                                         sx={styles.headerBtn}
                                         startIcon={<img src={chain.iconUrl} style={{width: pixToRem(15), height: pixToRem(15)}} alt='metamask' />}
-                                        onClick={openAccountModal}
                                     >
                                         {account.displayName}
                                         {account.displayBalance
                                             ? ` (${account.displayBalance})`
                                             : ''}
+                                    </Button>
+                                    <Button
+                                        sx={styles.headerBtn}
+                                        onClick={async () => await disconnect()}
+                                    >
+                                        Disconnect Wallet
                                     </Button>
                                 </div>
                             );
@@ -342,6 +321,7 @@ const styles = {
         paddingBottom: pixToRem(10),
         paddingLeft: pixToRem(20),
         paddingRight: pixToRem(20),
+        width: 160,
         height: pixToRem(35),
         backgroundColor: '#F8F8F8',
         color: '#333333',

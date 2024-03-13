@@ -4,9 +4,15 @@ import {fonts, pixToRem} from "../const/uivar";
 import MetaMaskLogo from '../assets/metamask.svg'
 import {useDisconnect} from "wagmi";
 import {colors} from '../const/uivar'
+import {useState} from "react";
 
 export const HeaderConnectButton = () => {
     const {disconnect} = useDisconnect();
+    const [showDisconnectButton, setShowDisconnectButton] = useState(false)
+    const disconnectWallet = async () => {
+        await disconnect();
+        setShowDisconnectButton(false);
+    }
     return (
         <ConnectButton.Custom>
             {({
@@ -64,18 +70,19 @@ export const HeaderConnectButton = () => {
                                     <Button
                                         sx={styles.headerBtn}
                                         startIcon={<img src={chain.iconUrl} style={{width: pixToRem(15), height: pixToRem(15)}} alt='metamask' />}
+                                        onClick={() => setShowDisconnectButton(!showDisconnectButton)}
                                     >
                                         {account.displayName}
                                         {account.displayBalance
                                             ? ` (${account.displayBalance})`
                                             : ''}
                                     </Button>
-                                    <Button
+                                    {showDisconnectButton && <Button
                                         sx={styles.headerBtn}
-                                        onClick={async () => await disconnect()}
+                                        onClick={disconnectWallet}
                                     >
                                         Disconnect Wallet
-                                    </Button>
+                                    </Button>}
                                 </div>
                             );
                         })()}
@@ -87,9 +94,11 @@ export const HeaderConnectButton = () => {
 };
 
 export const MobileHeaderConnectButton = () => {
+    const [showDisconnectButton, setShowDisconnectButton] = useState(false);
     const {disconnect} = useDisconnect();
     const disconnectWallet = async () => {
         await disconnect();
+        setShowDisconnectButton(false)
     }
     return (
         <ConnectButton.Custom>
@@ -149,18 +158,19 @@ export const MobileHeaderConnectButton = () => {
                                     <Button
                                         sx={styles.mobileHeaderBtn}
                                         endIcon={<img src={chain.iconUrl} style={{width: pixToRem(20), height: pixToRem(20)}} alt={chain.name} />}
+                                        onClick={() => setShowDisconnectButton(!showDisconnectButton)}
                                     >
                                         {account.displayName}
                                         {account.displayBalance
                                             ? ` (${account.displayBalance})`
                                             : ''}
                                     </Button>
-                                    <Button
+                                    {showDisconnectButton && <Button
                                         sx={[styles.mobileHeaderBtn, {color: colors.red}]}
                                         onClick={disconnectWallet}
                                     >
                                         Disconnect Wallet
-                                    </Button>
+                                    </Button>}
                                 </div>
                             );
                         })()}

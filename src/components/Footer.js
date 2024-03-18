@@ -57,7 +57,7 @@ export function Footer() {
                         component={'span'}
                         sx={styles.copyright}
                     >
-                        Sapien Eleven - 2024 © <br/> All Rights
+                        Sapien Eleven Platforms, Inc <br/> All Rights Reserved
                     </Box>
                 </Grid>
             </Grid>

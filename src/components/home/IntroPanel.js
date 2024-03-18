@@ -5,7 +5,7 @@ import '@fontsource/roboto/400.css';
 import {memo, useEffect, useState} from "react";
 import {connect} from "react-redux";
 import {StrapiToken, StrapiURL, wallets} from "../../const/consts";
-import {fonts, pixToRem} from "../../const/uivar";
+import {colors, fonts, pixToRem} from "../../const/uivar";
 import axios from "axios";
 import SigninModal from "../SigninModal";
 import {HomeConnectButton} from "../WalletConnectButton";
@@ -105,10 +105,11 @@ const styles = {
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'flex-start',
+        backgroundColor: colors.bgBlackColor,
         backgroundImage: `url(${MainBg})`,
-        backgroundPosition: 'right center',
+        backgroundPosition: 'right',
         backgroundRepeat: 'no-repeat',
-        backgroundSize: 'cover',
+        backgroundSize: 'auto 100%',
         pt: pixToRem(210),
         pb: pixToRem(210)
     },

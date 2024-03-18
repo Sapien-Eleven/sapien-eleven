@@ -48,7 +48,6 @@ export const ChronicDisease = (props) => {
             maxWidth={false}
             sx={styles.mobilePanel}
         >
-            <MobileChronicDiseaseJSX />
             <Box
                 component={'div'}
                 sx={styles.mobileExplaination}
@@ -75,6 +74,7 @@ export const ChronicDisease = (props) => {
                     component={'div'}
                     sx={styles.chartPanel}
                 >
+                    <MobileChronicDiseaseJSX style={{position: 'absolute', right: -270, height: '100%', width: 'auto'}} />
                     <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                         <Tabs value={value} onChange={handleChange} aria-label="Disease chart" variant="scrollable" scrollButtons="true" orientation={'horizontal'}>
                             <Tab label="CANCERS" {...a11yProps(0)} style={value === 0 ? styles.mobileActiveTab : styles.mobileDefaultTab} />
@@ -84,9 +84,8 @@ export const ChronicDisease = (props) => {
                         </Tabs>
                     </Box>
                     <TabPanel value={value} index={0}>
-                        <ResponsiveContainer width="100%" minHeight={430}>
+                        <ResponsiveContainer width="100%" height={350}>
                             <ComposedChart
-                                // height={500}
                                 data={dataCancerArr}
                                 margin={{
                                     top: 20,
@@ -111,9 +110,8 @@ export const ChronicDisease = (props) => {
                         </ResponsiveContainer>
                     </TabPanel>
                     <TabPanel value={value} index={1}>
-                        <ResponsiveContainer width="100%" minHeight={430}>
+                        <ResponsiveContainer width="100%" minHeight={350}>
                             <ComposedChart
-                                // height={500}
                                 data={dataDeathArr}
                                 margin={{
                                     top: 20,
@@ -135,9 +133,8 @@ export const ChronicDisease = (props) => {
                         </ResponsiveContainer>
                     </TabPanel>
                     <TabPanel value={value} index={2}>
-                        <ResponsiveContainer width="100%" minHeight={430}>
+                        <ResponsiveContainer width="100%" minHeight={350}>
                             <ComposedChart
-                                // height={500}
                                 data={dataDeathArr}
                                 margin={{
                                     top: 20,
@@ -159,7 +156,7 @@ export const ChronicDisease = (props) => {
                         </ResponsiveContainer>
                     </TabPanel>
                     <TabPanel value={value} index={3}>
-                        <ResponsiveContainer width="100%" minHeight={430}>
+                        <ResponsiveContainer width="100%" minHeight={350}>
                             <ComposedChart
                                 // height={500}
                                 data={dataDeathArr}
@@ -348,7 +345,7 @@ const styles = {
         width: '100%',
         zIndex: 1,
         backgroundColor: '#1D1D1D',
-        pb: pixToRem(50)
+        pt: 10
     },
     explaination: {
         marginLeft: '5rem',
@@ -418,8 +415,12 @@ const styles = {
     },
     chartPanel: {
         marginTop: pixToRem(50),
+        pb: pixToRem(50),
         backgroundColor: 'rgba(29,29,29,0.25)',
-        width: '95%'
+        // width: '95%',
+        width: '99%',
+        position: 'relative',
+        backgroundClip: 'border-box'
     },
     defaultTab: {
         color: '#999'
@@ -430,10 +431,12 @@ const styles = {
     mobileDefaultTab: {
         color: '#999',
         fontSize: pixToRem(14),
+        maxWidth: 120
     },
     mobileActiveTab: {
         color: 'white',
         fontSize: pixToRem(14),
+        maxWidth: 120
     }
 }
 

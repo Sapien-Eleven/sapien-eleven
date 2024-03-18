@@ -170,6 +170,18 @@ const Header = memo((props) => {
 					sx={{width: '100%', boxShadow: 4, borderTop: '1px solid #ccc'}}
 				>
 					<Collapse in={showMobileMenu}>
+						<Box
+							sx={[styles.mobileMenuItem, {alignItems: 'center'}]}
+						>
+							{/*<Button*/}
+							{/*	sx={styles.mobileWalletBtn}*/}
+							{/*	endIcon={<img src={props.connectedWallet === '' ? MetaMaskLogo : wallets[props.connectedWallet].remoteIcon} style={{width: pixToRem(20), height: pixToRem(20)}} alt='metamask' />}*/}
+							{/*	onClick={connectWallet}*/}
+							{/*>*/}
+							{/*	{(props.walletAddress !== '' || props.isAuthenticated) ? 'DISCONNECT WALLET' : 'CONNECT WALLET'}*/}
+							{/*</Button>*/}
+							<MobileHeaderConnectButton/>
+						</Box>
 						<AcademyMenu isConnected={whitelisted} closeMenu={handleCloseMobileMenu} />
 						<Box sx={styles.mobileMenuItem} onClick={() => navigate('/about')}>
 							<Typography sx={styles.mobileMenuText}>ABOUT</Typography>
@@ -183,18 +195,6 @@ const Header = memo((props) => {
 						<ResourcesMenu closeMenu={handleCloseMobileMenu} />
 						<Box sx={styles.mobileMenuItem} onClick={() => navigate('/contact')}>
 							<Typography sx={styles.mobileMenuText}>CONTACT</Typography>
-						</Box>
-						<Box
-							sx={[styles.mobileMenuItem, {alignItems: 'center'}]}
-						>
-							{/*<Button*/}
-							{/*	sx={styles.mobileWalletBtn}*/}
-							{/*	endIcon={<img src={props.connectedWallet === '' ? MetaMaskLogo : wallets[props.connectedWallet].remoteIcon} style={{width: pixToRem(20), height: pixToRem(20)}} alt='metamask' />}*/}
-							{/*	onClick={connectWallet}*/}
-							{/*>*/}
-							{/*	{(props.walletAddress !== '' || props.isAuthenticated) ? 'DISCONNECT WALLET' : 'CONNECT WALLET'}*/}
-							{/*</Button>*/}
-							<MobileHeaderConnectButton/>
 						</Box>
 					</Collapse>
 				</Box>

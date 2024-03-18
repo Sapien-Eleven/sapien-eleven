@@ -109,9 +109,8 @@ const styles = {
         backgroundImage: `url(${MainBg})`,
         backgroundPosition: 'right',
         backgroundRepeat: 'no-repeat',
-        backgroundSize: 'auto 100%',
-        pt: pixToRem(210),
-        pb: pixToRem(210)
+        backgroundSize: 'auto 110%',
+        pt: 40, pb: 40
     },
     redTxt: {
         fontFamily: 'Roboto',

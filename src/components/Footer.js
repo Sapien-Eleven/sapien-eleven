@@ -29,49 +29,39 @@ export function Footer() {
         navigate(`/resource`, {state: {policy: policy}});
     }
     return (
-        <Box
-            sx={styles.panel}
-            >
-            <Container maxWidth={false}>
-                <Grid container direction="row" alignItems="center" justifyContent={'space-between'}>
-                    <Grid item md={2.5}>
-                        <Box
-                            component={'img'}
-                            src={SapienLogo}
-                            sx={styles.logo}
-                        />
-                    </Grid>
-                    <Stack
-                        direction={'row'}
-                        alignItems={'center'}
-                        justifyContent={'center'}
-                        spacing={3}
-                    >
-                        {
-                            policies.map((policy, index) => {
-                                return (
-                                    <Button key={index} sx={styles.policy} onClick={() => goToResourceDetail(policy)}>{policy}</Button>
-                                )
-                            })
-                        }
-                    </Stack>
-                    <Grid container md={1.5} direction={'column'} alignItems={'center'}>
-                        <Box
-                            component={'span'}
-                            sx={styles.copyright}
-                        >
-                            Sapien Eleven - 2023 ©
-                        </Box>
-                        <Box
-                            component={'span'}
-                            sx={styles.designBy}
-                        >
-                            Design by @sv3nsei
-                        </Box>
-                    </Grid>
+        <Container maxWidth={false} sx={styles.panel}>
+            <Grid container direction="row" alignItems="center" justifyContent={'space-between'}>
+                <Grid item md={2.5}>
+                    <Box
+                        component={'img'}
+                        src={SapienLogo}
+                        sx={styles.logo}
+                    />
                 </Grid>
-            </Container>
-        </Box>
+                <Stack
+                    direction={'row'}
+                    alignItems={'center'}
+                    justifyContent={'center'}
+                    spacing={3}
+                >
+                    {
+                        policies.map((policy, index) => {
+                            return (
+                                <Button key={index} sx={styles.policy} onClick={() => goToResourceDetail(policy)}>{policy}</Button>
+                            )
+                        })
+                    }
+                </Stack>
+                <Grid item md={1.5}>
+                    <Box
+                        component={'span'}
+                        sx={styles.copyright}
+                    >
+                        Sapien Eleven - 2024 © <br/> All Rights
+                    </Box>
+                </Grid>
+            </Grid>
+        </Container>
     )
 }
 

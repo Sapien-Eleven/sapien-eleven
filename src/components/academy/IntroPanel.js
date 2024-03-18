@@ -1,7 +1,7 @@
 import {memo, useEffect, useState} from "react";
 import {Box, Container, useMediaQuery, useTheme} from "@mui/material";
 import {colors, fonts, pixToRem} from "../../const/uivar";
-import Wellness from '../../assets/images/academy/wellness.png'
+import Wellness from '../../assets/images/academy/wellness.svg'
 import {connect} from "react-redux";
 import axios from "axios";
 import {StrapiToken, StrapiURL} from "../../const/consts";

@@ -116,10 +116,17 @@ const Header = memo((props) => {
 												sx={
 													props.page === page.toLowerCase() ?
 														{
-															borderBottom: '3px solid #CA3C3D'
+															borderBottom: '3px solid #CA3C3D',
+															':hover': {
+																color: colors.red
+															}
 														}
 														:
-														null
+														{
+															':hover': {
+																color: colors.red
+															}
+														}
 												}
 											>
 												{page}

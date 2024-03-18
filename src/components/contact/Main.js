@@ -1,7 +1,6 @@
 import {Box, Button, TextField, useMediaQuery, useTheme} from "@mui/material";
 import {memo, useEffect, useState} from "react";
 import StepBg from '../../assets/images/contact/step_bg.png'
-import FinalBg from '../../assets/images/contact/final_bg.png'
 import {colors, fonts, pixToRem} from "../../const/uivar";
 import {CircularProgressbar, buildStyles} from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
@@ -10,6 +9,7 @@ import {toast, ToastContainer} from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
 import emailjs from '@emailjs/browser'
 import {EmailJSPublicKey, EmailJSServiceID, EmailJSTemplateID} from "../../const/consts";
+import S11Particle from "../S11Particle";
 
 const Main = memo(props => {
     const [step, setStep] = useState(0);
@@ -97,14 +97,13 @@ const Main = memo(props => {
         if (e.target.value === '') setStepForwardBtnDisabled(true)
         else setStepForwardBtnDisabled(false)
     }
+
     return (
         <Box
             component={'div'}
-            sx={[styles.container, {
-                backgroundImage: step === 4 ? `url(${FinalBg})` : null,
-                backgroundSize: sm ? 'cover' : '100% 100%'
-            }]}
+            sx={styles.container}
         >
+            <S11Particle/>
             {
                 step <= 3 &&
                 <Box
@@ -188,14 +187,6 @@ const Main = memo(props => {
                 </Box>
             }
             {
-                step <= 3 &&
-                <Box
-                    component={'img'}
-                    sx={styles.stepBgImg}
-                    src={StepBg}
-                />
-            }
-            {
                 step === 4 &&
                 <Box
                     component={'div'}
@@ -243,7 +234,7 @@ const styles = {
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundPosition: 'center'
+        backgroundColor: colors.bgBlackColor
     },
     stepPanel: {
         width: '50%',
@@ -267,7 +258,7 @@ const styles = {
         fontWeight: 400,
         fontSize: pixToRem(25),
         lineHeight: pixToRem(40),
-        color: colors.black,
+        color: 'white',
         borderBottom: '2px solid #CA3C3D'
     },
     mobileStepTitle: {
@@ -277,7 +268,7 @@ const styles = {
         fontWeight: 400,
         fontSize: pixToRem(20),
         lineHeight: pixToRem(40),
-        color: colors.black,
+        color: 'white',
         borderBottom: '2px solid #CA3C3D'
     },
     stepperGroup: {
@@ -289,7 +280,6 @@ const styles = {
     stepperProgress: {
         width: '2rem',
         color: colors.red,
-        border: '2px solid #F2F2F2',
         borderRadius: '50%',
         transform: 'rotate(-90deg)'
     },
@@ -299,6 +289,7 @@ const styles = {
         fontSize: pixToRem(14),
         lineHeight: pixToRem(16),
         fontWeight: 700,
+        color: 'white',
         marginLeft: pixToRem(10)
     },
     stepComment: {
@@ -307,7 +298,7 @@ const styles = {
         fontSize: pixToRem(18),
         lineHeight: pixToRem(30),
         fontWeight: 400,
-        color: '#999',
+        color: '#F2F2F2',
         alignSelf: 'flex-start',
         marginTop: pixToRem(20),
         marginBottom: pixToRem(20)
@@ -319,7 +310,7 @@ const styles = {
         fontSize: pixToRem(16),
         lineHeight: pixToRem(24),
         fontWeight: 400,
-        color: '#999',
+        color: '#F2F2F2',
         alignSelf: 'flex-start',
         mt: 2, mb: 3
     },
@@ -329,7 +320,8 @@ const styles = {
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#F2F2F2',
+        backgroundColor: '#111',
+        opacity: 0.89,
         borderRadius: pixToRem(15),
         paddingTop: pixToRem(30),
         paddingBottom: pixToRem(30)
@@ -355,7 +347,7 @@ const styles = {
         fontSize: pixToRem(25),
         lineHeight: pixToRem(40),
         textAlign: 'center',
-        color: colors.black
+        color: 'white'
     },
     finalStepDivider: {
         width: pixToRem(130),
@@ -370,7 +362,7 @@ const styles = {
         fontWeight: 400,
         fontSize: pixToRem(18),
         lineHeight: pixToRem(30),
-        color: colors.comment,
+        color: '#F2F2F2',
         textAlign: 'center'
     },
     finalStepButton: {
@@ -451,6 +443,7 @@ const styles = {
         '&.Mui-disabled': {
             backgroundColor: 'transparent',
             border: '1px solid #ccc',
+            color: '#ccc'
         }
     },
     stepNamePanel: {
@@ -472,7 +465,7 @@ const styles = {
         fontSize: pixToRem(18),
         fontWeight: 700,
         lineHeight: pixToRem(30),
-        color: colors.black,
+        color: 'white',
         marginBottom: pixToRem(10)
     },
     stepNameInput: {
@@ -506,7 +499,7 @@ const styles = {
         fontSize: pixToRem(18),
         fontWeight: 700,
         lineHeight: pixToRem(30),
-        color: colors.black,
+        color: 'white',
         marginBottom: pixToRem(10),
         alignSelf: 'flex-start'
     },
@@ -538,7 +531,7 @@ const styles = {
         fontSize: pixToRem(18),
         fontWeight: 700,
         lineHeight: pixToRem(30),
-        color: colors.black,
+        color: 'white',
         marginBottom: pixToRem(10),
         alignSelf: 'flex-start'
     },
@@ -570,7 +563,7 @@ const styles = {
         fontSize: pixToRem(18),
         fontWeight: 700,
         lineHeight: pixToRem(30),
-        color: colors.black,
+        color: 'white',
         marginBottom: pixToRem(10),
         alignSelf: 'flex-start'
     },

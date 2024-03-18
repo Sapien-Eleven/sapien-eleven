@@ -1,8 +1,8 @@
-import {Box, Container, Stack, useMediaQuery, useTheme} from "@mui/material";
+import {Box, Container, useMediaQuery, useTheme} from "@mui/material";
 import {colors, fonts, pixToRem} from "../../const/uivar";
 import Activity from '../../assets/images/activity.png'
-import Nutriution from '../../assets/images/nutriution.png'
-import Coaching from '../../assets/images/coaching.png'
+import Nutriution from '../../assets/images/nutriution'
+import Coaching from '../../assets/images/coaching'
 import {useEffect, useState} from "react";
 import axios from "axios";
 import {StrapiToken, StrapiURL} from "../../const/consts";
@@ -110,12 +110,7 @@ export function About() {
                             component={'div'}
                             sx={styles.box}
                         >
-                            <Box
-                                component={'img'}
-                                sx={styles.img}
-                                src={Nutriution}
-                                alt="Nutriution and Supplementation"
-                            />
+                            <Nutriution style={styles.img} />
                             <Box
                                 component={'span'}
                                 sx={styles.boxTitle}
@@ -140,11 +135,7 @@ export function About() {
                             component={'div'}
                             sx={styles.box}
                         >
-                            <Box
-                                component={'img'}
-                                sx={styles.img}
-                                src={Coaching}
-                            />
+                            <Coaching style={styles.img} />
                             <Box
                                 component={'span'}
                                 sx={styles.boxTitle}
@@ -234,8 +225,7 @@ const styles = {
         alignItems: 'center',
     },
     img: {
-        marginTop: '-2.5em',
-        height: pixToRem(214)
+        marginTop: -50,
     },
     boxTitle: {
         width: '90%',

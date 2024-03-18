@@ -1,6 +1,6 @@
 import {Box, Container, useMediaQuery, useTheme} from '@mui/material'
 import Grid from '@mui/material/Unstable_Grid2';
-import Humanhealth from '../../assets/images/human_health.png'
+import Humanhealth from '../../assets/images/mediation'
 import {useEffect, useState} from "react";
 import axios from "axios";
 import {StrapiToken, StrapiURL} from "../../const/consts";
@@ -36,7 +36,6 @@ export function HumanHealth() {
     }
     return (
         <Container
-            component={'div'}
             maxWidth={false}
             sx={styles.panel}
         >
@@ -138,12 +137,7 @@ export function HumanHealth() {
                             component={'div'}
                             sx={styles.cardImage}
                         >
-                            <Box
-                                component={'img'}
-                                alt={'human health'}
-                                src={Humanhealth}
-                                sx={styles.humanImage}
-                            />
+                            <Humanhealth />
                         </Box>
                     </Grid>}
                     <Grid
@@ -174,12 +168,7 @@ export function HumanHealth() {
                             component={'div'}
                             sx={styles.cardImage}
                         >
-                            <Box
-                                component={'img'}
-                                alt={'human health'}
-                                src={Humanhealth}
-                                sx={styles.humanImage}
-                            />
+                            <Humanhealth />
                         </Box>
                     </Grid>}
                 </Grid>

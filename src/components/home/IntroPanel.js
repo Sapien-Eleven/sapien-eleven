@@ -1,5 +1,5 @@
 import {Box, Container, useMediaQuery, useTheme} from "@mui/material";
-import MainBg from '../../assets/images/main_bg.png'
+import MainBg from '../../assets/images/heroshot.svg'
 import MobileMainBg from '../../assets/images/mobile_main_bg.png'
 import '@fontsource/roboto/400.css';
 import {memo, useEffect, useState} from "react";
@@ -106,7 +106,7 @@ const styles = {
         justifyContent: 'center',
         alignItems: 'flex-start',
         backgroundImage: `url(${MainBg})`,
-        backgroundPosition: 'center',
+        backgroundPosition: 'right center',
         backgroundRepeat: 'no-repeat',
         backgroundSize: 'cover',
         pt: pixToRem(210),

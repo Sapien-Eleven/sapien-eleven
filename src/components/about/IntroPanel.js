@@ -96,13 +96,13 @@ const styles = {
         backgroundImage: `url(${PanelBg})`,
         backgroundRepeat: 'no-repeat',
         backgroundSize: 'cover',
-        backgroundPosition: 'center',
+        backgroundPosition: 'right center',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'flex-start',
-        paddingTop: pixToRem(100),
-        paddingBottom: pixToRem(100)
+        pt: pixToRem(100),
+        pb: pixToRem(100)
     },
     mobilePanel: {
         width: '100%',
@@ -156,7 +156,7 @@ const styles = {
     comment: {
         width: '28%',
         fontFamily: fonts.roboto,
-        fontSize: pixToRem(20),
+        fontSize: pixToRem(16),
         fontWeight: 400,
         fontStyle: 'normal',
         color: 'white',

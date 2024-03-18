@@ -1,10 +1,11 @@
 import {Box, Button, Container, Stack, useMediaQuery, useTheme} from "@mui/material";
-import WellnessAcademy from '../../assets/images/wellness_academy.png'
-import MarketPlace from '../../assets/images/marketplace.png'
+import WellnessAcademy from '../../assets/images/academy/wellness.svg'
+import MarketPlace from '../../assets/images/academy/cart.svg'
 import {useEffect, useState} from "react";
 import axios from "axios";
 import {StrapiToken, StrapiURL} from "../../const/consts";
-import {colors, fonts} from "../../const/uivar";
+import {colors, fonts, pixToRem} from "../../const/uivar";
+import Grid from "@mui/material/Unstable_Grid2";
 
 export function IntroSapien() {
     const [content, setContent] = useState({});
@@ -37,7 +38,6 @@ export function IntroSapien() {
     return (
         <Container
             maxWidth={false}
-            component={'div'}
             sx={styles.panel}
         >
             <Box
@@ -53,55 +53,66 @@ export function IntroSapien() {
                 sx={sm ? styles.mobileComment : styles.comment}
             >{content.description}</Box>
             {content.subcontents !== undefined &&
-                <Stack
-                    sx={styles.boxPanel}
+                <Grid
+                    container
+                    spacing={3}
                     direction={'row'}
-                    flexWrap={'wrap'}
-                    useFlexGap
-                    spacing={2}
-                    justifyContent={'center'}
+                    alignItems='stretch'
+                    sx={styles.boxPanel}
                 >
-                    <Box
-                        component='div'
-                        sx={styles.box}
+                    <Grid
+                        item
+                        md={6}
+                        sm={12}
                     >
                         <Box
-                            component={'img'}
-                            src={WellnessAcademy}
-                        />
-                        <Box
-                            component={'span'}
-                            sx={sm ? styles.mobileBoxTitle : styles.boxTitle}
-                        >{content.subcontents[0].subtitle}</Box>
-                        <Box
-                            component='span'
-                            sx={sm ? styles.mobileComment : styles.comment}
-                        >{content.subcontents[0].subdescription}</Box>
-                        <Button
-                            sx={styles.boxButton}
-                        >LEARN MORE</Button>
-                    </Box>
-                    <Box
-                        component='div'
-                        sx={styles.box}
+                            component={'div'}
+                            sx={styles.box}
+                        >
+                            <Box
+                                component={'img'}
+                                src={WellnessAcademy}
+                            />
+                            <Box
+                                component={'span'}
+                                sx={sm ? styles.mobileBoxTitle : styles.boxTitle}
+                            >{content.subcontents[0].subtitle}</Box>
+                            <Box
+                                component='span'
+                                sx={sm ? styles.mobileComment : [styles.comment, {width: '80%'}]}
+                            >{content.subcontents[0].subdescription}</Box>
+                            <Button
+                                sx={styles.boxButton}
+                            >LEARN MORE</Button>
+                        </Box>
+                    </Grid>
+                    <Grid
+                        item
+                        md={6}
+                        sm={12}
                     >
                         <Box
-                            component={'img'}
-                            src={MarketPlace}
-                        />
-                        <Box
-                            component={'span'}
-                            sx={sm ? styles.mobileBoxTitle : styles.boxTitle}
-                        >{content.subcontents[1].subtitle}</Box>
-                        <Box
-                            component='span'
-                            sx={sm ? styles.mobileComment : styles.comment}
-                        >{content.subcontents[1].subdescription}</Box>
-                        <Button
-                            sx={styles.boxButton}
-                        >EXPLORE</Button>
-                    </Box>
-                </Stack>
+                            component={'div'}
+                            sx={styles.box}
+                        >
+                            <Box
+                                component={'img'}
+                                src={MarketPlace}
+                            />
+                            <Box
+                                component={'span'}
+                                sx={sm ? styles.mobileBoxTitle : styles.boxTitle}
+                            >{content.subcontents[1].subtitle}</Box>
+                            <Box
+                                component='span'
+                                sx={sm ? styles.mobileComment : [styles.comment, {width: '80%'}]}
+                            >{content.subcontents[1].subdescription}</Box>
+                            <Button
+                                sx={styles.boxButton}
+                            >EXPLORE</Button>
+                        </Box>
+                    </Grid>
+                </Grid>
             }
         </Container>
     )
@@ -113,7 +124,8 @@ const styles = {
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: 'white'
+        backgroundColor: 'white',
+        mb: 10
     },
     redTxt: {
         fontFamily: fonts.roboto,
@@ -178,17 +190,14 @@ const styles = {
         marginBottom: '60px',
     },
     box: {
-        flex: 1,
-        height: '35rem',
         display: 'flex',
+        height: '100%',
         flexDirection: 'column',
         justifyContent: 'space-between',
         alignItems: 'center',
-        padding: '35px 81px',
         backgroundColor: '#F8F8F8',
         boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.18)',
-        marginLeft: '11px',
-        marginRight: '11px'
+        pt: 5, pb: 5
     },
     boxTitle: {
         fontFamily: fonts.roboto,

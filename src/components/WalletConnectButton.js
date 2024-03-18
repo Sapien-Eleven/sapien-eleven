@@ -342,6 +342,10 @@ const styles = {
         lineHeight: pixToRem(12),
         border: '1px solid #CA3C3D',
         borderRadius: 0,
+        ':hover': {
+            backgroundColor: colors.red,
+            color: 'white'
+        }
     },
     mobileHeaderBtn: {
         display: 'flex',

@@ -234,7 +234,8 @@ const styles = {
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: colors.bgBlackColor
+        backgroundColor: colors.bgBlackColor,
+        position: 'relative'
     },
     stepPanel: {
         width: '50%',

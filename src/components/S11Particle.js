@@ -22,7 +22,7 @@ const S11Particle = () => {
                     value: "transparent",
                 },
             },
-            fullScreen: {enable: true, zIndex: -1},
+            fullScreen: false,
             smooth: false,
             fpsLimit: 120,
             interactivity: {

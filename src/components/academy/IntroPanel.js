@@ -7,6 +7,7 @@ import axios from "axios";
 import {StrapiToken, StrapiURL} from "../../const/consts";
 import MobileBg from "../../assets/images/academy/mobile_bg.png";
 import {AcademyConnectButton} from "../WalletConnectButton";
+import S11Particle from "../S11Particle";
 
 const IntroPanel = memo(props => {
     const theme = useTheme();
@@ -43,6 +44,7 @@ const IntroPanel = memo(props => {
                 backgroundPosition: 'center',
             }]}
         >
+            <S11Particle />
             <Box
                 component={'span'}
                 sx={sm ? styles.mobileRedTitle : styles.redTitle}
@@ -85,7 +87,8 @@ const styles = {
         justifyContent: 'center',
         alignItems: 'center',
         width: '100%',
-        backgroundColor: colors.bgBlackColor
+        backgroundColor: colors.bgBlackColor,
+        position: 'relative'
     },
     redTitle: {
         fontFamily: fonts.roboto,

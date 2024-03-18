@@ -81,12 +81,6 @@ export function About() {
                             sx={styles.box}
                         >
                             <Box
-                                component={'img'}
-                                sx={styles.img}
-                                src={Activity}
-                                alt="Physical Activity"
-                            />
-                            <Box
                                 component={'span'}
                                 sx={styles.boxTitle}
                             >

@@ -90,6 +90,7 @@ export function IntroSapien() {
                         item
                         md={6}
                         sm={12}
+                        sx={{mt: sm ? 10 : 0}}
                     >
                         <Box
                             component={'div'}

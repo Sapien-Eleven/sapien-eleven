@@ -1,4 +1,4 @@
-import {Box, Container, useMediaQuery, useTheme} from "@mui/material";
+import {Box, Container, createTheme, useMediaQuery, useTheme} from "@mui/material";
 import MainBg from '../../assets/images/heroshot.svg'
 import MobileMainBg from '../../assets/images/mobile_main_bg.png'
 import '@fontsource/roboto/400.css';
@@ -13,8 +13,19 @@ import {HomeConnectButton} from "../WalletConnectButton";
 const IntroPanel = memo((props) => {
     const [showSigninModal, setShowSigninModal] = useState(false);
     const [content, setContent] = useState({});
-    const theme = useTheme();
+    const theme = createTheme({
+        breakpoints: {
+            values: {
+                xs: 0,
+                sm: 600,
+                md: 900,
+                lg: 1200,
+                xl: 1440,
+            }
+        }
+    });
     const sm = useMediaQuery(theme.breakpoints.down('sm'));
+    const xl = useMediaQuery(theme.breakpoints.down('xl'));
 
     useEffect(() => {
         fetchContent().then();
@@ -66,7 +77,10 @@ const IntroPanel = memo((props) => {
     return (
         <Container
             component={'div'}
-            sx={styles.introPanel}
+            sx={[styles.introPanel, {
+                pt: xl ? 20 : 30,
+                pb: xl ? 20 : 30
+            }]}
             maxWidth={false}
         >
             <Box
@@ -110,7 +124,7 @@ const styles = {
         backgroundPosition: 'right',
         backgroundRepeat: 'no-repeat',
         backgroundSize: 'auto 110%',
-        pt: 40, pb: 40
+        pt: 20, pb: 20
     },
     redTxt: {
         fontFamily: 'Roboto',

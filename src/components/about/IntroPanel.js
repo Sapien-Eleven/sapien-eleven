@@ -1,8 +1,8 @@
 import {memo, useEffect, useState} from "react";
 import {Box, Button, Container, useMediaQuery, useTheme} from "@mui/material";
 import {fonts, pixToRem} from "../../const/uivar";
-import PanelBg from '../../assets/images/about/bg.jpg'
-import MobilePanelBg from '../../assets/images/about/mobile_bg.png'
+import PanelBg from '../../assets/images/about/AboutHeroshot.jpg'
+import MobilePanelBg from '../../assets/images/about/AboutHeroshotMobile.png'
 import axios from "axios";
 import {StrapiToken, StrapiURL} from "../../const/consts";
 
@@ -93,6 +93,7 @@ export default IntroPanel
 const styles = {
     panel: {
         width: '100%',
+        minHeight: '100vh',
         backgroundImage: `url(${PanelBg})`,
         backgroundRepeat: 'no-repeat',
         backgroundSize: 'cover',
@@ -114,8 +115,8 @@ const styles = {
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        pt: 15,
-        pb: 75
+        pt: 10,
+        pb: 45
     },
     redTitle: {
         fontFamily: fonts.roboto,

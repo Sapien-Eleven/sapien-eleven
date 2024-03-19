@@ -1,11 +1,11 @@
 import {memo, useEffect, useState} from "react";
 import {Box, Button, Container, useMediaQuery, useTheme} from "@mui/material";
 import {colors, fonts, pixToRem} from "../../const/uivar";
-import Running from "../../assets/images/running.png";
+import Running from "../../assets/images/FooterRunning.jpg";
 import Mark from '../../assets/sapien.svg'
 import axios from "axios";
 import {StrapiToken, StrapiURL} from "../../const/consts";
-import MobileRunning from "../../assets/images/mobile_running.png";
+import MobileRunning from "../../assets/images/FooterMobileRunning.png";
 
 const Membership = memo(props => {
     const [content, setContent] = useState({})
@@ -66,11 +66,6 @@ const Membership = memo(props => {
                     Join Sapien Eleven
                 </Button>
             </Box>
-            <Box
-                component={'img'}
-                src={MobileRunning}
-                sx={{width: '100%', height: 'auto', mt: 10}}
-            />
         </Container>
     )
     return (
@@ -116,11 +111,12 @@ export default Membership
 
 const styles = {
     panel: {
+        minHeight: '100vh',
         backgroundColor: colors.bgBlackColor,
         backgroundImage: `url(${Running})`,
         backgroundRepeat: 'no-repeat',
         backgroundSize: 'cover',
-        backgroundPosition: 'start',
+        backgroundPosition: 'left bottom',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
@@ -130,12 +126,16 @@ const styles = {
     },
     mobilePanel: {
         backgroundColor: colors.bgBlackColor,
+        backgroundImage: `url(${MobileRunning})`,
+        backgroundRepeat: 'no-repeat',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center bottom',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
         p: 0,
-        pt: 5
+        pt: 7, pb: 47
     },
     explaination: {
         width: '45%',

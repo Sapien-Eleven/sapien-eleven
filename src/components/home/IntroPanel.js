@@ -1,6 +1,6 @@
 import {Box, Container, createTheme, useMediaQuery, useTheme} from "@mui/material";
-import MainBg from '../../assets/images/heroshot.svg'
-import MobileMainBg from '../../assets/images/mobile_main_bg.png'
+import MainBg from '../../assets/images/HeroshotSapiensEleven.jpg'
+import MobileMainBg from '../../assets/images/HeroshotMobile.jpg'
 import '@fontsource/roboto/400.css';
 import {memo, useEffect, useState} from "react";
 import {connect} from "react-redux";
@@ -114,6 +114,7 @@ export default connect(
 const styles = {
     introPanel: {
         width: '100%',
+        minHeight: '100vh',
         display: 'flex',
         boxSizing: 'border-box',
         flexDirection: 'column',
@@ -170,8 +171,8 @@ const styles = {
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
         backgroundSize: 'cover',
-        pt: pixToRem(450),
-        pb: pixToRem(150)
+        pt: pixToRem(470),
+        pb: pixToRem(130)
     },
     mobileRedTxt: {
         fontFamily: fonts.roboto,

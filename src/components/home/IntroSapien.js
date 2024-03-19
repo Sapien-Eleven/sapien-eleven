@@ -74,16 +74,25 @@ export function IntroSapien() {
                                 src={WellnessAcademy}
                             />
                             <Box
-                                component={'span'}
-                                sx={sm ? styles.mobileBoxTitle : styles.boxTitle}
-                            >{content.subcontents[0].subtitle}</Box>
-                            <Box
-                                component='span'
-                                sx={sm ? styles.mobileComment : [styles.comment, {width: '80%'}]}
-                            >{content.subcontents[0].subdescription}</Box>
-                            <Button
-                                sx={styles.boxButton}
-                            >LEARN MORE</Button>
+                                sx={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    justifyContent: 'center',
+                                    alignItems: 'center'
+                                }}
+                            >
+                                <Box
+                                    component={'span'}
+                                    sx={sm ? [styles.mobileBoxTitle, {mb: 2}] : [styles.boxTitle, {mb : 2}]}
+                                >{content.subcontents[0].subtitle}</Box>
+                                <Box
+                                    component='span'
+                                    sx={sm ? [styles.mobileComment, {m: 2}] : [styles.comment, {width: '80%', m: 2}]}
+                                >{content.subcontents[0].subdescription}</Box>
+                                <Button
+                                    sx={styles.boxButton}
+                                >LEARN MORE</Button>
+                            </Box>
                         </Box>
                     </Grid>
                     <Grid
@@ -100,17 +109,24 @@ export function IntroSapien() {
                                 component={'img'}
                                 src={MarketPlace}
                             />
-                            <Box
-                                component={'span'}
-                                sx={sm ? styles.mobileBoxTitle : styles.boxTitle}
-                            >{content.subcontents[1].subtitle}</Box>
-                            <Box
-                                component='span'
-                                sx={sm ? styles.mobileComment : [styles.comment, {width: '80%'}]}
-                            >{content.subcontents[1].subdescription}</Box>
-                            <Button
-                                sx={styles.boxButton}
-                            >EXPLORE</Button>
+                            <Box sx={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                justifyContent: 'center',
+                                alignItems: 'center'
+                            }}>
+                                <Box
+                                    component={'span'}
+                                    sx={sm ? [styles.mobileBoxTitle, {mb : 3}] : [styles.boxTitle, {mb: 3}]}
+                                >{content.subcontents[1].subtitle}</Box>
+                                <Box
+                                    component='span'
+                                    sx={sm ? [styles.mobileComment, {mb: 2}] : [styles.comment, {width: '80%', mb: 2}]}
+                                >{content.subcontents[1].subdescription}</Box>
+                                <Button
+                                    sx={styles.boxButton}
+                                >EXPLORE</Button>
+                            </Box>
                         </Box>
                     </Grid>
                 </Grid>
@@ -194,7 +210,7 @@ const styles = {
         display: 'flex',
         height: '100%',
         flexDirection: 'column',
-        justifyContent: 'space-between',
+        justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#F8F8F8',
         boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.18)',

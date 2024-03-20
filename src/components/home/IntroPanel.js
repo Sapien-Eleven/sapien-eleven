@@ -1,4 +1,4 @@
-import {Box, Container, createTheme, useMediaQuery, useTheme} from "@mui/material";
+import {Box, Container, createTheme, useMediaQuery} from "@mui/material";
 import MainBg from '../../assets/images/HeroshotSapiensEleven.jpg'
 import MobileMainBg from '../../assets/images/HeroshotMobile.jpg'
 import '@fontsource/roboto/400.css';

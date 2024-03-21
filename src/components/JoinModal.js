@@ -1,9 +1,10 @@
 import {Backdrop, Box, Button, Modal, TextField} from "@mui/material";
-import React, {memo} from "react";
+import React, {memo, useEffect, useState} from "react";
 import {useSpring, animated} from "@react-spring/web";
 import PropTypes from "prop-types";
 import {colors, fonts, pixToRem} from "../const/uivar";
 import TriangleVectors from "../assets/images/triangle_vectors";
+import validator from "validator";
 
 const Fade = React.forwardRef(function Fade(props, ref) {
     const {
@@ -47,6 +48,15 @@ Fade.propTypes = {
 };
 
 const JoinModal = memo(props => {
+    const [email, setEmail] = useState('');
+    const [enableBtn, setEnableBtn] = useState(false);
+    const handleInputChange = (event) => {
+        setEmail(event.target.value);
+    };
+    useEffect(() => {
+        if (email !== '' && validator.isEmail(email)) setEnableBtn(true);
+        else setEnableBtn(false)
+    }, [email]);
     return(
         <Modal
             aria-labelledby={"spring-modal-title"}
@@ -68,38 +78,58 @@ const JoinModal = memo(props => {
                     <Box style={styles.vectorBg}>
                         <TriangleVectors />
                     </Box>
-                    <Box
-                        component={'span'}
-                        sx={styles.title}
-                    >JOIN OUR MAILING LIST</Box>
-                    <Box component={'div'} sx={styles.redLine} />
-                    <Box
-                        component={'span'}
-                        sx={styles.comment}
-                    >
-                        Please fill in the email below so that we can add you to mailing list.
+                    <Box sx={{
+                        display: 'flex',
+                        width: '100%',
+                        zIndex: 1,
+                        boxSizing: 'border-box',
+                        flexDirection: 'column',
+                        justifyContent: 'center',
+                        alignItems: 'flex-start',
+                        backgroundColor: '#F2F2F2',
+                        p: 2
+                    }}>
+                        <Box
+                            component={'span'}
+                            sx={styles.title}
+                        >JOIN OUR MAILING LIST</Box>
+                        <Box component={'div'} sx={styles.redLine} />
+                        <Box
+                            component={'span'}
+                            sx={styles.comment}
+                        >
+                            Please fill in the email below so that we can add you to mailing list.
+                        </Box>
+                        <Box
+                            component={'span'}
+                            sx={styles.inputLabel}
+                        >Email*</Box>
+                        <TextField
+                            sx={styles.input}
+                            fullWidth={true}
+                            variant={'standard'}
+                            InputProps={{
+                                disableUnderline: true,
+                                style: {
+                                    paddingLeft: pixToRem(30),
+                                    paddingRight: pixToRem(30),
+                                    paddingTop: pixToRem(20),
+                                    paddingBottom: pixToRem(20),
+                                }
+                            }}
+                            required={true}
+                            type={'text'}
+                            onChange={handleInputChange}
+                        />
+                        <Button
+                            sx={[styles.sendBtn, {
+                                backgroundColor: enableBtn ? colors.red : '#ccc',
+                                ':hover': {
+                                    backgroundColor: enableBtn ? colors.red : '#ccc',
+                                }
+                            }]}
+                        >Send</Button>
                     </Box>
-                    <Box
-                        component={'span'}
-                        sx={styles.inputLabel}
-                    >Email*</Box>
-                    <TextField
-                        sx={styles.input}
-                        fullWidth={true}
-                        variant={'standard'}
-                        InputProps={{
-                            disableUnderline: true,
-                            style: {
-                                paddingLeft: pixToRem(30),
-                                paddingRight: pixToRem(30),
-                                paddingTop: pixToRem(20),
-                                paddingBottom: pixToRem(20),
-                            }
-                        }}
-                        required={true}
-                        type={'text'}
-                    />
-                    <Button sx={styles.sendBtn}>Send</Button>
                 </Box>
             </Fade>
         </Modal>
@@ -120,10 +150,11 @@ const styles = {
         justifyContent: 'center',
         alignItems: 'flex-start',
         backgroundColor: '#F2F2F2',
-        paddingLeft: pixToRem(120),
-        paddingRight: pixToRem(120),
-        paddingTop: pixToRem(140),
-        paddingBottom: pixToRem(140),
+        backgroundClip: 'border-box',
+        paddingLeft: pixToRem(100),
+        paddingRight: pixToRem(100),
+        paddingTop: pixToRem(120),
+        paddingBottom: pixToRem(120),
         borderRadius: pixToRem(9)
     },
     title: {
@@ -176,7 +207,6 @@ const styles = {
         justifyContent: 'center',
         alignItems: 'center',
         color: 'white',
-        backgroundColor: colors.red,
         fontFamily: fonts.roboto,
         fontStyle: 'normal',
         fontSize: pixToRem(14),
@@ -186,7 +216,6 @@ const styles = {
         paddingBottom: pixToRem(15),
         borderRadius: 0,
         ":hover": {
-            backgroundColor: colors.red,
             color: 'white',
             boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.25)'
         },

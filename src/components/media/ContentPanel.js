@@ -456,36 +456,16 @@ const Podcasts = memo(props => {
 })
 
 const PodcastsItem = memo(props => {
-    const [analyzerData, setAnalyzerData] = useState(null);
-    const [audio, playing, toggle] = useAudio(props.item.audio);
+    const [playing, setPlaying] = useState(false);
+
+    useEffect(() => setPlaying(false), [])
+
+    const toggle = () => setPlaying(!playing);
 
     const formatDate = (dateString) => {
         const date = new Date(dateString);
         return date.toLocaleDateString('en-US');
     }
-
-    let source
-
-    useEffect(() => {
-        // audioAnalyzer();
-    }, []);
-
-    const audioAnalyzer = () => {
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        const analyzer = audioCtx.createAnalyser();
-        analyzer.fftSize = 2048;
-
-        const bufferLength = analyzer.frequencyBinCount;
-        const dataArray = new Uint8Array(bufferLength);
-        source = audioCtx.createMediaElementSource(audio);
-        source.connect(analyzer);
-        analyzer.connect(audioCtx.destination);
-        source.onended = () => {
-            source.disconnect();
-        };
-
-        setAnalyzerData({ analyzer, bufferLength, dataArray });
-    };
 
     return (
         <Box
@@ -540,7 +520,7 @@ const PodcastsItem = memo(props => {
                     }
                 </Button>
             </Box>
-            { analyzerData && <WaveForm analyzerData={analyzerData} width={'100%'} height={100} /> }
+            <WaveForm audio={props.item} playing={playing} />
         </Box>
     )
 })

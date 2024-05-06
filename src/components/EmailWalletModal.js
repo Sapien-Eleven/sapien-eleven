@@ -82,7 +82,7 @@ const EmailWalletModal = memo(props => {
                     password: values.password
                 })).data;
                 if (result.status === 'success') {
-                    enqueueSnackbar('Successfully added!', {variant: 'success'});
+                    enqueueSnackbar('Successfully signed in!', {variant: 'success'});
                     dispatch({type: 'SIGN_IN', user: result.user});
                     props.onClose();
                 } else {

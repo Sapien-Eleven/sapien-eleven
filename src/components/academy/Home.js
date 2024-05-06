@@ -3,7 +3,7 @@ import IntroPanel from "./IntroPanel";
 import Middle from "./Middle";
 import Membership from "./Membership";
 import Main from "./Main";
-import {connect} from "react-redux";
+import {connect, useSelector} from "react-redux";
 import WalletModal from "../WalletModal";
 import SigninModal from "../SigninModal";
 import {useMediaQuery, useTheme} from "@mui/material";
@@ -16,32 +16,40 @@ const Home = memo(props => {
     const [isEntered, setEntered] = useState(false);
     const {isConnected, address} = useAccount()
     const [showSigninModal, setShowSigninModal] = useState(false);
+    const isAuthenticated = useSelector(state => state.authReducer.isAuthenticated);
+    const user = useSelector(state => state.authReducer.user);
     const theme = useTheme();
     const sm = useMediaQuery(theme.breakpoints.down('sm'));
 
-    const checkWhitelisted = async () => {
-        if (!isConnected) return;
-        try {
-            const data = (await axios.post(`${SERVER_URL}checkWhitelisted`, {
-                wallet_address: address
-            })).data
-            if (data.status === 'success') return true;
-            else {
-                enqueueSnackbar(data.comment, {variant: 'error'});
+    const onEnter = useCallback(async() => {
+        if (!isConnected && !isAuthenticated) return;
+        if (isAuthenticated) {
+            try {
+                const data = (await axios.post(`${SERVER_URL}checkWhitelistedById`, {
+                    id: user._id
+                })).data
+                if (data.status === 'success') setEntered(true);
+                else enqueueSnackbar(data.comment, {variant: 'warning'});
+            } catch (e) {
+                enqueueSnackbar(e.toString(), {variant: 'error'})
                 return false;
             }
-        } catch (e) {
-            return false;
         }
-    }
-
-    const onEnter = useCallback(async() => {
-        if (await checkWhitelisted()) {
-            setEntered(true);
+        if (isConnected) {
+            try {
+                const data = (await axios.post(`${SERVER_URL}checkWhitelistedByWallet`, {
+                    wallet_address: address
+                })).data
+                if (data.status === 'success') setEntered(true)
+                else enqueueSnackbar(data.comment, {variant: 'warning'})
+            } catch (e) {
+                enqueueSnackbar(e.toString(), {variant: 'error'})
+                return false;
+            }
         }
-    }, [isEntered, isConnected]);
-    if (sm && isConnected && props.mobileCategory !== null) return <Main mobileCategory={props.mobileCategory} />
-    else if (isEntered && isConnected) return <Main mobileCategory={props.mobileCategory} />
+    }, [isEntered, isConnected, isAuthenticated]);
+    if (sm && (isConnected || isAuthenticated) && props.mobileCategory !== null) return <Main mobileCategory={props.mobileCategory} />
+    else if (isEntered && (isConnected || isAuthenticated)) return <Main mobileCategory={props.mobileCategory} />
     else return (
         <div>
             <IntroPanel onPress={onEnter} />

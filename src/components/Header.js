@@ -12,14 +12,11 @@ import {
 import {useTheme} from '@mui/material/styles'
 import '../styles/common.css'
 import SapienLogo from '../assets/logo.svg'
-import SapienIcon from '../assets/sapien.svg'
 import {pages, SERVER_URL} from '../const/consts'
-import WalletModal from "./WalletModal";
 import {memo, useCallback, useEffect, useState} from "react";
 import {colors, fonts, pixToRem} from "../const/uivar";
 import {setConnectedWallet, setWalletAddress} from "../store/actions/auth";
-import {connect} from "react-redux";
-import {useWeb3React} from "@web3-react/core";
+import {connect, useSelector} from "react-redux";
 import {useNavigate} from "react-router-dom";
 import SigninModal from "./SigninModal";
 import MenuIcon from '@mui/icons-material/Menu';
@@ -30,6 +27,8 @@ import axios from "axios";
 import {HeaderConnectButton, MobileHeaderConnectButton} from "./WalletConnectButton";
 import {useAccount} from "wagmi";
 import {enqueueSnackbar} from "notistack";
+import EmailWalletModal from "./EmailWalletModal";
+import MetaMaskLogo from "../assets/metamask.svg";
 
 const NavButton = styled(Button)((props) => ({
 	height: 81,
@@ -44,10 +43,13 @@ const NavButton = styled(Button)((props) => ({
 
 const Header = memo((props) => {
 	const [showSigninModal, setShowSigninModal] = useState(false);
+	const [showEmailWalletModal, setShowEmailWalletModal] = useState(false);
 	const [showMobileMenu, setShowMobileMenu] = useState(false)
 	const [whitelisted, setWhitelisted] = useState(false);
 	const navigate = useNavigate()
 	const {isConnected, address} = useAccount();
+	const isAuthenticated = useSelector(state => state.authReducer.isAuthenticated);
+	const user = useSelector(state => state.authReducer.user);
 	const theme = useTheme();
 	const md = useMediaQuery(theme.breakpoints.down('md'));
 	const sm = useMediaQuery(theme.breakpoints.down('sm'));
@@ -55,16 +57,31 @@ const Header = memo((props) => {
 
 	useEffect(() => {
 		checkWhitelisted().then();
-	}, [isConnected]);
+	}, [isConnected, isAuthenticated]);
 	const checkWhitelisted = async () => {
-		if (!isConnected) return;
-		try {
-			const data = (await axios.post(`${SERVER_URL}checkWhitelisted`, {
-				wallet_address: address
-			})).data
-			if (data.status === 'success') setWhitelisted(true)
-		} catch (e) {
-			console.log(e);
+		if (!isConnected && !isAuthenticated) {
+			setWhitelisted(false)
+			return;
+		}
+		if (isAuthenticated) {
+			try {
+				const data = (await axios.post(`${SERVER_URL}checkWhitelistedById`, {
+					id: user._id
+				})).data
+				if (data.status === 'success') setWhitelisted(true)
+			} catch (e) {
+				console.log(e);
+			}
+		}
+		if (isConnected) {
+			try {
+				const data = (await axios.post(`${SERVER_URL}checkWhitelistedByWallet`, {
+					wallet_address: address
+				})).data
+				if (data.status === 'success') setWhitelisted(true)
+			} catch (e) {
+				console.log(e);
+			}
 		}
 	}
 
@@ -77,6 +94,7 @@ const Header = memo((props) => {
 	const handleCloseMobileMenu = () => {
 		setShowMobileMenu(false)
 	}
+
 	return (
 		<>
 			<AppBar
@@ -137,7 +155,7 @@ const Header = memo((props) => {
 							</Stack>
 						}
 						{
-							!md && <HeaderConnectButton/>
+							!md && <HeaderConnectButton />
 						}
 						{
 							sm && !showMobileMenu &&
@@ -162,6 +180,10 @@ const Header = memo((props) => {
 				<SigninModal
 					visible={showSigninModal}
 					onClose={() => setShowSigninModal(false)}
+				/>
+				<EmailWalletModal
+					visible={showEmailWalletModal}
+					onClose={() => setShowEmailWalletModal(false)}
 				/>
 			</AppBar>
 			{
@@ -202,17 +224,18 @@ const Header = memo((props) => {
 		</>
 	)
 })
-export default connect(
-	state => ({
-		walletAddress: state.authReducer.walletAddress,
-		connectedWallet: state.authReducer.connectedWallet,
-		isAuthenticated: state.authReducer.isAuthenticated
-	}),
-	dispatch => ({
-		setWalletAddress: (address) => dispatch(setWalletAddress(address)),
-		setConnectedWallet: (wallet) => dispatch(setConnectedWallet(wallet))
-	})
-)(Header)
+// export default connect(
+// 	state => ({
+// 		walletAddress: state.authReducer.walletAddress,
+// 		connectedWallet: state.authReducer.connectedWallet,
+// 		isAuthenticated: state.authReducer.isAuthenticated
+// 	}),
+// 	dispatch => ({
+// 		setWalletAddress: (address) => dispatch(setWalletAddress(address)),
+// 		setConnectedWallet: (wallet) => dispatch(setConnectedWallet(wallet))
+// 	})
+// )(Header)
+export default Header
 
 const styles = {
 	toolbar: {
@@ -271,6 +294,32 @@ const styles = {
 	},
 	subMenuItem: {
 		pt: 1, pb: 1,
+	},
+	connectBtn: {
+		boxSizing: 'border-box',
+		display: 'flex',
+		flexDirection: 'row',
+		justifyContent: 'center',
+		alignItems: 'center',
+		paddingTop: pixToRem(10),
+		paddingBottom: pixToRem(10),
+		paddingLeft: pixToRem(20),
+		paddingRight: pixToRem(20),
+		width: 160,
+		height: pixToRem(35),
+		backgroundColor: '#F8F8F8',
+		color: '#333333',
+		fontFamily: 'Roboto',
+		fontSize: pixToRem(10),
+		fontWeight: '700',
+		fontStyle: 'normal',
+		lineHeight: pixToRem(12),
+		border: '1px solid #CA3C3D',
+		borderRadius: 0,
+		':hover': {
+			backgroundColor: colors.red,
+			color: 'white'
+		}
 	}
 }
 

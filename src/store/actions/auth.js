@@ -18,3 +18,9 @@ export const signIn = (user) => {
         user: user
     }
 }
+
+export const signOut = () => {
+    return {
+        type: 'SIGN_OUT'
+    }
+}

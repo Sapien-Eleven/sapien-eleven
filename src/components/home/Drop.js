@@ -3,7 +3,7 @@ import {colors, fonts, pixToRem} from "../../const/uivar";
 import Running from '../../assets/images/FooterRunning.jpg'
 import MobileRunning from '../../assets/images/FooterMobileRunning.png'
 import SapienMark from '../../assets/sapien.svg'
-import {connect} from "react-redux";
+import {connect, useSelector} from "react-redux";
 import {memo, useEffect, useState} from "react";
 import {Twitter} from "@mui/icons-material";
 import axios from "axios";
@@ -12,6 +12,7 @@ import {useAccount} from "wagmi";
 
 const Drop = memo(props => {
     const [content, setContent] = useState({})
+    const isAuthenticated = useSelector(state => state.authReducer.isAuthenticated)
     const {isConnected} = useAccount()
     const theme = useTheme();
     const md = useMediaQuery(theme.breakpoints.down('md'));
@@ -48,26 +49,26 @@ const Drop = memo(props => {
                     component={'span'}
                     sx={styles.mobileWhiteTitle}
                 >
-                    {!isConnected ? content.title1 : 'FULL'}
+                    {(!isConnected && !isAuthenticated) ? content.title1 : 'FULL'}
                 </Box>
                 <Box
                     component={'span'}
                     sx={styles.mobileRedTitle}
                 >
-                    {!isConnected ? content.title2 : 'TRANSPARENCY'}
+                    {(!isConnected && !isAuthenticated) ? content.title2 : 'TRANSPARENCY'}
                 </Box>
                 <Box
                     component={'span'}
                     sx={styles.mobileComment}
                 >
                     {
-                        !isConnected ?
+                        (!isConnected && !isAuthenticated) ?
                             content.description
                             : 'It\'s no secret that transparency is necessary to gain full trust and support of the community. Stay up to date on what the Sapien Eleven team is striving to accomplish.'
                     }
                 </Box>
                 {
-                    !isConnected ?
+                    (!isConnected && !isAuthenticated) ?
                         <Button
                             sx={styles.twitterBtn}
                             startIcon={<Box component={'img'} src={SapienMark}
@@ -100,26 +101,26 @@ const Drop = memo(props => {
                     component={'span'}
                     sx={styles.whiteTitle}
                 >
-                    {!isConnected ? content.title1 : 'FULL'}
+                    {(!isConnected && !isAuthenticated) ? content.title1 : 'FULL'}
                 </Box>
                 <Box
                     component={'span'}
                     sx={styles.redTitle}
                 >
-                    {!isConnected ? content.title2 : 'TRANSPARENCY'}
+                    {(!isConnected && !isAuthenticated) ? content.title2 : 'TRANSPARENCY'}
                 </Box>
                 <Box
                     component={'span'}
                     sx={styles.comment}
                 >
                     {
-                        !isConnected ?
+                        (!isConnected && !isAuthenticated) ?
                             content.description
                             : 'It\'s no secret that transparency is necessary to gain full trust and support of the community. Stay up to date on what the Sapien Eleven team is striving to accomplish.'
                     }
                 </Box>
                 {
-                    !isConnected ?
+                    (!isConnected && !isAuthenticated) ?
                         <Button
                             sx={styles.twitterBtn}
                             startIcon={<Box component={'img'} src={SapienMark}

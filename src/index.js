@@ -32,18 +32,21 @@ import {
     QueryClient,
 } from "@tanstack/react-query";
 import {
+    bitgetWallet,
     coinbaseWallet,
     metaMaskWallet,
     rainbowWallet,
     walletConnectWallet,
     phantomWallet,
+    magicEdenWallet,
+    xdefiWallet
 } from '@rainbow-me/rainbowkit/wallets';
 
 const connectors = connectorsForWallets(
     [
         {
             groupName: 'Popular',
-            wallets: [metaMaskWallet, rainbowWallet, coinbaseWallet, walletConnectWallet, phantomWallet],
+            wallets: [metaMaskWallet, bitgetWallet, rainbowWallet, coinbaseWallet, walletConnectWallet, phantomWallet, magicEdenWallet, xdefiWallet],
         },
     ],
     {
